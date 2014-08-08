@@ -18,8 +18,18 @@
  *
  * Data Structures and function declarations
  */
- 
- #ifndef DEBUG
-    #define DEBUG 1
+
+#ifndef __IOTKIT_H
+#define __IOTKIT_H
+
+
+#include <stdbool.h>
+#include <curl/curl.h>
+#include "rest.h"
+
+#ifndef DEBUG
+   #define DEBUG 0
+#endif
+
+
  #endif
- 
