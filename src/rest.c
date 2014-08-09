@@ -21,10 +21,14 @@
 
 #include "rest.h"
 
-CURLcode rest_init() {
+CURLcode rest_init(bool isSecure) {
     CURLcode returnCode;
 
-    returnCode = curl_global_init(CURL_GLOBAL_SSL);
+    if(isSecure) {
+        returnCode = curl_global_init(CURL_GLOBAL_SSL);
+    } else {
+        returnCode = curl_global_init(CURL_GLOBAL_NOTHING);
+    }
 
     return returnCode;
 }
@@ -196,7 +200,7 @@ int doHttpPost(char *url, struct curl_slist *headers, char *body) {
         /* incase of redirection, follow the new url */
         curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
 
-        if(!body) {
+        if(body) {
             curl_easy_setopt(curl, CURLOPT_POSTFIELDS, body);
         }
 
