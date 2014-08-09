@@ -23,13 +23,45 @@
 #define __IOTKIT_H
 
 
+#include <stdlib.h>
 #include <stdbool.h>
-#include <curl/curl.h>
+#include "../lib/cJSON/cJSON.h"
+#include "util.h"
 #include "rest.h"
 
 #ifndef DEBUG
-   #define DEBUG 0
+   #define DEBUG 1
 #endif
 
+#define BODY_SIZE_MIN 256
+#define BODY_SIZE_MED 4096
+#define BODY_SIZE_MAX 12288
 
- #endif
+#define HTTP_PROTOCOL "http://"
+#define HTTPS_PROTOCOL "https://"
+
+#define HEADER_CONTENT_TYPE_NAME "Content-Type"
+#define HEADER_CONTENT_TYPE_JSON "application/json"
+
+
+#define HEADER_AUTHORIZATION "Authorization"
+#define HEADER_AUTHORIZATION_BEARER "Bearer "
+
+typedef struct _Configurations {
+    bool isSecure;
+
+    char *authorization_key;
+    char *base_url;
+    char *new_auth_token;
+    char *auth_token_info;
+    char *me_info;
+} Configurations;
+
+
+Configurations configurations;
+
+void parseConfiguration(char *config_file_path);
+bool prepareUrl(char **full_url, char *url_prepend, char *url_append);
+char *getConfigAuthorizationToken();
+
+#endif

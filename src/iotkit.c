@@ -25,8 +25,10 @@ static bool isInitialized = false;
 
 void iotkit_init() {
 
+parseConfiguration("../config/config.json");
+
     if(!isInitialized) {
-        CURLcode code = rest_init();
+        CURLcode code = rest_init(configurations.isSecure);
         if(code) {
             fprintf(stderr, "Unable to initialize CURL %d\n", code);
         } else {
@@ -48,6 +50,180 @@ void iotkit_cleanup() {
 }
 
 
+/** Parses configuration JSON
+* @param[in] config file path to the JSON
+* @return returns client query description object upon successful parsing and NULL otherwise
+*/
+void parseConfiguration(char *config_file_path) {
+    char *out;
+    int i = 0;
+    cJSON *json, *jitem, *child1, *child2;
+    bool status = true;
+
+    FILE *fp = fopen(config_file_path, "rb");
+    if (fp == NULL) {
+        fprintf(stderr,"Error can't open file %s\n", config_file_path);
+    }
+    else {
+        fseek(fp, 0, SEEK_END);
+        long size = ftell(fp);
+        rewind(fp);
+
+        // read the file
+        char *buffer = (char *)malloc(size+1);
+        fread(buffer, 1, size, fp);
+
+        // parse the file
+        json = cJSON_Parse(buffer);
+        if (!json) {
+            fprintf(stderr,"Error before: [%s]\n",cJSON_GetErrorPtr());
+        }
+        else {
+            #if DEBUG
+                out = cJSON_Print(json, 2);
+                printf("%s\n", out);
+                free(out);
+            #endif
+
+            if (!isJsonObject(json)) {
+                fprintf(stderr,"Invalid JSON format for %s file\n", config_file_path);
+                return;
+            }
+
+            jitem = cJSON_GetObjectItem(json, "isSecure");
+
+            if (!isJsonBooleanTrue(jitem)) {
+                fprintf(stderr,"Invalid JSON format for json property %s\n", jitem->string);
+                return;
+            }
+
+            configurations.isSecure = true;
+
+
+            jitem = cJSON_GetObjectItem(json, "authorization_key");
+
+            if (!isJsonString(jitem)) {
+                fprintf(stderr,"Invalid JSON format for json property %s\n", jitem->string);
+                return;
+            }
+
+            configurations.authorization_key = strdup(jitem->valuestring);
+
+            printf("Read authorization_key is %s\n", configurations.authorization_key);
+
+
+            jitem = cJSON_GetObjectItem(json, "host");
+
+            if (!isJsonString(jitem)) {
+                fprintf(stderr,"Invalid JSON format for json property %s\n", jitem->string);
+                return;
+            }
+
+            configurations.base_url = strdup(jitem->valuestring);
+
+            jitem = cJSON_GetObjectItem(json, "apipath");
+
+            if (!isJsonObject(jitem)) {
+                fprintf(stderr,"Invalid JSON format for json property %s\n", jitem->string);
+                return;
+            }
+
+            child1 = cJSON_GetObjectItem(jitem, "authorization");
+
+            if (!isJsonObject(child1)) {
+                fprintf(stderr,"Invalid JSON format for json property %s\n", child1->string);
+                return;
+            }
+
+            child2 = cJSON_GetObjectItem(child1, "new_auth_token");
+
+            if (!isJsonString(child2)) {
+                fprintf(stderr,"Invalid JSON format for json property %s\n", child2->string);
+                return;
+            }
+
+            configurations.new_auth_token = strdup(child2->valuestring);
+
+
+            child2 = cJSON_GetObjectItem(child1, "auth_token_info");
+
+            if (!isJsonString(child2)) {
+                fprintf(stderr,"Invalid JSON format for json property %s\n", child2->string);
+                return;
+            }
+
+            configurations.auth_token_info = strdup(child2->valuestring);
+
+            printf("Read auth_token_info is %s\n", configurations.auth_token_info);
+
+
+            child2 = cJSON_GetObjectItem(child1, "me_info");
+
+            if (!isJsonString(child2)) {
+                fprintf(stderr,"Invalid JSON format for json property %s\n", child2->string);
+                return;
+            }
+
+            configurations.me_info = strdup(child2->valuestring);
+
+            printf("Read me_info is %s\n", configurations.me_info);
+
+
+
+
+
+            cJSON_Delete(json);
+        }
+
+        // free buffers
+        fclose(fp);
+        free(buffer);
+    }
+
+    return ;
+}
+
+
+bool prepareUrl(char **full_url, char *url_prepend, char *url_append) {
+    int urlSize;
+
+    if(!url_prepend || !url_append) {
+        fprintf(stderr, "prepareUrl: Parameter cannot be NULL");
+        return false;
+    }
+
+    urlSize = configurations.isSecure ? strlen(HTTPS_PROTOCOL) : strlen(HTTP_PROTOCOL);
+    urlSize += strlen(url_prepend) + strlen(url_append) + 1;
+    *full_url = (char *)malloc(sizeof(char) * urlSize);
+    if(configurations.isSecure){
+        strcpy(*full_url, HTTPS_PROTOCOL);
+    } else {
+        strcpy(*full_url, HTTP_PROTOCOL);
+    }
+
+    strcat(*full_url, url_prepend);
+    strcat(*full_url, url_append);
+
+
+    #if DEBUG
+        printf("URL prepared is %s\n", *full_url);
+    #endif
+
+    return true;
+}
+
+
+char *getConfigAuthorizationToken() {
+    char *authorization;
+    int authorizationSize = strlen(HEADER_AUTHORIZATION_BEARER) + configurations.authorization_key + 1;
+
+    authorization = (char *)malloc(sizeof(char) * authorizationSize);
+    strcpy(authorization, HEADER_AUTHORIZATION_BEARER);
+    strcat(authorization, configurations.authorization_key);
+
+    return authorization;
+}
+
 #if DEBUG
 
     void main() {
@@ -56,12 +232,9 @@ void iotkit_cleanup() {
 
         iotkit_init();
 
-        appendHttpHeader(&headers, "Content-Type", "application/json");
-        appendHttpHeader(&headers, "Authorization", "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJqdGkiOiI3ZGQ2Mzc1Yy02ZWNlLTQ2ZjUtYWVmYi0wODVlYzVlMjc4YzAiLCJpc3MiOiJodHRwOi8vZW5hYmxlaW90LmNvbSIsInN1YiI6IjUzY2Q2NDQ2ZmJhYzdlMDM1ZjcxYmM3ZSIsImV4cCI6IjIwMjQtMDgtMDRUMjI6MDI6MjguMzY5WiJ9.nSl4BC9z_3j8JOxcvfi9UtrgJjVRdx_szO00y1wn66mgdZre1xpjVOmxoB30Xi5cLU5l7CEPpmCXUnzXTqZs_3slkQtO2_Yxk77LamX5ePkRzfDq50yPVnFlQzrgRxs_bdKcEJQMrhdsIhGq_IsSFZB0QMPGEXIxbLe2V2rjbK4dDmazb8q7uhlZ8GqT8sMQnl717b6iqJ8WtGbbRcoWuh9uQqDJsb9B_d6xIDYVONr3DrdBfOytNQPeqFWzGMP7NC34ygRyqYg4lscbAPC4ghf1pZ1sjLJUPAmyBjf9De7nIlXcwIDZYu8K7tptZ6XOGqTQiGzGQsg6Ar35R7CPAA");
-        appendHttpHeader(&headers, "Expect", "");
+        validateAuthorizationToken();
 
-        doHttpPut("https://dashboard.us.enableiot.com/v1/api/accounts/53cd6446fbac7e035f71bc7e/activationcode/refresh", \
-                headers, NULL);
+        getAuthorizationTokenMeInfo();
 
 
         iotkit_cleanup();
