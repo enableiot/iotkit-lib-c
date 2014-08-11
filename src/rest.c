@@ -152,19 +152,11 @@ int doHttpPut(char *url, struct curl_slist *headers, char *body) {
         /* incase of redirection, follow the new url */
         curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
 
-        curl_easy_setopt(curl, CURLOPT_PUT, 1L);
+        curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "PUT");
 
-        /*if(!body) {
+        if(!body) {
             curl_easy_setopt(curl, CURLOPT_POSTFIELDS, body);
-        }*/
-
-        /* we want to use our own read function */
-        curl_easy_setopt(curl, CURLOPT_READDATA, datal);
-        /* we want to use our own read function */
-        curl_easy_setopt(curl, CURLOPT_READFUNCTION, readCallbackForPut);
-
-        /* enable uploading */
-        curl_easy_setopt(curl, CURLOPT_UPLOAD, 1L);
+        }
 
         res = curl_easy_perform(curl);
         if(res != CURLE_OK) {
