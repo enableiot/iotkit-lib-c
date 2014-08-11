@@ -85,7 +85,17 @@ bool appendHttpHeader(struct curl_slist ** headerList, char *headername, char *h
     return true;
 }
 
-int doHttpGet(char *url, struct curl_slist *headers) {
+size_t static write_callback_func(void *buffer, size_t size, size_t nmemb, char **userp)
+{
+    size_t write_length = 0;
+
+    *userp = strndup(buffer, (size_t)(size *nmemb));
+    write_length = strlen(*userp);
+
+    return write_length;
+}
+
+int doHttpGet(char *url, struct curl_slist *headers, char **response) {
     CURL *curl;
     CURLcode res;
 
@@ -103,6 +113,12 @@ int doHttpGet(char *url, struct curl_slist *headers) {
         curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
         /* incase of redirection, follow the new url */
         curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
+
+        /* callback function to return data */
+        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_callback_func);
+
+        /* pass the response to callback function */
+        curl_easy_setopt(curl, CURLOPT_WRITEDATA, response);
 
         res = curl_easy_perform(curl);
         if(res != CURLE_OK) {

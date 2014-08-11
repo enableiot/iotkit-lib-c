@@ -307,7 +307,7 @@ char *getConfigAuthorizationToken() {
 
         iotkit_init();
 
-        deleteAnAccount();
+        validateAuthorizationToken();
 
 
 

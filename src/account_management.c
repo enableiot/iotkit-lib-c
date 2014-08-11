@@ -21,14 +21,15 @@
 
 #include "iotkit.h"
 
-bool createAnAccount(char *account_name) {
+char *createAnAccount(char *account_name) {
     struct curl_slist *headers = NULL;
     char *url;
     char body[BODY_SIZE_MIN];
+    char *response;
 
     if(!account_name) {
         fprintf(stderr, "createAnAccount::Account name cannot be NULL");
-        return false;
+        return NULL;
     }
 
     prepareUrl(&url, configurations.base_url, configurations.create_an_account);
@@ -40,12 +41,13 @@ bool createAnAccount(char *account_name) {
 
     doHttpPost(url, headers, body);
 
-    return true;
+    return response;
 }
 
-bool getAccountInformation() { // TODO: this should taken data account id as a parameter
+char *getAccountInformation() { // TODO: this should taken data account id as a parameter
     struct curl_slist *headers = NULL;
     char *url;
+    char *response;
 
     appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
     appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
@@ -54,12 +56,13 @@ bool getAccountInformation() { // TODO: this should taken data account id as a p
 
     doHttpGet(url, headers);
 
-    return true;
+    return response;
 }
 
-bool getAccountActivationCode() { // TODO: this should taken data account id as a parameter
+char *getAccountActivationCode() { // TODO: this should taken data account id as a parameter
     struct curl_slist *headers = NULL;
     char *url;
+    char *response;
 
     appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
     appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
@@ -68,13 +71,14 @@ bool getAccountActivationCode() { // TODO: this should taken data account id as 
 
     doHttpGet(url, headers);
 
-    return true;
+    return response;
 }
 
 
-bool renewActivationCode() {
+char *renewActivationCode() {
     struct curl_slist *headers = NULL;
     char *url;
+    char *response;
 
     prepareUrl(&url, configurations.base_url, configurations.renew_account_activation);
 
@@ -84,13 +88,14 @@ bool renewActivationCode() {
     // TODO: GET THE NEW ACTIVATION CODE AND STORE IT IN CONFIG FILE
     doHttpPut(url, headers, NULL);
 
-    return true;
+    return response;
 }
 
-bool updateAnAccount(char *account_name) {
+char *updateAnAccount(char *account_name) {
     struct curl_slist *headers = NULL;
     char *url;
     char body[BODY_SIZE_MIN];
+    char *response;
 
     prepareUrl(&url, configurations.base_url, configurations.update_an_account_name);
 
@@ -102,12 +107,13 @@ bool updateAnAccount(char *account_name) {
 
     doHttpPut(url, headers, body);
 
-    return true;
+    return response;
 }
 
-bool deleteAnAccount() {
+char *deleteAnAccount() {
     struct curl_slist *headers = NULL;
     char *url;
+    char *response;
 
     prepareUrl(&url, configurations.base_url, configurations.delete_an_account_name);
 
@@ -118,5 +124,5 @@ bool deleteAnAccount() {
 
     doHttpDelete(url, headers);
 
-    return true;
+    return response;
 }

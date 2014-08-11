@@ -23,19 +23,20 @@
 #include "iotkit.h"
 
 
-bool getNewAuthorizationToken(char *username, char *password) {
+char *getNewAuthorizationToken(char *username, char *password) {
     struct curl_slist *headers = NULL;
     char *url;
     char body[BODY_SIZE_MIN];
+    char *response;
 
     if(!username) {
         fprintf(stderr, "Username cannot be NULL");
-        return false;
+        return NULL;
     }
 
     if(!password) {
         fprintf(stderr, "Password cannot be NULL");
-        return false;
+        return NULL;
     }
 
 
@@ -52,54 +53,42 @@ bool getNewAuthorizationToken(char *username, char *password) {
     // TODO: store the authorization token in the config.json file
 
 
-    return true;
+    return response;
 }
 
 
-bool validateAuthorizationToken() {
+char *validateAuthorizationToken() {
     struct curl_slist *headers = NULL;
     char *url;
+    char *response;
 
     appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
     appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
 
     prepareUrl(&url, configurations.base_url, configurations.auth_token_info);
 
-    doHttpGet(url, headers);
+    doHttpGet(url, headers, &response);
 
     // TODO: store the account id in the config.json file
 
-    return true;
+    return response;
 }
 
 
 
-bool getAuthorizationTokenMeInfo() {
+char *getAuthorizationTokenMeInfo() {
     struct curl_slist *headers = NULL;
     char *url;
+    char *response;
 
     appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
     appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
 
     prepareUrl(&url, configurations.base_url, configurations.me_info);
 
-    doHttpGet(url, headers);
+    doHttpGet(url, headers, &response);
 
     // TODO: store the account name etc in config.json file
 
-    return true;
+    return response;
 }
-
-
-/*
-
-Content-Type: application/json
-
-Authorization: Bearer <token>
-
-Get: https://dashboard.us.enableiot.com/v1/api/auth/tokeninfo
-
-token: eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJqdGkiOiI4OTQ2YzVhYy1jYTE2LTRhODgtOGQ4Yi0zYzRiOGIzYTlhMTEiLCJpc3MiOiJodHRwOi8vZW5hYmxlaW90LmNvbSIsInN1YiI6IjUzY2Q2NDQ2ZmJhYzdlMDM1ZjcxYmM3ZSIsImV4cCI6IjIwMjQtMDgtMDVUMTk6MTk6NDYuMzY5WiJ9.VoWiV0cDUgcQwksX68r53b_vW7IoATy-vvBP2bFSA4f6QlgtOtk7nHswBdN8XFYA4v6EuF-zxSdBrBHfF1BTRwztFVrOAlLsMCyvoplf3i_2lWYjlFh6BnJ5uW8rykyKRd9oorNaPBnSwas3mSUKC0IcUNH02eRKbn4_mJ9GS2-UJiQAeLwjAsPCcGSQn9WxKQgq_CRZ7Mfw2dbB-vQc8I2TzCLtJaqd0UpHDTXpYs5eYZkuChDefeVGWY0-c3SDkhd3hS4J14lXdR-vaS54lrCKpYnCOj0KBDhj--80D1v9Z7LivIFO8-PJGtgtS-npoUhAeKVZsRE94exubsPXmg
-
-accountid: 53cd6446fbac7e035f71bc7e
-*/
