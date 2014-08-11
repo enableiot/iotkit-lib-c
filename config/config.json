@@ -15,6 +15,9 @@
     "port": 443,
     "isSecure": true,
     "apipath": {
+        "account_management": {
+            "renew_account_activation" : "/v1/api/accounts/{account_id}/activationcode/refresh"
+        },
         "authorization": {
             "new_auth_token" : "/v1/api/auth/token",
             "auth_token_info" : "/v1/api/auth/tokeninfo",

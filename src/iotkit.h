@@ -50,8 +50,14 @@
 typedef struct _Configurations {
     bool isSecure;
 
-    char *authorization_key;
+    char *account_id;
     char *base_url;
+
+    // account management
+    char *renew_account_activation;
+
+    // account authorization
+    char *authorization_key;
     char *new_auth_token;
     char *auth_token_info;
     char *me_info;

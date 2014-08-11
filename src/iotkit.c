@@ -91,14 +91,19 @@ void parseConfiguration(char *config_file_path) {
             }
 
             jitem = cJSON_GetObjectItem(json, "isSecure");
-
             if (!isJsonBooleanTrue(jitem)) {
                 fprintf(stderr,"Invalid JSON format for json property %s\n", jitem->string);
                 return;
             }
-
             configurations.isSecure = true;
 
+            jitem = cJSON_GetObjectItem(json, "account_id");
+            if (!isJsonString(jitem)) {
+                fprintf(stderr,"Invalid JSON format for json property %s\n", jitem->string);
+                return;
+            }
+            configurations.account_id = strdup(jitem->valuestring);
+            printf("Read Account ID %s\n", configurations.account_id);
 
             jitem = cJSON_GetObjectItem(json, "authorization_key");
 
@@ -127,6 +132,21 @@ void parseConfiguration(char *config_file_path) {
                 fprintf(stderr,"Invalid JSON format for json property %s\n", jitem->string);
                 return;
             }
+
+            child1 = cJSON_GetObjectItem(jitem, "account_management");
+            if (!isJsonObject(child1)) {
+                fprintf(stderr,"Invalid JSON format for json property %s\n", child1->string);
+                return;
+            }
+
+            child2 = cJSON_GetObjectItem(child1, "renew_account_activation");
+            if (!isJsonString(child2)) {
+                fprintf(stderr,"Invalid JSON format for json property %s\n", child2->string);
+                return;
+            }
+
+            configurations.renew_account_activation = strdup(child2->valuestring);
+
 
             child1 = cJSON_GetObjectItem(jitem, "authorization");
 
@@ -186,14 +206,39 @@ void parseConfiguration(char *config_file_path) {
 
 bool prepareUrl(char **full_url, char *url_prepend, char *url_append) {
     int urlSize;
+    char *url_post = NULL;
 
     if(!url_prepend || !url_append) {
         fprintf(stderr, "prepareUrl: Parameter cannot be NULL");
         return false;
     }
 
+    if(strstr(url_append, "{")) {
+        char *start = strstr(url_append, "{");
+        char *end = strstr(url_append, "}");
+
+        char strtokensize = end - start;
+        char *strtoken = (char *)malloc(sizeof(char) * strtokensize);
+        strncpy(strtoken, start + 1, strtokensize -1);
+        strtoken[strtokensize - 1] = '\0';
+
+        if(strcmp(strtoken, "account_id") == 0) {
+            int url_post_size = (start - url_append) + strlen(configurations.account_id) + strlen(end);
+            url_post = (char *)malloc(sizeof(char) * url_post_size);
+
+            strncpy(url_post, url_append, (start - url_append));
+            url_post[start - url_append] = '\0';
+            strcat(url_post, configurations.account_id);
+            strcat(url_post, end + 1);
+        } else {
+            url_post = url_append;
+        }
+    } else {
+        url_post = url_append;
+    }
+
     urlSize = configurations.isSecure ? strlen(HTTPS_PROTOCOL) : strlen(HTTP_PROTOCOL);
-    urlSize += strlen(url_prepend) + strlen(url_append) + 1;
+    urlSize += strlen(url_prepend) + strlen(url_post) + 1;
     *full_url = (char *)malloc(sizeof(char) * urlSize);
     if(configurations.isSecure){
         strcpy(*full_url, HTTPS_PROTOCOL);
@@ -202,7 +247,7 @@ bool prepareUrl(char **full_url, char *url_prepend, char *url_append) {
     }
 
     strcat(*full_url, url_prepend);
-    strcat(*full_url, url_append);
+    strcat(*full_url, url_post);
 
 
     #if DEBUG
@@ -232,9 +277,7 @@ char *getConfigAuthorizationToken() {
 
         iotkit_init();
 
-        validateAuthorizationToken();
-
-        getAuthorizationTokenMeInfo();
+        renewActivationCode();
 
 
         iotkit_cleanup();
