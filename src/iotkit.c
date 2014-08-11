@@ -97,6 +97,7 @@ void parseConfiguration(char *config_file_path) {
             }
             configurations.isSecure = true;
 
+
             jitem = cJSON_GetObjectItem(json, "account_id");
             if (!isJsonString(jitem)) {
                 fprintf(stderr,"Invalid JSON format for json property %s\n", jitem->string);
@@ -105,91 +106,112 @@ void parseConfiguration(char *config_file_path) {
             configurations.account_id = strdup(jitem->valuestring);
             printf("Read Account ID %s\n", configurations.account_id);
 
-            jitem = cJSON_GetObjectItem(json, "authorization_key");
-
+            jitem = cJSON_GetObjectItem(json, "data_account_id");
             if (!isJsonString(jitem)) {
                 fprintf(stderr,"Invalid JSON format for json property %s\n", jitem->string);
                 return;
             }
+            configurations.data_account_id = strdup(jitem->valuestring);
 
+            jitem = cJSON_GetObjectItem(json, "authorization_key");
+            if (!isJsonString(jitem)) {
+                fprintf(stderr,"Invalid JSON format for json property %s\n", jitem->string);
+                return;
+            }
             configurations.authorization_key = strdup(jitem->valuestring);
-
             printf("Read authorization_key is %s\n", configurations.authorization_key);
 
 
             jitem = cJSON_GetObjectItem(json, "host");
-
             if (!isJsonString(jitem)) {
                 fprintf(stderr,"Invalid JSON format for json property %s\n", jitem->string);
                 return;
             }
-
             configurations.base_url = strdup(jitem->valuestring);
 
-            jitem = cJSON_GetObjectItem(json, "apipath");
 
+            jitem = cJSON_GetObjectItem(json, "apipath");
             if (!isJsonObject(jitem)) {
                 fprintf(stderr,"Invalid JSON format for json property %s\n", jitem->string);
                 return;
             }
-
             child1 = cJSON_GetObjectItem(jitem, "account_management");
             if (!isJsonObject(child1)) {
                 fprintf(stderr,"Invalid JSON format for json property %s\n", child1->string);
                 return;
             }
 
+            child2 = cJSON_GetObjectItem(child1, "create_an_account");
+            if (!isJsonString(child2)) {
+                fprintf(stderr,"Invalid JSON format for json property %s\n", child2->string);
+                return;
+            }
+            configurations.create_an_account = strdup(child2->valuestring);
+
+            child2 = cJSON_GetObjectItem(child1, "get_account_information");
+            if (!isJsonString(child2)) {
+                fprintf(stderr,"Invalid JSON format for json property %s\n", child2->string);
+                return;
+            }
+            configurations.get_account_information = strdup(child2->valuestring);
+
+            child2 = cJSON_GetObjectItem(child1, "get_account_activation_code");
+            if (!isJsonString(child2)) {
+                fprintf(stderr,"Invalid JSON format for json property %s\n", child2->string);
+                return;
+            }
+            configurations.get_account_activation_code = strdup(child2->valuestring);
+
             child2 = cJSON_GetObjectItem(child1, "renew_account_activation");
             if (!isJsonString(child2)) {
                 fprintf(stderr,"Invalid JSON format for json property %s\n", child2->string);
                 return;
             }
-
             configurations.renew_account_activation = strdup(child2->valuestring);
+
+            child2 = cJSON_GetObjectItem(child1, "update_an_account_name");
+            if (!isJsonString(child2)) {
+                fprintf(stderr,"Invalid JSON format for json property %s\n", child2->string);
+                return;
+            }
+            configurations.update_an_account_name = strdup(child2->valuestring);
+
+            child2 = cJSON_GetObjectItem(child1, "delete_an_account_name");
+            if (!isJsonString(child2)) {
+                fprintf(stderr,"Invalid JSON format for json property %s\n", child2->string);
+                return;
+            }
+            configurations.delete_an_account_name = strdup(child2->valuestring);
 
 
             child1 = cJSON_GetObjectItem(jitem, "authorization");
-
             if (!isJsonObject(child1)) {
                 fprintf(stderr,"Invalid JSON format for json property %s\n", child1->string);
                 return;
             }
 
             child2 = cJSON_GetObjectItem(child1, "new_auth_token");
-
             if (!isJsonString(child2)) {
                 fprintf(stderr,"Invalid JSON format for json property %s\n", child2->string);
                 return;
             }
-
             configurations.new_auth_token = strdup(child2->valuestring);
 
-
             child2 = cJSON_GetObjectItem(child1, "auth_token_info");
-
             if (!isJsonString(child2)) {
                 fprintf(stderr,"Invalid JSON format for json property %s\n", child2->string);
                 return;
             }
-
             configurations.auth_token_info = strdup(child2->valuestring);
-
             printf("Read auth_token_info is %s\n", configurations.auth_token_info);
 
-
             child2 = cJSON_GetObjectItem(child1, "me_info");
-
             if (!isJsonString(child2)) {
                 fprintf(stderr,"Invalid JSON format for json property %s\n", child2->string);
                 return;
             }
-
             configurations.me_info = strdup(child2->valuestring);
-
             printf("Read me_info is %s\n", configurations.me_info);
-
-
-
 
 
             cJSON_Delete(json);
@@ -229,6 +251,14 @@ bool prepareUrl(char **full_url, char *url_prepend, char *url_append) {
             strncpy(url_post, url_append, (start - url_append));
             url_post[start - url_append] = '\0';
             strcat(url_post, configurations.account_id);
+            strcat(url_post, end + 1);
+        } else if(strcmp(strtoken, "data_account_id") == 0) {
+            int url_post_size = (start - url_append) + strlen(configurations.data_account_id) + strlen(end);
+            url_post = (char *)malloc(sizeof(char) * url_post_size);
+
+            strncpy(url_post, url_append, (start - url_append));
+            url_post[start - url_append] = '\0';
+            strcat(url_post, configurations.data_account_id);
             strcat(url_post, end + 1);
         } else {
             url_post = url_append;
@@ -277,7 +307,8 @@ char *getConfigAuthorizationToken() {
 
         iotkit_init();
 
-        renewActivationCode();
+        deleteAnAccount();
+
 
 
         iotkit_cleanup();

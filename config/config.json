@@ -3,6 +3,8 @@
     "authorization_key": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJqdGkiOiI4OTQ2YzVhYy1jYTE2LTRhODgtOGQ4Yi0zYzRiOGIzYTlhMTEiLCJpc3MiOiJodHRwOi8vZW5hYmxlaW90LmNvbSIsInN1YiI6IjUzY2Q2NDQ2ZmJhYzdlMDM1ZjcxYmM3ZSIsImV4cCI6IjIwMjQtMDgtMDVUMTk6MTk6NDYuMzY5WiJ9.VoWiV0cDUgcQwksX68r53b_vW7IoATy-vvBP2bFSA4f6QlgtOtk7nHswBdN8XFYA4v6EuF-zxSdBrBHfF1BTRwztFVrOAlLsMCyvoplf3i_2lWYjlFh6BnJ5uW8rykyKRd9oorNaPBnSwas3mSUKC0IcUNH02eRKbn4_mJ9GS2-UJiQAeLwjAsPCcGSQn9WxKQgq_CRZ7Mfw2dbB-vQc8I2TzCLtJaqd0UpHDTXpYs5eYZkuChDefeVGWY0-c3SDkhd3hS4J14lXdR-vaS54lrCKpYnCOj0KBDhj--80D1v9Z7LivIFO8-PJGtgtS-npoUhAeKVZsRE94exubsPXmg",
     "account_id": "53cd6446fbac7e035f71bc7e",
     "device_id": false,
+    "data_account_id_old" : "53e8152830dec2aa20c4cb67",
+    "data_account_id" : "53e821a850177c582764ec6c",
     "token_file": "token.json",
     "device_loc": [
         88.34,
@@ -16,6 +18,11 @@
     "isSecure": true,
     "apipath": {
         "account_management": {
+            "create_an_account" : "/v1/api/accounts",
+            "get_account_information" : "/v1/api/accounts/{data_account_id}",
+            "get_account_activation_code" : "/v1/api/accounts/{data_account_id}/activationcode",
+            "update_an_account_name" : "/v1/api/accounts/{data_account_id}",
+            "delete_an_account_name" : "/v1/api/accounts/{data_account_id}",
             "renew_account_activation" : "/v1/api/accounts/{account_id}/activationcode/refresh"
         },
         "authorization": {
