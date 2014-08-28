@@ -67,6 +67,9 @@ typedef struct _Configurations {
     char *new_auth_token;
     char *auth_token_info;
     char *me_info;
+
+    // component catalogs
+    char *list_components;
 } Configurations;
 
 

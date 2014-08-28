@@ -39,7 +39,7 @@
             "data": "/v1/api/data/{deviceid}"
         },
         "cmpcatalog": {
-            "catalog": "/v1/api/cmpcatalog",
+            "list_components": "/v1/api/accounts/{data_account_id}/cmpcatalog",
             "component": "/v1/api/cmpcatalog/{componentId}"
         },
         "health": "/v1/api/health"

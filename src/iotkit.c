@@ -25,7 +25,7 @@ static bool isInitialized = false;
 
 void iotkit_init() {
 
-parseConfiguration("../config/config.json");
+    parseConfiguration("../config/config.json");
 
     if(!isInitialized) {
         CURLcode code = rest_init(configurations.isSecure);
@@ -230,6 +230,19 @@ void parseConfiguration(char *config_file_path) {
             printf("Read me_info is %s\n", configurations.me_info);
 
 
+            child1 = cJSON_GetObjectItem(jitem, "cmpcatalog");
+            if (!isJsonObject(child1)) {
+                fprintf(stderr,"Invalid JSON format for json property %s\n", child1->string);
+                return;
+            }
+
+            child2 = cJSON_GetObjectItem(child1, "list_components");
+            if (!isJsonString(child2)) {
+                fprintf(stderr,"Invalid JSON format for json property %s\n", child2->string);
+                return;
+            }
+            configurations.list_components = strdup(child2->valuestring);
+
             cJSON_Delete(json);
         }
 
@@ -333,13 +346,12 @@ char *getConfigAuthorizationToken() {
 #if DEBUG
 
     void main() {
-        struct curl_slist *headers = NULL;
         puts("Iotkit Library to communicate with IoT Cloud via REST APIs");
 
         iotkit_init();
 
-        char * response = getAuthorizationTokenMeInfo();
-        printf("Response Received :\n%s", response);
+        char * response = listAllComponents();
+        printf("Response Received :%s\n", response);
 
 
 
