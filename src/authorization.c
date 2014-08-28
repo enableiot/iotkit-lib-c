@@ -40,20 +40,22 @@ char *getNewAuthorizationToken(char *username, char *password) {
     }
 
 
-    prepareUrl(&url, configurations.base_url, configurations.new_auth_token);
+    if(prepareUrl(&url, configurations.base_url, configurations.new_auth_token)) {
+
+        sprintf(body, "{\"username\":\"%s\",\"password\":\"%s\"}", username, password);
+
+        appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
+
+        doHttpPost(url, headers, body);
 
 
-    sprintf(body, "{\"username\":\"%s\",\"password\":\"%s\"}", username, password);
-
-    appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
-
-    doHttpPost(url, headers, body);
+        // TODO: store the authorization token in the config.json file
 
 
-    // TODO: store the authorization token in the config.json file
+        return response;
+    }
 
-
-    return response;
+    return NULL;
 }
 
 
@@ -65,13 +67,16 @@ char *validateAuthorizationToken() {
     appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
     appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
 
-    prepareUrl(&url, configurations.base_url, configurations.auth_token_info);
+    if(prepareUrl(&url, configurations.base_url, configurations.auth_token_info)) {
 
-    doHttpGet(url, headers, &response);
+        doHttpGet(url, headers, &response);
 
-    // TODO: store the account id in the config.json file
+        // TODO: store the account id in the config.json file
 
-    return response;
+        return response;
+    }
+
+    return NULL;
 }
 
 
@@ -84,11 +89,14 @@ char *getAuthorizationTokenMeInfo() {
     appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
     appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
 
-    prepareUrl(&url, configurations.base_url, configurations.me_info);
+    if(prepareUrl(&url, configurations.base_url, configurations.me_info)) {
 
-    doHttpGet(url, headers, &response);
+        doHttpGet(url, headers, &response);
 
-    // TODO: store the account name etc in config.json file
+        // TODO: store the account name etc in config.json file
 
-    return response;
+        return response;
+    }
+
+    return NULL;
 }

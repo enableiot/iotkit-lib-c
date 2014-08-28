@@ -99,28 +99,44 @@ void parseConfiguration(char *config_file_path) {
 
 
             jitem = cJSON_GetObjectItem(json, "account_id");
-            if (!isJsonString(jitem)) {
+            if (!isJsonString(jitem) && !isJsonBooleanFalse(jitem)) {
                 fprintf(stderr,"Invalid JSON format for json property %s\n", jitem->string);
                 return;
             }
-            configurations.account_id = strdup(jitem->valuestring);
-            printf("Read Account ID %s\n", configurations.account_id);
+
+            if (isJsonString(jitem)) {
+                configurations.account_id = strdup(jitem->valuestring);
+                printf("Read Account ID %s\n", configurations.account_id);
+            } else {
+                configurations.account_id = NULL;
+                puts("Read Account ID is NULL");
+            }
 
             jitem = cJSON_GetObjectItem(json, "data_account_id");
-            if (!isJsonString(jitem)) {
+            if (!isJsonString(jitem) && !isJsonBooleanFalse(jitem)) {
                 fprintf(stderr,"Invalid JSON format for json property %s\n", jitem->string);
                 return;
             }
-            configurations.data_account_id = strdup(jitem->valuestring);
+
+            if (isJsonString(jitem)) {
+                configurations.data_account_id = strdup(jitem->valuestring);
+            } else {
+                configurations.data_account_id = NULL;
+            }
 
             jitem = cJSON_GetObjectItem(json, "authorization_key");
-            if (!isJsonString(jitem)) {
+            if (!isJsonString(jitem) && !isJsonBooleanFalse(jitem)) {
                 fprintf(stderr,"Invalid JSON format for json property %s\n", jitem->string);
                 return;
             }
-            configurations.authorization_key = strdup(jitem->valuestring);
-            printf("Read authorization_key is %s\n", configurations.authorization_key);
 
+            if (isJsonString(jitem)) {
+                configurations.authorization_key = strdup(jitem->valuestring);
+                printf("Read authorization_key is %s\n", configurations.authorization_key);
+            } else {
+                configurations.authorization_key = NULL;
+                puts("Read authorization_key is NULL");
+            }
 
             jitem = cJSON_GetObjectItem(json, "host");
             if (!isJsonString(jitem)) {
@@ -245,7 +261,13 @@ bool prepareUrl(char **full_url, char *url_prepend, char *url_append) {
         strtoken[strtokensize - 1] = '\0';
 
         if(strcmp(strtoken, "account_id") == 0) {
-            int url_post_size = (start - url_append) + strlen(configurations.account_id) + strlen(end);
+            int url_post_size = 0;
+
+            if(configurations.account_id == NULL){
+                puts("User account ID not Found");
+                return false;
+            }
+            url_post_size = (start - url_append) + strlen(configurations.account_id) + strlen(end);
             url_post = (char *)malloc(sizeof(char) * url_post_size);
 
             strncpy(url_post, url_append, (start - url_append));
@@ -253,7 +275,16 @@ bool prepareUrl(char **full_url, char *url_prepend, char *url_append) {
             strcat(url_post, configurations.account_id);
             strcat(url_post, end + 1);
         } else if(strcmp(strtoken, "data_account_id") == 0) {
-            int url_post_size = (start - url_append) + strlen(configurations.data_account_id) + strlen(end);
+        // TODO: TODO: Right now this is done for one data account per one user account
+        // TODO: TODO: Multiple data accounts per user account should be supported
+            int url_post_size = 0;
+
+            if(configurations.data_account_id == NULL){
+                puts("Data Account ID not Found");
+                return false;
+            }
+
+            url_post_size = (start - url_append) + strlen(configurations.data_account_id) + strlen(end);
             url_post = (char *)malloc(sizeof(char) * url_post_size);
 
             strncpy(url_post, url_append, (start - url_append));
@@ -307,7 +338,8 @@ char *getConfigAuthorizationToken() {
 
         iotkit_init();
 
-        validateAuthorizationToken();
+        char * response = getAuthorizationTokenMeInfo();
+        printf("Response Received :\n%s", response);
 
 
 

@@ -32,16 +32,18 @@ char *createAnAccount(char *account_name) {
         return NULL;
     }
 
-    prepareUrl(&url, configurations.base_url, configurations.create_an_account);
+    if(prepareUrl(&url, configurations.base_url, configurations.create_an_account)) {
+        appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
+        appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
 
-    appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
-    appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
+        sprintf(body, "{\"name\":\"%s\"}", account_name);
 
-    sprintf(body, "{\"name\":\"%s\"}", account_name);
+        doHttpPost(url, headers, body);
 
-    doHttpPost(url, headers, body);
+        return response;
+    }
 
-    return response;
+    return NULL;
 }
 
 char *getAccountInformation() { // TODO: this should taken data account id as a parameter
@@ -52,11 +54,13 @@ char *getAccountInformation() { // TODO: this should taken data account id as a 
     appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
     appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
 
-    prepareUrl(&url, configurations.base_url, configurations.get_account_information);
+    if(prepareUrl(&url, configurations.base_url, configurations.get_account_information)){
+        doHttpGet(url, headers);
 
-    doHttpGet(url, headers);
+        return response;
+    }
 
-    return response;
+    return NULL;
 }
 
 char *getAccountActivationCode() { // TODO: this should taken data account id as a parameter
@@ -67,11 +71,14 @@ char *getAccountActivationCode() { // TODO: this should taken data account id as
     appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
     appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
 
-    prepareUrl(&url, configurations.base_url, configurations.get_account_activation_code);
+    if(prepareUrl(&url, configurations.base_url, configurations.get_account_activation_code)) {
 
-    doHttpGet(url, headers);
+        doHttpGet(url, headers);
 
-    return response;
+        return response;
+    }
+
+    return NULL;
 }
 
 
@@ -80,15 +87,18 @@ char *renewActivationCode() {
     char *url;
     char *response;
 
-    prepareUrl(&url, configurations.base_url, configurations.renew_account_activation);
+    if(prepareUrl(&url, configurations.base_url, configurations.renew_account_activation)) {
 
-    appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
-    appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
+        appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
+        appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
 
-    // TODO: GET THE NEW ACTIVATION CODE AND STORE IT IN CONFIG FILE
-    doHttpPut(url, headers, NULL);
+        // TODO: GET THE NEW ACTIVATION CODE AND STORE IT IN CONFIG FILE
+        doHttpPut(url, headers, NULL);
 
-    return response;
+        return response;
+    }
+
+    return NULL;
 }
 
 char *updateAnAccount(char *account_name) {
@@ -97,17 +107,20 @@ char *updateAnAccount(char *account_name) {
     char body[BODY_SIZE_MIN];
     char *response;
 
-    prepareUrl(&url, configurations.base_url, configurations.update_an_account_name);
+    if(prepareUrl(&url, configurations.base_url, configurations.update_an_account_name)) {
 
-    appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
-    appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
+        appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
+        appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
 
-    sprintf(body, "{\"name\":\"%s\"}", account_name);
-    // TODO: GET THE NEW ACTIVATION CODE AND STORE IT IN CONFIG FILE
+        sprintf(body, "{\"name\":\"%s\"}", account_name);
+        // TODO: GET THE NEW ACTIVATION CODE AND STORE IT IN CONFIG FILE
 
-    doHttpPut(url, headers, body);
+        doHttpPut(url, headers, body);
 
-    return response;
+        return response;
+    }
+
+    return NULL;
 }
 
 char *deleteAnAccount() {
@@ -115,14 +128,17 @@ char *deleteAnAccount() {
     char *url;
     char *response;
 
-    prepareUrl(&url, configurations.base_url, configurations.delete_an_account_name);
+    if(prepareUrl(&url, configurations.base_url, configurations.delete_an_account_name)) {
 
-    appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
-    appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
+        appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
+        appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
 
-    // TODO: GET THE NEW ACTIVATION CODE AND STORE IT IN CONFIG FILE
+        // TODO: GET THE NEW ACTIVATION CODE AND STORE IT IN CONFIG FILE
 
-    doHttpDelete(url, headers);
+        doHttpDelete(url, headers);
 
-    return response;
+        return response;
+    }
+
+    return NULL;
 }
