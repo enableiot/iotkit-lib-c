@@ -37,3 +37,20 @@ char * listAllComponents() {
 
     return NULL;
 }
+
+char * getComponentDetails() {
+    struct curl_slist *headers = NULL;
+    char *url;
+    char *response;
+
+    appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
+
+    if(prepareUrl(&url, configurations.base_url, configurations.get_component_details)) {
+
+        doHttpGet(url, headers, &response);
+
+        return response;
+    }
+
+    return NULL;
+}

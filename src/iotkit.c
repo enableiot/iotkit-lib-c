@@ -243,6 +243,13 @@ void parseConfiguration(char *config_file_path) {
             }
             configurations.list_components = strdup(child2->valuestring);
 
+            child2 = cJSON_GetObjectItem(child1, "get_component_details");
+            if (!isJsonString(child2)) {
+                fprintf(stderr,"Invalid JSON format for json property %s\n", child2->string);
+                return;
+            }
+            configurations.get_component_details = strdup(child2->valuestring);
+
             cJSON_Delete(json);
         }
 
@@ -264,9 +271,15 @@ bool prepareUrl(char **full_url, char *url_prepend, char *url_append) {
         return false;
     }
 
-    if(strstr(url_append, "{")) {
-        char *start = strstr(url_append, "{");
-        char *end = strstr(url_append, "}");
+//    url_post = url_append;
+
+    char *start = url_append;
+    char *end = NULL;
+
+    while(start != NULL && strstr(start, "{") != NULL) {
+
+        start = strstr(start, "{");
+        end = strstr(start, "}");
 
         char strtokensize = end - start;
         char *strtoken = (char *)malloc(sizeof(char) * strtokensize);
@@ -281,15 +294,21 @@ bool prepareUrl(char **full_url, char *url_prepend, char *url_append) {
                 return false;
             }
             url_post_size = (start - url_append) + strlen(configurations.account_id) + strlen(end);
-            url_post = (char *)malloc(sizeof(char) * url_post_size);
 
-            strncpy(url_post, url_append, (start - url_append));
-            url_post[start - url_append] = '\0';
+            if(url_post == NULL) {
+                url_post = (char *)malloc(sizeof(char) * url_post_size);
+                strncpy(url_post, url_append, (start - url_append));
+                url_post[start - url_append] = '\0';
+            } else {
+                url_post_size += strlen(url_post);
+                url_post = (char *)realloc(url_post, sizeof(char) * url_post_size);
+                strncat(url_post, url_append, (start - url_append));
+            }
+
             strcat(url_post, configurations.account_id);
-            strcat(url_post, end + 1);
         } else if(strcmp(strtoken, "data_account_id") == 0) {
-        // TODO: TODO: Right now this is done for one data account per one user account
-        // TODO: TODO: Multiple data accounts per user account should be supported
+            // TODO: TODO: Right now this is done for one data account per one user account
+            // TODO: TODO: Multiple data accounts per user account should be supported
             int url_post_size = 0;
 
             if(configurations.data_account_id == NULL){
@@ -298,17 +317,62 @@ bool prepareUrl(char **full_url, char *url_prepend, char *url_append) {
             }
 
             url_post_size = (start - url_append) + strlen(configurations.data_account_id) + strlen(end);
-            url_post = (char *)malloc(sizeof(char) * url_post_size);
 
-            strncpy(url_post, url_append, (start - url_append));
-            url_post[start - url_append] = '\0';
+            if(url_post == NULL) {
+                url_post = (char *)malloc(sizeof(char) * url_post_size);
+                strncpy(url_post, url_append, (start - url_append));
+                url_post[start - url_append] = '\0';
+            } else {
+                url_post_size += strlen(url_post);
+                url_post = (char *)realloc(url_post, sizeof(char) * url_post_size);
+                strncat(url_post, url_append, (start - url_append));
+            }
+
             strcat(url_post, configurations.data_account_id);
-            strcat(url_post, end + 1);
+        } else if(strcmp(strtoken, "cmp_catalog_id") == 0) {
+            // TODO: TODO: Right now value is fixed
+            // TODO: TODO: Will see how to implement this in a better way
+            int url_post_size = 0;
+
+            url_post_size = (start - url_append) + strlen("temperature.v1.0") + strlen(end);
+
+            if(url_post == NULL) {
+                url_post = (char *)malloc(sizeof(char) * url_post_size);
+                strncpy(url_post, url_append, (start - url_append));
+                url_post[start - url_append] = '\0';
+            } else {
+                url_post_size += strlen(url_post);
+                url_post = (char *)realloc(url_post, sizeof(char) * url_post_size);
+                strncat(url_post, url_append, (start - url_append));
+            }
+
+            strcat(url_post, "temperature.v1.0");
         } else {
-            url_post = url_append;
+            int url_post_size = 0;
+
+            url_post_size = (end - url_append) + strlen(end);
+
+            if(url_post == NULL) {
+                url_post = (char *)malloc(sizeof(char) * url_post_size);
+                strncpy(url_post, url_append, (end - url_append));
+                url_post[start - url_append] = '\0';
+            } else {
+                url_post_size += strlen(url_post);
+                url_post = (char *)realloc(url_post, sizeof(char) * url_post_size);
+                strncat(url_post, url_append, (end - url_append));
+            }
+
+            strcat(url_post, "}");
         }
-    } else {
+
+        url_append = end + 1;
+        start = url_append;
+    }
+
+    if(url_post == NULL) {
         url_post = url_append;
+    } else if(end != NULL) {
+        strcat(url_post, url_append);
     }
 
     urlSize = configurations.isSecure ? strlen(HTTPS_PROTOCOL) : strlen(HTTP_PROTOCOL);
@@ -350,7 +414,10 @@ char *getConfigAuthorizationToken() {
 
         iotkit_init();
 
+//        getNewAuthorizationToken("pradeepx.chenthati@intel.com", "Password1");
+//        char * response = validateAuthorizationToken();
         char * response = listAllComponents();
+//        char * response = getComponentDetails();
         printf("Response Received :%s\n", response);
 
 

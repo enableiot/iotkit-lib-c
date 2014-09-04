@@ -70,6 +70,7 @@ typedef struct _Configurations {
 
     // component catalogs
     char *list_components;
+    char *get_component_details;
 } Configurations;
 
 

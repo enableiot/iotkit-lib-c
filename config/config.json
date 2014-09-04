@@ -1,10 +1,11 @@
 {
     "activation_code": null,
-    "authorization_key": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJqdGkiOiI4MTllZTcxNC0zMjQ3LTQ5ZTktOTFkMi0yMmYwZTZhYzcxOWEiLCJpc3MiOiJodHRwOi8vZW5hYmxlaW90LmNvbSIsInN1YiI6IjUzZmU0NTJmZDZlMjA2MTU1MTE1M2E4OCIsImV4cCI6IjIwMTQtMDgtMjlUMDA6MzM6MDIuNzc3WiJ9.CrZOnf_8Kc5JONRCa6O8nac9m2XH3JHdO6IT444ly6gb6Z6-MmkVFquS4TYwyFMZU8yaH3R18bA18DJVzrz09fLVIbl6HCCAxoBGRGeXgHOUQJacWnIYzXFdammA59TKbRWv_rK1HDL9CmnXwp08w3gj4AqcQLWkNcin4x0PeiOJgekz8MNl-6gPqGIPUBc9tqilzRIB_wvPcSDAMKxg_A11vR5I-8bM5HcIbktJ4pfPI-abWdK5vqfQ7vHSqah8U1rwquHefEMv5LTruOoPDZlBl7-f2TXErCGpHJB5oLJrXtiQu1zHgnDs4E-OyEjeSsjjrroy0yVga45WlOkfbA",
+    "authorization_key": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJqdGkiOiJkZWM3NDhhYy1lY2NjLTQzYzgtODU1OC03NDFjNTMyYzUxOTIiLCJpc3MiOiJodHRwOi8vZW5hYmxlaW90LmNvbSIsInN1YiI6IjUzZmU0NTJmZDZlMjA2MTU1MTE1M2E4OCIsImV4cCI6IjIwMTQtMDktMDVUMDA6NTA6NTUuNzkxWiJ9.illXvl9uLTUhl-tuxa2WGuB3C0VLBMYVv0DKMNBu1BDbHJdYa5oCvYELqXoP2RM2VGlq4AM_0E8ktpVFMIgADUgObIN5NEnf3E4bvua-fhAU3b4B4Sv-t4LQMjrc4Fgp2tQIhTCl-m1ppK3NuwuXsMJTKLMoYL3okf934nKqmcwkI82Z8xckDvPsPhFQORbf42WSTGURJasNo1aaauntz-_xtiILS2h9gVfSRHAqoP4i5Nbl49RUwPTKUuau8LRbEAGwgtY9Vti0FSyPpW77tSLUlgF2SNc4jz9xOMzzdng7w5g91BJQ_8U6qIRQCPKzGK_4vDzVX7SqlSYXPpybRA",
     "account_id": "53fe452fd6e2061551153a88",
     "device_id": false,
     "data_account_name": "pradyp7",
     "data_account_id" : "5cf1f891-b388-4795-8abc-b604ded6b163",
+    "cmp_catalog_id": "temperature.v1.0",
     "token_file": "token.json",
     "device_loc": [
         88.34,
@@ -40,6 +41,7 @@
         },
         "cmpcatalog": {
             "list_components": "/v1/api/accounts/{data_account_id}/cmpcatalog",
+            "get_component_details": "/v1/api/accounts/{data_account_id}/cmpcatalog/{cmp_catalog_id}",
             "component": "/v1/api/cmpcatalog/{componentId}"
         },
         "health": "/v1/api/health"
