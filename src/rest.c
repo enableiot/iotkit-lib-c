@@ -137,22 +137,9 @@ int doHttpGet(char *url, struct curl_slist *headers, char **response) {
 }
 
 
-static size_t readCallbackForPut(void *ptr, size_t size, size_t nmemb, struct putData *userdata)
-{
-  size_t curl_size = nmemb * size;
-  size_t to_copy = (userdata->len < curl_size) ? userdata->len : curl_size;
-  memcpy(ptr, userdata->data, to_copy);
-  userdata->len -= to_copy;
-  userdata->data += to_copy;
-  return to_copy;
-}
-
 int doHttpPut(char *url, struct curl_slist *headers, char *body) {
     CURL *curl;
     CURLcode res;
-    struct putData *datal = (struct putData *)malloc(sizeof(struct putData));
-    datal->data = "{}";
-    datal->len = 2;
 
     curl = curl_easy_init();
     if(curl) {
@@ -171,7 +158,7 @@ int doHttpPut(char *url, struct curl_slist *headers, char *body) {
 
         curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "PUT");
 
-        if(!body) {
+        if(body) {
             curl_easy_setopt(curl, CURLOPT_POSTFIELDS, body);
         }
 
