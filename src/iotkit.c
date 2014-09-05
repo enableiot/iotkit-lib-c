@@ -250,6 +250,13 @@ void parseConfiguration(char *config_file_path) {
             }
             configurations.get_component_details = strdup(child2->valuestring);
 
+            child2 = cJSON_GetObjectItem(child1, "create_an_cmp_catalog");
+            if (!isJsonString(child2)) {
+                fprintf(stderr,"Invalid JSON format for json property %s\n", child2->string);
+                return;
+            }
+            configurations.create_an_cmp_catalog = strdup(child2->valuestring);
+
             cJSON_Delete(json);
         }
 
@@ -416,9 +423,10 @@ char *getConfigAuthorizationToken() {
 
 //        getNewAuthorizationToken("pradeepx.chenthati@intel.com", "Password1");
 //        char * response = validateAuthorizationToken();
-        char * response = listAllComponents();
+//        char * response = listAllComponents();
 //        char * response = getComponentDetails();
-        printf("Response Received :%s\n", response);
+        createAnComponentCatalog("funny13", "1.0", "sensor", "Number", "float", true, -150.0f, true, 150.0f, "Degrees Celsius", "timeSeries");
+//        printf("Response Received :%s\n", response);
 
 
 

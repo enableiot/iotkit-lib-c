@@ -54,3 +54,95 @@ char * getComponentDetails() {
 
     return NULL;
 }
+
+char *createAnComponentCatalog(char *cmp_name, char *cmp_version, char *cmp_type, char *cmp_datatype, \
+        char *cmp_format, bool isMinPresent, double cmp_minvalue, bool isMaxPresent, double cmp_maxvalue, char *cmp_unit, char *cmp_display) {
+
+    struct curl_slist *headers = NULL;
+    char *url;
+    char body[BODY_SIZE_MIN];
+    char *response;
+
+    if(cmp_name == NULL || cmp_version == NULL || \
+            cmp_type == NULL || cmp_datatype == NULL || \
+            cmp_format == NULL || cmp_unit == NULL || \
+            cmp_display == NULL) {
+        printf("Mandatory field missing to create component catalog\n");
+
+        return NULL;
+    }
+
+    if(prepareUrl(&url, configurations.base_url, configurations.create_an_cmp_catalog)) {
+        appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
+        appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
+
+        strcpy(body, "{");
+
+        if(cmp_name != NULL) {
+            strcat(body, "\"dimension\":\"");
+            strcat(body, cmp_name);
+            strcat(body, "\"");
+        }
+
+        if(cmp_version != NULL) {
+            strcat(body, ",\"version\":\"");
+            strcat(body, cmp_version);
+            strcat(body, "\"");
+        }
+
+        if(cmp_type != NULL) {
+            strcat(body, ",\"type\":\"");
+            strcat(body, cmp_type);
+            strcat(body, "\"");
+        }
+
+        if(cmp_datatype != NULL) {
+            strcat(body, ",\"dataType\":\"");
+            strcat(body, cmp_datatype);
+            strcat(body, "\"");
+        }
+
+        if(cmp_format != NULL) {
+            strcat(body, ",\"format\":\"");
+            strcat(body, cmp_format);
+            strcat(body, "\"");
+        }
+
+        char value[BODY_SIZE_MIN];
+        if(isMinPresent == true) {
+            sprintf(value, "%f", cmp_minvalue);
+            strcat(body, ",\"min\":");
+            strcat(body, value);
+        }
+
+        if(isMaxPresent == true) {
+            sprintf(value, "%f", cmp_maxvalue);
+            strcat(body, ",\"max\":");
+            strcat(body, value);
+        }
+
+        if(cmp_unit != NULL) {
+            strcat(body, ",\"measureunit\":\"");
+            strcat(body, cmp_unit);
+            strcat(body, "\"");
+        }
+
+        if(cmp_display != NULL) {
+            strcat(body, ",\"display\":\"");
+            strcat(body, cmp_display);
+            strcat(body, "\"");
+        }
+
+        strcat(body, "}");
+
+        #if DEBUG
+            printf("Prepared BODY is %s\n", body);
+        #endif
+
+        doHttpPost(url, headers, body);
+
+        return response;
+    }
+
+    return NULL;
+}

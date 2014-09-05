@@ -1,6 +1,6 @@
 {
     "activation_code": null,
-    "authorization_key": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJqdGkiOiJkZWM3NDhhYy1lY2NjLTQzYzgtODU1OC03NDFjNTMyYzUxOTIiLCJpc3MiOiJodHRwOi8vZW5hYmxlaW90LmNvbSIsInN1YiI6IjUzZmU0NTJmZDZlMjA2MTU1MTE1M2E4OCIsImV4cCI6IjIwMTQtMDktMDVUMDA6NTA6NTUuNzkxWiJ9.illXvl9uLTUhl-tuxa2WGuB3C0VLBMYVv0DKMNBu1BDbHJdYa5oCvYELqXoP2RM2VGlq4AM_0E8ktpVFMIgADUgObIN5NEnf3E4bvua-fhAU3b4B4Sv-t4LQMjrc4Fgp2tQIhTCl-m1ppK3NuwuXsMJTKLMoYL3okf934nKqmcwkI82Z8xckDvPsPhFQORbf42WSTGURJasNo1aaauntz-_xtiILS2h9gVfSRHAqoP4i5Nbl49RUwPTKUuau8LRbEAGwgtY9Vti0FSyPpW77tSLUlgF2SNc4jz9xOMzzdng7w5g91BJQ_8U6qIRQCPKzGK_4vDzVX7SqlSYXPpybRA",
+    "authorization_key": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJqdGkiOiJiNDY4MTkzMi0zY2Q2LTRiYTAtOGYxYy0wOTBmNzdkODA3YmMiLCJpc3MiOiJodHRwOi8vZW5hYmxlaW90LmNvbSIsInN1YiI6IjUzZmU0NTJmZDZlMjA2MTU1MTE1M2E4OCIsImV4cCI6IjIwMTQtMDktMDZUMDE6MzE6MTQuMzI4WiJ9.TAOCpmQput9xmqdz6DJIW0uw2zOE3YBmeOcEbBuddUW3vPsW5-v9ryl5AEGlOpdQ3BFeON5No8TGOO0Xo9YPgQrdy-cLx9GZtVrp8Eyfjwy4VVS2IZrMZ3ZE2FFQ3jG-HA5zop-Emmu8vUNyaoMRNbz8y_DkVFBvtrOlG1iY-MoGOyTh8-jfu7r9-UmrwPqSGDFnjmRY1Z4IZO7iU32LdTzRejZISV58pjGZCpmsZ4kVpjrFkiqe5n3KRFf5ZVa3zJRVESuq2OHY09XQlk-qJVrVppOj-yZwECPITbR2h6GpJICMtSKzRT2sl75LYxciHvZV5hmTm5lYJBJb9Qu-Zw",
     "account_id": "53fe452fd6e2061551153a88",
     "device_id": false,
     "data_account_name": "pradyp7",
@@ -42,6 +42,7 @@
         "cmpcatalog": {
             "list_components": "/v1/api/accounts/{data_account_id}/cmpcatalog",
             "get_component_details": "/v1/api/accounts/{data_account_id}/cmpcatalog/{cmp_catalog_id}",
+            "create_an_cmp_catalog": "/v1/api/accounts/{data_account_id}/cmpcatalog",
             "component": "/v1/api/cmpcatalog/{componentId}"
         },
         "health": "/v1/api/health"
