@@ -73,6 +73,9 @@ typedef struct _Configurations {
     char *get_component_details;
     char *create_an_cmp_catalog;
     char *update_an_cmp_catalog;
+
+    // device management
+    char *list_all_devices;
 } Configurations;
 
 

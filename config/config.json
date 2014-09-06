@@ -31,7 +31,8 @@
             "auth_token_info" : "/v1/api/auth/tokeninfo",
             "me_info" : "/v1/ui/auth/me"
         },
-        "device": {
+        "device_management": {
+            "list_all_devices": "/v1/api/accounts/{data_account_id}/devices",
             "act": "/v1/api/devices/{deviceid}/activation",
             "update": "/v1/api/devices/{deviceid}",
             "components": "/v1/api/devices/{deviceid}/components"
