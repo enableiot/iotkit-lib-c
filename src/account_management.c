@@ -55,7 +55,7 @@ char *getAccountInformation() { // TODO: this should taken data account id as a 
     appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
 
     if(prepareUrl(&url, configurations.base_url, configurations.get_account_information)){
-        doHttpGet(url, headers);
+        doHttpGet(url, headers, &response);
 
         return response;
     }
@@ -73,7 +73,7 @@ char *getAccountActivationCode() { // TODO: this should taken data account id as
 
     if(prepareUrl(&url, configurations.base_url, configurations.get_account_activation_code)) {
 
-        doHttpGet(url, headers);
+        doHttpGet(url, headers, &response);
 
         return response;
     }
