@@ -56,7 +56,10 @@ char * getComponentDetails() {
 }
 
 char *createAnComponentCatalog(char *cmp_name, char *cmp_version, char *cmp_type, char *cmp_datatype, \
-        char *cmp_format, bool isMinPresent, double cmp_minvalue, bool isMaxPresent, double cmp_maxvalue, char *cmp_unit, char *cmp_display) {
+        char *cmp_format, bool isMinPresent, double cmp_minvalue, bool isMaxPresent, double cmp_maxvalue, \
+        char *cmp_unit, char *cmp_display, char *cmp_command) {
+
+// TODO: TODO: TODO: TODO: THIS DOES NOT SUPPORT ACTUATOR AS OF NOW
 
     struct curl_slist *headers = NULL;
     char *url;
@@ -130,6 +133,13 @@ char *createAnComponentCatalog(char *cmp_name, char *cmp_version, char *cmp_type
         if(cmp_display != NULL) {
             strcat(body, ",\"display\":\"");
             strcat(body, cmp_display);
+            strcat(body, "\"");
+        }
+
+        if(cmp_command != NULL) {
+            // TODO: TODO: NEED TO BE VALIDATED FOR ACTUATOR
+            strcat(body, ",\"command\":\"");
+            strcat(body, cmp_command);
             strcat(body, "\"");
         }
 
