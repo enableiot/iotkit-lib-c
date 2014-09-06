@@ -257,6 +257,13 @@ void parseConfiguration(char *config_file_path) {
             }
             configurations.create_an_cmp_catalog = strdup(child2->valuestring);
 
+            child2 = cJSON_GetObjectItem(child1, "update_an_cmp_catalog");
+            if (!isJsonString(child2)) {
+                fprintf(stderr,"Invalid JSON format for json property %s\n", child2->string);
+                return;
+            }
+            configurations.update_an_cmp_catalog = strdup(child2->valuestring);
+
             cJSON_Delete(json);
         }
 
@@ -425,7 +432,8 @@ char *getConfigAuthorizationToken() {
 //        char * response = validateAuthorizationToken();
 //        char * response = listAllComponents();
 //        char * response = getComponentDetails();
-        createAnComponentCatalog("funny13", "1.0", "sensor", "Number", "float", true, -150.0f, true, 150.0f, "Degrees Celsius", "timeSeries");
+//        createAnComponentCatalog("funny13", "1.0", "sensor", "Number", "float", true, -150.0f, true, 150.0f, "Degrees Celsius", "timeSeries");
+        updateAnComponentCatalog(NULL, "Number", "Integer", false, -150.0f, false, 150.0f, "masala", "timeSeries", NULL);
 //        printf("Response Received :%s\n", response);
 
 

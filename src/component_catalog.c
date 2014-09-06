@@ -146,3 +146,113 @@ char *createAnComponentCatalog(char *cmp_name, char *cmp_version, char *cmp_type
 
     return NULL;
 }
+
+char *updateAnComponentCatalog(char *cmp_type, char *cmp_datatype, \
+        char *cmp_format, bool isMinPresent, double cmp_minvalue, bool isMaxPresent, double cmp_maxvalue,
+        char *cmp_unit, char *cmp_display, char *cmp_command) {
+
+// TODO: TODO: TODO: TODO: THIS DOES NOT SUPPORT ACTUATOR AS OF NOW
+
+    struct curl_slist *headers = NULL;
+    char *url;
+    char body[BODY_SIZE_MIN];
+    char *response;
+    bool isCommaRequired = false;
+
+    if(prepareUrl(&url, configurations.base_url, configurations.update_an_cmp_catalog)) {
+        appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
+        appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
+
+        strcpy(body, "{");
+
+        if(cmp_type != NULL) {
+            strcat(body, "\"type\":\"");
+            strcat(body, cmp_type);
+            strcat(body, "\"");
+            isCommaRequired = true;
+        }
+
+        if(cmp_datatype != NULL) {
+            if(isCommaRequired) {
+                strcat(body, ",");
+            }
+            strcat(body, "\"dataType\":\"");
+            strcat(body, cmp_datatype);
+            strcat(body, "\"");
+            isCommaRequired = true;
+        }
+
+        if(cmp_format != NULL) {
+            if(isCommaRequired) {
+                strcat(body, ",");
+            }
+            strcat(body, "\"format\":\"");
+            strcat(body, cmp_format);
+            strcat(body, "\"");
+            isCommaRequired = true;
+        }
+
+        char value[BODY_SIZE_MIN];
+        if(isMinPresent == true) {
+            sprintf(value, "%f", cmp_minvalue);
+            if(isCommaRequired) {
+                strcat(body, ",");
+            }
+            strcat(body, "\"min\":");
+            strcat(body, value);
+            isCommaRequired = true;
+        }
+
+        if(isMaxPresent == true) {
+            sprintf(value, "%f", cmp_maxvalue);
+            if(isCommaRequired) {
+                strcat(body, ",");
+            }
+            strcat(body, "\"max\":");
+            strcat(body, value);
+            isCommaRequired = true;
+        }
+
+        if(cmp_unit != NULL) {
+            if(isCommaRequired) {
+                strcat(body, ",");
+            }
+            strcat(body, "\"measureunit\":\"");
+            strcat(body, cmp_unit);
+            strcat(body, "\"");
+            isCommaRequired = true;
+        }
+
+        if(cmp_display != NULL) {
+            if(isCommaRequired) {
+                strcat(body, ",");
+            }
+            strcat(body, "\"display\":\"");
+            strcat(body, cmp_display);
+            strcat(body, "\"");
+            isCommaRequired = true;
+        }
+
+        if(cmp_command != NULL) {
+            // TODO: TODO: NEED TO BE VALIDATED FOR ACTUATOR
+            if(isCommaRequired) {
+                strcat(body, ",");
+            }
+            strcat(body, "\"command\":\"");
+            strcat(body, cmp_command);
+            strcat(body, "\"");
+        }
+
+        strcat(body, "}");
+
+        #if DEBUG
+            printf("Prepared BODY is %s\n", body);
+        #endif
+
+        doHttpPut(url, headers, body);
+
+        return response;
+    }
+
+    return NULL;
+}

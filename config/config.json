@@ -43,6 +43,7 @@
             "list_components": "/v1/api/accounts/{data_account_id}/cmpcatalog",
             "get_component_details": "/v1/api/accounts/{data_account_id}/cmpcatalog/{cmp_catalog_id}",
             "create_an_cmp_catalog": "/v1/api/accounts/{data_account_id}/cmpcatalog",
+            "update_an_cmp_catalog": "/v1/api/accounts/{data_account_id}/cmpcatalog/{cmp_catalog_id}",
             "component": "/v1/api/cmpcatalog/{componentId}"
         },
         "health": "/v1/api/health"

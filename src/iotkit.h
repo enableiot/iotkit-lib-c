@@ -72,6 +72,7 @@ typedef struct _Configurations {
     char *list_components;
     char *get_component_details;
     char *create_an_cmp_catalog;
+    char *update_an_cmp_catalog;
 } Configurations;
 
 
