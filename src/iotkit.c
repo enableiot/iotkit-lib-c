@@ -124,6 +124,18 @@ void parseConfiguration(char *config_file_path) {
                 configurations.data_account_id = NULL;
             }
 
+            jitem = cJSON_GetObjectItem(json, "device_id");
+            if (!isJsonString(jitem) && !isJsonBooleanFalse(jitem)) {
+                fprintf(stderr,"Invalid JSON format for json property %s\n", jitem->string);
+                return;
+            }
+
+            if (isJsonString(jitem)) {
+                configurations.device_id = strdup(jitem->valuestring);
+            } else {
+                configurations.device_id = NULL;
+            }
+
             jitem = cJSON_GetObjectItem(json, "authorization_key");
             if (!isJsonString(jitem) && !isJsonBooleanFalse(jitem)) {
                 fprintf(stderr,"Invalid JSON format for json property %s\n", jitem->string);
@@ -278,6 +290,13 @@ void parseConfiguration(char *config_file_path) {
             }
             configurations.list_all_devices = strdup(child2->valuestring);
 
+            child2 = cJSON_GetObjectItem(child1, "get_device_info");
+            if (!isJsonString(child2)) {
+                fprintf(stderr,"Invalid JSON format for json property %s\n", child2->string);
+                return;
+            }
+            configurations.get_device_info = strdup(child2->valuestring);
+
             cJSON_Delete(json);
         }
 
@@ -375,6 +394,27 @@ bool prepareUrl(char **full_url, char *url_prepend, char *url_append) {
             }
 
             strcat(url_post, "temperature.v1.0");
+        } else if(strcmp(strtoken, "device_id") == 0) {
+            int url_post_size = 0;
+
+            if(configurations.device_id == NULL){
+                puts("Device ID not Found");
+                return false;
+            }
+
+            url_post_size = (start - url_append) + strlen(configurations.device_id) + strlen(end);
+
+            if(url_post == NULL) {
+                url_post = (char *)malloc(sizeof(char) * url_post_size);
+                strncpy(url_post, url_append, (start - url_append));
+                url_post[start - url_append] = '\0';
+            } else {
+                url_post_size += strlen(url_post);
+                url_post = (char *)realloc(url_post, sizeof(char) * url_post_size);
+                strncat(url_post, url_append, (start - url_append));
+            }
+
+            strcat(url_post, configurations.device_id);
         } else {
             int url_post_size = 0;
 
@@ -448,7 +488,8 @@ char *getConfigAuthorizationToken() {
 //        char * response = getComponentDetails();
 //        createAnComponentCatalog("funny13", "1.0", "sensor", "Number", "float", true, -150.0f, true, 150.0f, "Degrees Celsius", "timeSeries");
 //        updateAnComponentCatalog(NULL, "Number", "Integer", false, -150.0f, false, 150.0f, "masala", "timeSeries", NULL);
-        char * response = listAllDevices();
+//        char * response = listAllDevices();
+        char * response = getOneDeviceInfo();
         printf("Response Received :%s\n", response);
 
 

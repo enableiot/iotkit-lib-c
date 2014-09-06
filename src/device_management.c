@@ -37,3 +37,20 @@ char *listAllDevices() {
 
     return NULL;
 }
+
+char *getOneDeviceInfo() {
+    struct curl_slist *headers = NULL;
+    char *url;
+    char *response;
+
+    appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
+    appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
+
+    if(prepareUrl(&url, configurations.base_url, configurations.get_device_info)){
+        doHttpGet(url, headers, &response);
+
+        return response;
+    }
+
+    return NULL;
+}
