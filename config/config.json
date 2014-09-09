@@ -1,6 +1,6 @@
 {
     "activation_code": null,
-    "authorization_key": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJqdGkiOiJiNDY4MTkzMi0zY2Q2LTRiYTAtOGYxYy0wOTBmNzdkODA3YmMiLCJpc3MiOiJodHRwOi8vZW5hYmxlaW90LmNvbSIsInN1YiI6IjUzZmU0NTJmZDZlMjA2MTU1MTE1M2E4OCIsImV4cCI6IjIwMTQtMDktMDZUMDE6MzE6MTQuMzI4WiJ9.TAOCpmQput9xmqdz6DJIW0uw2zOE3YBmeOcEbBuddUW3vPsW5-v9ryl5AEGlOpdQ3BFeON5No8TGOO0Xo9YPgQrdy-cLx9GZtVrp8Eyfjwy4VVS2IZrMZ3ZE2FFQ3jG-HA5zop-Emmu8vUNyaoMRNbz8y_DkVFBvtrOlG1iY-MoGOyTh8-jfu7r9-UmrwPqSGDFnjmRY1Z4IZO7iU32LdTzRejZISV58pjGZCpmsZ4kVpjrFkiqe5n3KRFf5ZVa3zJRVESuq2OHY09XQlk-qJVrVppOj-yZwECPITbR2h6GpJICMtSKzRT2sl75LYxciHvZV5hmTm5lYJBJb9Qu-Zw",
+    "authorization_key": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJqdGkiOiIxOTYwNTg1Yy03ZGRmLTRjNGQtODNiZi0yN2Q1NmVhYmE5ODgiLCJpc3MiOiJodHRwOi8vZW5hYmxlaW90LmNvbSIsInN1YiI6IjUzZmU0NTJmZDZlMjA2MTU1MTE1M2E4OCIsImV4cCI6IjIwMTQtMDktMDlUMjM6NTE6MDAuMzAzWiJ9.SyRZPjfhMo8mq1YhbJwjNRnDJ1hs3M17dQkoFPmPXoHjnYYwZB2HY4D9utZdo6R01ffYyuWiZKojSRb-S1zzOx5IRkfB6ugphvIIV8gqnWmkjHLyp-xGbDkqyvNnqAJkrkdtpVVp9ffP9eN2XB9kxljQyxdTznbQ7VLdAFg2Hrn1_4OtJVf_N9hSwcgEt5B6ASiOnYCA6WGb8r7sdNbR7_3cc0edyC-FxXnfE3Rx0vuDciD-SxJUwrtFXdP6K7fYEjLxQF-AEEhsPwnDusiE_k072T5qXRtFstcuD4-Y5ueH_nydbh-Uux35awkiOr_WG0441YVWT9kj_J3R5zz6Hg",
     "account_id": "53fe452fd6e2061551153a88",
     "device_id": "02-00-86-83-c5-c2",
     "data_account_name": "pradyp7",
@@ -34,6 +34,7 @@
         "device_management": {
             "list_all_devices": "/v1/api/accounts/{data_account_id}/devices",
             "get_device_info": "/v1/api/accounts/{data_account_id}/devices/{device_id}",
+            "create_a_device": "/v1/api/accounts/{data_account_id}/devices",
             "act": "/v1/api/devices/{deviceid}/activation",
             "update": "/v1/api/devices/{deviceid}",
             "components": "/v1/api/devices/{deviceid}/components"
