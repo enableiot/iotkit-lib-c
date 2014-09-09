@@ -79,6 +79,7 @@ typedef struct _Configurations {
     char *list_all_devices;
     char *get_device_info;
     char *create_a_device;
+    char *update_a_device;
 } Configurations;
 
 

@@ -35,6 +35,7 @@
             "list_all_devices": "/v1/api/accounts/{data_account_id}/devices",
             "get_device_info": "/v1/api/accounts/{data_account_id}/devices/{device_id}",
             "create_a_device": "/v1/api/accounts/{data_account_id}/devices",
+            "update_a_device": "/v1/api/accounts/{data_account_id}/devices/{device_id}",
             "act": "/v1/api/devices/{deviceid}/activation",
             "update": "/v1/api/devices/{deviceid}",
             "components": "/v1/api/devices/{deviceid}/components"

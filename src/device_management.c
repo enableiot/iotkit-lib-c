@@ -90,3 +90,55 @@ char *createADevice(char *device_id, char *gateway_id, char *device_name) {
 
     return NULL;
 }
+
+char *updateADevice(char *device_id, char *gateway_id, char *device_name) {
+
+// TODO: TODO: TODO: This does not support tags, loc and attributes while updating a device
+
+    struct curl_slist *headers = NULL;
+    char *url;
+    char body[BODY_SIZE_MED];
+    char *response;
+    bool isCommaRequired = false;
+
+    if(!device_id) {
+        fprintf(stderr, "updateADevice::Device ID cannot be NULL");
+        return NULL;
+    }
+
+    if(prepareUrl(&url, configurations.base_url, configurations.update_a_device)) {
+        appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
+        appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
+
+        strcpy(body, "{");
+
+        if(gateway_id != NULL) {
+            strcat(body, "\"gatewayId\":\"");
+            strcat(body, gateway_id);
+            strcat(body, "\"");
+            isCommaRequired = true;
+        }
+
+        if(device_name != NULL) {
+            if(isCommaRequired) {
+                strcat(body, ",");
+            }
+            strcat(body, "\"name\":\"");
+            strcat(body, device_name);
+            strcat(body, "\"");
+            isCommaRequired = true;
+        }
+
+        strcat(body, "}");
+
+        #if DEBUG
+            printf("Prepared BODY is %s\n", body);
+        #endif
+
+        doHttpPut(url, headers, body);
+
+        return response;
+    }
+
+    return NULL;
+}
