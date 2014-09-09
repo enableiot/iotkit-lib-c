@@ -54,3 +54,38 @@ char *getOneDeviceInfo() {
 
     return NULL;
 }
+
+char *createADevice(char *device_id, char *gateway_id, char *device_name) {
+    struct curl_slist *headers = NULL;
+    char *url;
+    char body[BODY_SIZE_MED];
+    char *response;
+
+    if(!device_id) {
+        fprintf(stderr, "createADevice::Device ID cannot be NULL");
+        return NULL;
+    }
+
+    if(!gateway_id) {
+        fprintf(stderr, "createADevice::Gateway ID cannot be NULL");
+        return NULL;
+    }
+
+    if(!device_name) {
+        fprintf(stderr, "createADevice::Device Name cannot be NULL");
+        return NULL;
+    }
+
+    if(prepareUrl(&url, configurations.base_url, configurations.create_a_device)) {
+        appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
+        appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
+
+        sprintf(body, "{\"deviceId\":\"%s\",\"gatewayId\":\"%s\",\"name\":\"%s\"}", device_id, gateway_id, device_name);
+
+        doHttpPost(url, headers, body);
+
+        return response;
+    }
+
+    return NULL;
+}
