@@ -177,3 +177,21 @@ char *activateADevice(char *activation_code) {
 
     return NULL;
 }
+
+char *deleteADevice() {
+    struct curl_slist *headers = NULL;
+    char *url;
+    char *response;
+
+    if(prepareUrl(&url, configurations.base_url, configurations.delete_a_device)) {
+
+        appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
+        appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
+
+        doHttpDelete(url, headers);
+
+        return response;
+    }
+
+    return NULL;
+}
