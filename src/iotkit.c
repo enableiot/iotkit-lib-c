@@ -311,6 +311,13 @@ void parseConfiguration(char *config_file_path) {
             }
             configurations.update_a_device = strdup(child2->valuestring);
 
+            child2 = cJSON_GetObjectItem(child1, "activate_a_device");
+            if (!isJsonString(child2)) {
+                fprintf(stderr,"Invalid JSON format for json property %s\n", child2->string);
+                return;
+            }
+            configurations.activate_a_device = strdup(child2->valuestring);
+
             cJSON_Delete(json);
         }
 
@@ -505,7 +512,8 @@ char *getConfigAuthorizationToken() {
 //        char * response = listAllDevices();
 //        char * response = getOneDeviceInfo();
 //        createADevice("02-00-86-81-77-22", "02-00-86-81-77-22", "maha 1234");
-        updateADevice("02-00-86-83-c5-c2", "02-00-86-83-c5-c2", "brady2");
+//        updateADevice("02-00-86-83-c5-c2", "02-00-86-83-c5-c2", "brady2");
+        activateADevice("yo7cWqUC");
 //        printf("Response Received :%s\n", response);
 
 

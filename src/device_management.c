@@ -142,3 +142,38 @@ char *updateADevice(char *device_id, char *gateway_id, char *device_name) {
 
     return NULL;
 }
+
+char *activateADevice(char *activation_code) {
+    struct curl_slist *headers = NULL;
+    char *url;
+    char body[BODY_SIZE_MED];
+    char *response;
+
+    if(!activation_code) {
+        fprintf(stderr, "activateADevice::Activation Code cannot be NULL");
+        return NULL;
+    }
+
+    if(prepareUrl(&url, configurations.base_url, configurations.activate_a_device)) {
+        appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
+        appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
+
+        strcpy(body, "{");
+
+        strcat(body, "\"activationCode\":\"");
+        strcat(body, activation_code);
+        strcat(body, "\"");
+
+        strcat(body, "}");
+
+        #if DEBUG
+            printf("Prepared BODY is %s\n", body);
+        #endif
+
+        doHttpPut(url, headers, body);
+
+        return response;
+    }
+
+    return NULL;
+}
