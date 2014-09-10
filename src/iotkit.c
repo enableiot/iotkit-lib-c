@@ -351,6 +351,19 @@ void parseConfiguration(char *config_file_path) {
             }
             configurations.delete_a_component = strdup(child2->valuestring);
 
+            child1 = cJSON_GetObjectItem(jitem, "data");
+            if (!isJsonObject(child1)) {
+                fprintf(stderr,"Invalid JSON format for json property %s\n", child1->string);
+                return;
+            }
+
+            child2 = cJSON_GetObjectItem(child1, "submit_data");
+            if (!isJsonString(child2)) {
+                fprintf(stderr,"Invalid JSON format for json property %s\n", child2->string);
+                return;
+            }
+            configurations.submit_data = strdup(child2->valuestring);
+
             cJSON_Delete(json);
         }
 
@@ -576,9 +589,9 @@ char *getDeviceAuthorizationToken() {
 //        updateADevice("02-00-86-83-c5-c2", "02-00-86-83-c5-c2", "brady2");
 //        activateADevice("teT2244l");
 //        deleteADevice();
-        addComponent("pune3", "temperature.v1.0");
+//        addComponent("pune3", "temperature.v1.0");
 //        deleteComponent();
-//        submitData("c8f3aae6-75c8-4b00-a1d9-900aceebcfcb", "20.5");
+        submitData("3601c9ad-77db-4f9a-89bf-1e6a045edb21", "30.5");
 //        printf("Response Received :%s\n", response);
 
 
