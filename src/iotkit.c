@@ -325,6 +325,20 @@ void parseConfiguration(char *config_file_path) {
             }
             configurations.delete_a_device = strdup(child2->valuestring);
 
+            child2 = cJSON_GetObjectItem(child1, "add_a_component");
+            if (!isJsonString(child2)) {
+                fprintf(stderr,"Invalid JSON format for json property %s\n", child2->string);
+                return;
+            }
+            configurations.add_a_component = strdup(child2->valuestring);
+
+            child2 = cJSON_GetObjectItem(child1, "delete_a_component");
+            if (!isJsonString(child2)) {
+                fprintf(stderr,"Invalid JSON format for json property %s\n", child2->string);
+                return;
+            }
+            configurations.delete_a_component = strdup(child2->valuestring);
+
             cJSON_Delete(json);
         }
 
@@ -443,6 +457,23 @@ bool prepareUrl(char **full_url, char *url_prepend, char *url_append) {
             }
 
             strcat(url_post, configurations.device_id);
+        } else if(strcmp(strtoken, "cid") == 0) {
+        // TODO: cid to be retrieved from configuration file
+            int url_post_size = 0;
+
+            url_post_size = (start - url_append) + strlen("85b6915e-99b7-4ca4-b3a1-f1e3fea6be3d") + strlen(end);
+
+            if(url_post == NULL) {
+                url_post = (char *)malloc(sizeof(char) * url_post_size);
+                strncpy(url_post, url_append, (start - url_append));
+                url_post[start - url_append] = '\0';
+            } else {
+                url_post_size += strlen(url_post);
+                url_post = (char *)realloc(url_post, sizeof(char) * url_post_size);
+                strncat(url_post, url_append, (start - url_append));
+            }
+
+            strcat(url_post, "85b6915e-99b7-4ca4-b3a1-f1e3fea6be3d");
         } else {
             int url_post_size = 0;
 
@@ -522,6 +553,8 @@ char *getConfigAuthorizationToken() {
 //        updateADevice("02-00-86-83-c5-c2", "02-00-86-83-c5-c2", "brady2");
 //        activateADevice("yo7cWqUC");
 //        deleteADevice();
+        addComponent("pune2", "temperature.v1.0");
+//        deleteComponent();
 //        printf("Response Received :%s\n", response);
 
 

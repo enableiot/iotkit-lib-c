@@ -195,3 +195,57 @@ char *deleteADevice() {
 
     return NULL;
 }
+
+char *addComponent(char *cmp_name, char *cmp_type) {
+// TODO: TODO: TODO: Generate GUID
+    struct curl_slist *headers = NULL;
+    char *url;
+    char body[BODY_SIZE_MIN];
+    char *response;
+
+    if(!cmp_name) {
+        fprintf(stderr, "createAComponent::Component Name cannot be NULL");
+        return NULL;
+    }
+
+    if(!cmp_type) {
+        fprintf(stderr, "createAComponent::Component Type cannot be NULL");
+        return NULL;
+    }
+
+    if(prepareUrl(&url, configurations.base_url, configurations.add_a_component)) {
+        appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
+        appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
+
+//        sprintf(body, "{\"cid\":\"%s\",\"name\":\"%s\",\"type\":\"%s\"}", "aedf4b3b-32db-4e09-8da2-fbbdfbcee37b", cmp_name, cmp_type);
+        sprintf(body, "{\"cid\":\"%s\",\"name\":\"%s\",\"type\":\"%s\"}", "85b6915e-99b7-4ca4-b3a1-f1e3fea6be3d", cmp_name, cmp_type);
+
+        #if DEBUG
+            printf("Prepared BODY is %s\n", body);
+        #endif
+
+        doHttpPost(url, headers, body);
+
+        return response;
+    }
+
+    return NULL;
+}
+
+char *deleteComponent() {
+    struct curl_slist *headers = NULL;
+    char *url;
+    char *response;
+
+    if(prepareUrl(&url, configurations.base_url, configurations.delete_a_component)) {
+
+        appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
+        appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
+
+        doHttpDelete(url, headers);
+
+        return response;
+    }
+
+    return NULL;
+}

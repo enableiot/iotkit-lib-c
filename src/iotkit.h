@@ -82,6 +82,8 @@ typedef struct _Configurations {
     char *update_a_device;
     char *activate_a_device;
     char *delete_a_device;
+    char *add_a_component;
+    char *delete_a_component;
 } Configurations;
 
 
