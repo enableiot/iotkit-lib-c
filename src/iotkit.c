@@ -136,6 +136,18 @@ void parseConfiguration(char *config_file_path) {
                 configurations.device_id = NULL;
             }
 
+            jitem = cJSON_GetObjectItem(json, "deviceToken");
+            if (!isJsonString(jitem) && !isJsonBooleanFalse(jitem)) {
+                fprintf(stderr,"Invalid JSON format for json property %s\n", jitem->string);
+                return;
+            }
+
+            if (isJsonString(jitem)) {
+                configurations.deviceToken = strdup(jitem->valuestring);
+            } else {
+                configurations.deviceToken = NULL;
+            }
+
             jitem = cJSON_GetObjectItem(json, "authorization_key");
             if (!isJsonString(jitem) && !isJsonBooleanFalse(jitem)) {
                 fprintf(stderr,"Invalid JSON format for json property %s\n", jitem->string);
@@ -525,11 +537,22 @@ bool prepareUrl(char **full_url, char *url_prepend, char *url_append) {
 
 char *getConfigAuthorizationToken() {
     char *authorization;
-    int authorizationSize = strlen(HEADER_AUTHORIZATION_BEARER) + configurations.authorization_key + 1;
+    int authorizationSize = strlen(HEADER_AUTHORIZATION_BEARER) + strlen(configurations.authorization_key) + 1;
 
     authorization = (char *)malloc(sizeof(char) * authorizationSize);
     strcpy(authorization, HEADER_AUTHORIZATION_BEARER);
     strcat(authorization, configurations.authorization_key);
+
+    return authorization;
+}
+
+char *getDeviceAuthorizationToken() {
+    char *authorization;
+    int authorizationSize = strlen(HEADER_AUTHORIZATION_BEARER) + strlen(configurations.deviceToken) + 1;
+
+    authorization = (char *)malloc(sizeof(char) * authorizationSize);
+    strcpy(authorization, HEADER_AUTHORIZATION_BEARER);
+    strcat(authorization, configurations.deviceToken);
 
     return authorization;
 }
@@ -549,12 +572,13 @@ char *getConfigAuthorizationToken() {
 //        updateAnComponentCatalog(NULL, "Number", "Integer", false, -150.0f, false, 150.0f, "masala", "timeSeries", NULL);
 //        char * response = listAllDevices();
 //        char * response = getOneDeviceInfo();
-//        createADevice("02-00-86-81-77-22", "02-00-86-81-77-22", "maha 1234");
+//        createADevice("02-00-86-81-77-33", "02-00-86-81-77-33", "ponky2");
 //        updateADevice("02-00-86-83-c5-c2", "02-00-86-83-c5-c2", "brady2");
-//        activateADevice("yo7cWqUC");
+//        activateADevice("teT2244l");
 //        deleteADevice();
-        addComponent("pune2", "temperature.v1.0");
+        addComponent("pune3", "temperature.v1.0");
 //        deleteComponent();
+//        submitData("c8f3aae6-75c8-4b00-a1d9-900aceebcfcb", "20.5");
 //        printf("Response Received :%s\n", response);
 
 

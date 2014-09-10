@@ -215,10 +215,10 @@ char *addComponent(char *cmp_name, char *cmp_type) {
 
     if(prepareUrl(&url, configurations.base_url, configurations.add_a_component)) {
         appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
-        appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
+        appendHttpHeader(&headers, HEADER_AUTHORIZATION, getDeviceAuthorizationToken());
 
 //        sprintf(body, "{\"cid\":\"%s\",\"name\":\"%s\",\"type\":\"%s\"}", "aedf4b3b-32db-4e09-8da2-fbbdfbcee37b", cmp_name, cmp_type);
-        sprintf(body, "{\"cid\":\"%s\",\"name\":\"%s\",\"type\":\"%s\"}", "85b6915e-99b7-4ca4-b3a1-f1e3fea6be3d", cmp_name, cmp_type);
+        sprintf(body, "{\"cid\":\"%s\",\"name\":\"%s\",\"type\":\"%s\"}", "3601c9ad-77db-4f9a-89bf-1e6a045edb21", cmp_name, cmp_type);
 
         #if DEBUG
             printf("Prepared BODY is %s\n", body);
