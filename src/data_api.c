@@ -86,3 +86,54 @@ char *submitData(char *cid, char *value) {
 
     return NULL;
 }
+
+char *retrieveData(long fromMillis, long toMillis, char *deviceId, char *componentId) {
+// TODO: TODO: should be able to retrieve data from multiple devices
+// TODO: TODO: should be able to retrieve data for multiple sensor components
+    struct curl_slist *headers = NULL;
+    char *url;
+    char body[BODY_SIZE_MED];
+    char *response;
+    char fromTimeInMillis[BODY_SIZE_MIN];
+    char toTimeInMillis[BODY_SIZE_MIN];
+
+    if(!deviceId) {
+        fprintf(stderr, "retrieveData::Device ID cannot be NULL");
+        return NULL;
+    }
+
+    if(!componentId) {
+        fprintf(stderr, "retrieveData::Component ID cannot be NULL");
+        return NULL;
+    }
+
+    if(prepareUrl(&url, configurations.base_url, configurations.retrieve_data)) {
+        appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
+        appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
+
+        sprintf(fromTimeInMillis, "%ld", fromMillis);
+        sprintf(toTimeInMillis, "%ld", toMillis);
+
+        strcpy(body, "{");
+        strcat(body, "\"from\":");
+        strcat(body, fromTimeInMillis);
+        strcat(body, ",\"to\":");
+        strcat(body, toTimeInMillis);
+        strcat(body, ",\"targetFilter\":{\"deviceList\":[\"");
+        strcat(body, deviceId);
+        strcat(body, "\"]},\"metrics\":[{\"id\":\"");
+        strcat(body, componentId);
+        strcat(body, "\",\"op\":\"none\"");
+        strcat(body, "}]}");
+
+        #if DEBUG
+            printf("Prepared BODY is %s\n", body);
+        #endif
+
+        doHttpPost(url, headers, body);
+
+        return response;
+    }
+
+    return NULL;
+}

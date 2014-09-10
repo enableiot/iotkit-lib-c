@@ -33,7 +33,7 @@
    #define DEBUG 1
 #endif
 
-#define BODY_SIZE_MIN 256
+#define BODY_SIZE_MIN 1024
 #define BODY_SIZE_MED 4096
 #define BODY_SIZE_MAX 12288
 
@@ -88,6 +88,7 @@ typedef struct _Configurations {
 
     // data api
     char *submit_data;
+    char *retrieve_data;
 } Configurations;
 
 

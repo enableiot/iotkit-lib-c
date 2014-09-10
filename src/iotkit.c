@@ -364,6 +364,13 @@ void parseConfiguration(char *config_file_path) {
             }
             configurations.submit_data = strdup(child2->valuestring);
 
+            child2 = cJSON_GetObjectItem(child1, "retrieve_data");
+            if (!isJsonString(child2)) {
+                fprintf(stderr,"Invalid JSON format for json property %s\n", child2->string);
+                return;
+            }
+            configurations.retrieve_data = strdup(child2->valuestring);
+
             cJSON_Delete(json);
         }
 
@@ -591,7 +598,8 @@ char *getDeviceAuthorizationToken() {
 //        deleteADevice();
 //        addComponent("pune3", "temperature.v1.0");
 //        deleteComponent();
-        submitData("3601c9ad-77db-4f9a-89bf-1e6a045edb21", "30.5");
+//        submitData("3601c9ad-77db-4f9a-89bf-1e6a045edb21", "30.5");
+        retrieveData(1410387088000, 1410392576934, "02-00-86-81-77-33", "3601c9ad-77db-4f9a-89bf-1e6a045edb21");
 //        printf("Response Received :%s\n", response);
 
 
