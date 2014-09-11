@@ -7,13 +7,11 @@
     "data_account_name": "pradyp7",
     "data_account_id" : "5cf1f891-b388-4795-8abc-b604ded6b163",
     "cmp_catalog_id": "temperature.v1.0",
-    "token_file": "token.json",
     "device_loc": [
         88.34,
         64.22047,
         -20
     ],
-    "data_directory": "",
     "gateway_id": null,
     "host": "dashboard.us.enableiot.com",
     "port": 443,
@@ -52,7 +50,6 @@
             "create_an_cmp_catalog": "/v1/api/accounts/{data_account_id}/cmpcatalog",
             "update_an_cmp_catalog": "/v1/api/accounts/{data_account_id}/cmpcatalog/{cmp_catalog_id}",
             "component": "/v1/api/cmpcatalog/{componentId}"
-        },
-        "health": "/v1/api/health"
+        }
     }
 }
