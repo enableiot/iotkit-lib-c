@@ -83,7 +83,7 @@ char *createADevice(char *device_id, char *gateway_id, char *device_name) {
 
         sprintf(body, "{\"deviceId\":\"%s\",\"gatewayId\":\"%s\",\"name\":\"%s\"}", device_id, gateway_id, device_name);
 
-        doHttpPost(url, headers, body);
+        doHttpPost(url, headers, body, &response);
 
         return response;
     }
@@ -135,7 +135,7 @@ char *updateADevice(char *device_id, char *gateway_id, char *device_name) {
             printf("Prepared BODY is %s\n", body);
         #endif
 
-        doHttpPut(url, headers, body);
+        doHttpPut(url, headers, body, &response);
 
         return response;
     }
@@ -170,7 +170,7 @@ char *activateADevice(char *activation_code) {
             printf("Prepared BODY is %s\n", body);
         #endif
 
-        doHttpPut(url, headers, body);
+        doHttpPut(url, headers, body, &response);
 
         return response;
     }
@@ -224,7 +224,7 @@ char *addComponent(char *cmp_name, char *cmp_type) {
             printf("Prepared BODY is %s\n", body);
         #endif
 
-        doHttpPost(url, headers, body);
+        doHttpPost(url, headers, body, &response);
 
         return response;
     }

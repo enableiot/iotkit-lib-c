@@ -584,23 +584,24 @@ char *getDeviceAuthorizationToken() {
 
         iotkit_init();
 
-//        getNewAuthorizationToken("pradeepx.chenthati@intel.com", "Password1");
+//        char * response = createAnAccount("mahatest");
+//        char * response = getNewAuthorizationToken("pradeepx.chenthati@intel.com", "Password1");
 //        char * response = validateAuthorizationToken();
 //        char * response = listAllComponents();
 //        char * response = getComponentDetails();
-//        createAnComponentCatalog("funny13", "1.0", "sensor", "Number", "float", true, -150.0f, true, 150.0f, "Degrees Celsius", "timeSeries");
-//        updateAnComponentCatalog(NULL, "Number", "Integer", false, -150.0f, false, 150.0f, "masala", "timeSeries", NULL);
+//        char * response = createAnComponentCatalog("funny13", "1.0", "sensor", "Number", "float", true, -150.0f, true, 150.0f, "Degrees Celsius", "timeSeries");
+//        char * response = updateAnComponentCatalog(NULL, "Number", "Integer", false, -150.0f, false, 150.0f, "masala", "timeSeries", NULL);
 //        char * response = listAllDevices();
 //        char * response = getOneDeviceInfo();
-//        createADevice("02-00-86-81-77-33", "02-00-86-81-77-33", "ponky2");
-//        updateADevice("02-00-86-83-c5-c2", "02-00-86-83-c5-c2", "brady2");
-//        activateADevice("teT2244l");
+//        char * response = createADevice("02-00-86-81-77-44", "02-00-86-81-77-44", "ponky4");
+        char * response = updateADevice("02-00-86-81-77-44", "02-00-86-81-77-44", "pinky44");
+//        char * response = activateADevice("teT2244l");
 //        deleteADevice();
-//        addComponent("pune3", "temperature.v1.0");
+//        char * response = addComponent("pune3", "temperature.v1.0");
 //        deleteComponent();
-//        submitData("3601c9ad-77db-4f9a-89bf-1e6a045edb21", "30.5");
-        retrieveData(1410387088000, 1410392576934, "02-00-86-81-77-33", "3601c9ad-77db-4f9a-89bf-1e6a045edb21");
-//        printf("Response Received :%s\n", response);
+//        char * response = submitData("3601c9ad-77db-4f9a-89bf-1e6a045edb21", "30.5");
+//        char * response = retrieveData(1410387088000, 1410392576934, "02-00-86-81-77-33", "3601c9ad-77db-4f9a-89bf-1e6a045edb21");
+        printf("Response Received :%s\n", response);
 
 
 

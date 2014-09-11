@@ -46,7 +46,7 @@ char *getNewAuthorizationToken(char *username, char *password) {
 
         appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
 
-        doHttpPost(url, headers, body);
+        doHttpPost(url, headers, body, &response);
 
 
         // TODO: store the authorization token in the config.json file

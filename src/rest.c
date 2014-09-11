@@ -137,7 +137,7 @@ int doHttpGet(char *url, struct curl_slist *headers, char **response) {
 }
 
 
-int doHttpPut(char *url, struct curl_slist *headers, char *body) {
+int doHttpPut(char *url, struct curl_slist *headers, char *body, char **response) {
     CURL *curl;
     CURLcode res;
 
@@ -162,6 +162,12 @@ int doHttpPut(char *url, struct curl_slist *headers, char *body) {
             curl_easy_setopt(curl, CURLOPT_POSTFIELDS, body);
         }
 
+        /* callback function to return data */
+        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_callback_func);
+
+        /* pass the response to callback function */
+        curl_easy_setopt(curl, CURLOPT_WRITEDATA, response);
+
         res = curl_easy_perform(curl);
         if(res != CURLE_OK) {
             fprintf(stderr, "curl_easy_perform() failed: %s\n",
@@ -177,7 +183,7 @@ int doHttpPut(char *url, struct curl_slist *headers, char *body) {
     return 0;
 }
 
-int doHttpPost(char *url, struct curl_slist *headers, char *body) {
+int doHttpPost(char *url, struct curl_slist *headers, char *body, char **response) {
     CURL *curl;
     CURLcode res;
 
@@ -199,6 +205,12 @@ int doHttpPost(char *url, struct curl_slist *headers, char *body) {
         if(body) {
             curl_easy_setopt(curl, CURLOPT_POSTFIELDS, body);
         }
+
+        /* callback function to return data */
+        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_callback_func);
+
+        /* pass the response to callback function */
+        curl_easy_setopt(curl, CURLOPT_WRITEDATA, response);
 
         res = curl_easy_perform(curl);
         if(res != CURLE_OK) {

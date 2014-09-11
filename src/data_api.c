@@ -79,7 +79,7 @@ char *submitData(char *cid, char *value) {
             printf("Prepared BODY is %s\n", body);
         #endif
 
-        doHttpPost(url, headers, body);
+        doHttpPost(url, headers, body, &response);
 
         return response;
     }
@@ -130,7 +130,7 @@ char *retrieveData(long fromMillis, long toMillis, char *deviceId, char *compone
             printf("Prepared BODY is %s\n", body);
         #endif
 
-        doHttpPost(url, headers, body);
+        doHttpPost(url, headers, body, &response);
 
         return response;
     }

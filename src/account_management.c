@@ -38,7 +38,7 @@ char *createAnAccount(char *account_name) {
 
         sprintf(body, "{\"name\":\"%s\"}", account_name);
 
-        doHttpPost(url, headers, body);
+        doHttpPost(url, headers, body, &response);
 
         return response;
     }
@@ -93,7 +93,7 @@ char *renewActivationCode() {
         appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
 
         // TODO: GET THE NEW ACTIVATION CODE AND STORE IT IN CONFIG FILE
-        doHttpPut(url, headers, NULL);
+        doHttpPut(url, headers, NULL, &response);
 
         return response;
     }
@@ -115,7 +115,7 @@ char *updateAnAccount(char *account_name) {
         sprintf(body, "{\"name\":\"%s\"}", account_name);
         // TODO: GET THE NEW ACTIVATION CODE AND STORE IT IN CONFIG FILE
 
-        doHttpPut(url, headers, body);
+        doHttpPut(url, headers, body, &response);
 
         return response;
     }

@@ -149,7 +149,7 @@ char *createAnComponentCatalog(char *cmp_name, char *cmp_version, char *cmp_type
             printf("Prepared BODY is %s\n", body);
         #endif
 
-        doHttpPost(url, headers, body);
+        doHttpPost(url, headers, body, &response);
 
         return response;
     }
@@ -259,7 +259,7 @@ char *updateAnComponentCatalog(char *cmp_type, char *cmp_datatype, \
             printf("Prepared BODY is %s\n", body);
         #endif
 
-        doHttpPut(url, headers, body);
+        doHttpPut(url, headers, body, &response);
 
         return response;
     }
