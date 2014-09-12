@@ -46,7 +46,7 @@ char *createAnAccount(char *account_name) {
     return NULL;
 }
 
-char *getAccountInformation() { // TODO: this should taken data account id as a parameter
+char *getAccountInformation() { // TODO: this should take data account id as a parameter
     struct curl_slist *headers = NULL;
     char *url;
     char *response;
@@ -63,7 +63,7 @@ char *getAccountInformation() { // TODO: this should taken data account id as a 
     return NULL;
 }
 
-char *getAccountActivationCode() { // TODO: this should taken data account id as a parameter
+char *getAccountActivationCode() { // TODO: this should take data account id as a parameter
     struct curl_slist *headers = NULL;
     char *url;
     char *response;
