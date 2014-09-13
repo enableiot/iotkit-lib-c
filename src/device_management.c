@@ -149,6 +149,11 @@ char *activateADevice(char *activation_code) {
     char body[BODY_SIZE_MED];
     char *response;
 
+    if(configurations.deviceToken) {
+        fprintf(stderr, "activateADevice::Device appears to be already activated. Could not proceed\n");
+        return NULL;
+    }
+
     if(!activation_code) {
         fprintf(stderr, "activateADevice::Activation Code cannot be NULL");
         return NULL;
