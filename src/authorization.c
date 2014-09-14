@@ -27,7 +27,7 @@ char *getNewAuthorizationToken(char *username, char *password) {
     struct curl_slist *headers = NULL;
     char *url;
     char body[BODY_SIZE_MIN];
-    char *response;
+    char *response = NULL;
 
     if(!username) {
         fprintf(stderr, "Username cannot be NULL");
@@ -62,7 +62,7 @@ char *getNewAuthorizationToken(char *username, char *password) {
 char *validateAuthorizationToken() {
     struct curl_slist *headers = NULL;
     char *url;
-    char *response;
+    char *response = NULL;
 
     appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
     appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
@@ -84,7 +84,7 @@ char *validateAuthorizationToken() {
 char *getAuthorizationTokenMeInfo() {
     struct curl_slist *headers = NULL;
     char *url;
-    char *response;
+    char *response = NULL;
 
     appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
     appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());

@@ -24,7 +24,7 @@
 char * listAllComponents() {
     struct curl_slist *headers = NULL;
     char *url;
-    char *response;
+    char *response = NULL;
 
     appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
 
@@ -41,7 +41,7 @@ char * listAllComponents() {
 char * getComponentDetails() {
     struct curl_slist *headers = NULL;
     char *url;
-    char *response;
+    char *response = NULL;
 
     appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
 
@@ -64,7 +64,7 @@ char *createAnComponentCatalog(char *cmp_name, char *cmp_version, char *cmp_type
     struct curl_slist *headers = NULL;
     char *url;
     char body[BODY_SIZE_MIN];
-    char *response;
+    char *response = NULL;
 
     if(cmp_name == NULL || cmp_version == NULL || \
             cmp_type == NULL || cmp_datatype == NULL || \
@@ -166,7 +166,7 @@ char *updateAnComponentCatalog(char *cmp_type, char *cmp_datatype, \
     struct curl_slist *headers = NULL;
     char *url;
     char body[BODY_SIZE_MIN];
-    char *response;
+    char *response = NULL;
     bool isCommaRequired = false;
 
     if(prepareUrl(&url, configurations.base_url, configurations.update_an_cmp_catalog)) {

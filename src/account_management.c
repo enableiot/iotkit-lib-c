@@ -25,7 +25,7 @@ char *createAnAccount(char *account_name) {
     struct curl_slist *headers = NULL;
     char *url;
     char body[BODY_SIZE_MIN];
-    char *response;
+    char *response = NULL;
 
     if(!account_name) {
         fprintf(stderr, "createAnAccount::Account name cannot be NULL");
@@ -49,7 +49,7 @@ char *createAnAccount(char *account_name) {
 char *getAccountInformation() { // TODO: this should take data account id as a parameter
     struct curl_slist *headers = NULL;
     char *url;
-    char *response;
+    char *response = NULL;
 
     appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
     appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
@@ -66,7 +66,7 @@ char *getAccountInformation() { // TODO: this should take data account id as a p
 char *getAccountActivationCode() { // TODO: this should take data account id as a parameter
     struct curl_slist *headers = NULL;
     char *url;
-    char *response;
+    char *response = NULL;
 
     appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
     appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
@@ -85,7 +85,7 @@ char *getAccountActivationCode() { // TODO: this should take data account id as 
 char *renewActivationCode() {
     struct curl_slist *headers = NULL;
     char *url;
-    char *response;
+    char *response = NULL;
 
     if(prepareUrl(&url, configurations.base_url, configurations.renew_account_activation)) {
 
@@ -105,7 +105,7 @@ char *updateAnAccount(char *account_name) {
     struct curl_slist *headers = NULL;
     char *url;
     char body[BODY_SIZE_MIN];
-    char *response;
+    char *response = NULL;
 
     if(prepareUrl(&url, configurations.base_url, configurations.update_an_account_name)) {
 
@@ -126,7 +126,7 @@ char *updateAnAccount(char *account_name) {
 char *deleteAnAccount() {
     struct curl_slist *headers = NULL;
     char *url;
-    char *response;
+    char *response = NULL;
 
     if(prepareUrl(&url, configurations.base_url, configurations.delete_an_account_name)) {
 

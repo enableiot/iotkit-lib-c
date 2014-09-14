@@ -89,8 +89,23 @@ size_t static write_callback_func(void *buffer, size_t size, size_t nmemb, char 
 {
     size_t write_length = 0;
 
-    *userp = strndup(buffer, (size_t)(size *nmemb));
-    write_length = strlen(*userp);
+    if(*userp != NULL) {
+        // means this is a multi-part response
+        // so we need to append this response to the previous response fragment
+        char *fragment = strndup(buffer, (size_t)(size *nmemb));
+        int size = strlen(*userp);
+        size += strlen(fragment) + 1;
+
+        *userp = (char *)realloc(*userp, size * sizeof(char));
+        strcat(*userp, fragment);
+
+        write_length = strlen(fragment);
+
+        free(fragment);
+    } else {
+        *userp = strndup(buffer, (size_t)(size *nmemb));
+        write_length = strlen(*userp);
+    }
 
     printf("Values received :%s\n", *userp);
     return write_length;

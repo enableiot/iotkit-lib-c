@@ -587,14 +587,14 @@ char *getDeviceAuthorizationToken() {
 //        char * response = createAnAccount("mahatest");
 //        char * response = getNewAuthorizationToken("pradeepx.chenthati@intel.com", "Password1");
 //        char * response = validateAuthorizationToken();
-//        char * response = listAllComponents();
+        char * response = listAllComponents();
 //        char * response = getComponentDetails();
 //        char * response = createAnComponentCatalog("funny13", "1.0", "sensor", "Number", "float", true, -150.0f, true, 150.0f, "Degrees Celsius", "timeSeries");
 //        char * response = updateAnComponentCatalog(NULL, "Number", "Integer", false, -150.0f, false, 150.0f, "masala", "timeSeries", NULL);
 //        char * response = listAllDevices();
 //        char * response = getOneDeviceInfo();
 //        char * response = createADevice("02-00-86-81-77-44", "02-00-86-81-77-44", "ponky4");
-        char * response = updateADevice("02-00-86-81-77-44", "02-00-86-81-77-44", "pinky44");
+//        char * response = updateADevice("02-00-86-81-77-44", "02-00-86-81-77-44", "pinky44");
 //        char * response = activateADevice("teT2244l");
 //        deleteADevice();
 //        char * response = addComponent("pune3", "temperature.v1.0");

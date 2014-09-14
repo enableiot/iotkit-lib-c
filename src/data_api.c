@@ -38,7 +38,7 @@ char *submitData(char *cid, char *value) {
     struct curl_slist *headers = NULL;
     char *url;
     char body[BODY_SIZE_MED];
-    char *response;
+    char *response = NULL;
     char currentTimeInMills[BODY_SIZE_MED];
 
     if(!cid) {
@@ -93,7 +93,7 @@ char *retrieveData(long fromMillis, long toMillis, char *deviceId, char *compone
     struct curl_slist *headers = NULL;
     char *url;
     char body[BODY_SIZE_MED];
-    char *response;
+    char *response = NULL;
     char fromTimeInMillis[BODY_SIZE_MIN];
     char toTimeInMillis[BODY_SIZE_MIN];
 

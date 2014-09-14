@@ -24,7 +24,7 @@
 char *listAllDevices() {
     struct curl_slist *headers = NULL;
     char *url;
-    char *response;
+    char *response = NULL;
 
     appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
     appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
@@ -41,7 +41,7 @@ char *listAllDevices() {
 char *getOneDeviceInfo() {
     struct curl_slist *headers = NULL;
     char *url;
-    char *response;
+    char *response = NULL;
 
     appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
     appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
@@ -60,7 +60,7 @@ char *createADevice(char *device_id, char *gateway_id, char *device_name) {
     struct curl_slist *headers = NULL;
     char *url;
     char body[BODY_SIZE_MED];
-    char *response;
+    char *response = NULL;
 
     if(!device_id) {
         fprintf(stderr, "createADevice::Device ID cannot be NULL");
@@ -98,7 +98,7 @@ char *updateADevice(char *device_id, char *gateway_id, char *device_name) {
     struct curl_slist *headers = NULL;
     char *url;
     char body[BODY_SIZE_MED];
-    char *response;
+    char *response = NULL;
     bool isCommaRequired = false;
 
     if(!device_id) {
@@ -147,7 +147,7 @@ char *activateADevice(char *activation_code) {
     struct curl_slist *headers = NULL;
     char *url;
     char body[BODY_SIZE_MED];
-    char *response;
+    char *response = NULL;
 
     if(configurations.deviceToken) {
         fprintf(stderr, "activateADevice::Device appears to be already activated. Could not proceed\n");
@@ -186,7 +186,7 @@ char *activateADevice(char *activation_code) {
 char *deleteADevice() {
     struct curl_slist *headers = NULL;
     char *url;
-    char *response;
+    char *response = NULL;
 
     if(prepareUrl(&url, configurations.base_url, configurations.delete_a_device)) {
 
@@ -206,7 +206,7 @@ char *addComponent(char *cmp_name, char *cmp_type) {
     struct curl_slist *headers = NULL;
     char *url;
     char body[BODY_SIZE_MIN];
-    char *response;
+    char *response = NULL;
 
     if(!cmp_name) {
         fprintf(stderr, "createAComponent::Component Name cannot be NULL");
@@ -240,7 +240,7 @@ char *addComponent(char *cmp_name, char *cmp_type) {
 char *deleteComponent() {
     struct curl_slist *headers = NULL;
     char *url;
-    char *response;
+    char *response = NULL;
 
     if(prepareUrl(&url, configurations.base_url, configurations.delete_a_component)) {
 
