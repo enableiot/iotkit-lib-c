@@ -21,6 +21,26 @@
 
 #include "iotkit.h"
 
+char *validateDeviceToken() {
+    struct curl_slist *headers = NULL;
+    char *url;
+    char *response = NULL;
+
+    appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
+    appendHttpHeader(&headers, HEADER_AUTHORIZATION, getDeviceAuthorizationToken());
+
+    if(prepareUrl(&url, configurations.base_url, configurations.auth_token_info)) {
+
+        doHttpGet(url, headers, &response);
+
+        // TODO: store the account id in the config.json file
+
+        return response;
+    }
+
+    return NULL;
+}
+
 char *listAllDevices() {
     struct curl_slist *headers = NULL;
     char *url;
@@ -30,6 +50,23 @@ char *listAllDevices() {
     appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
 
     if(prepareUrl(&url, configurations.base_url, configurations.list_all_devices)){
+        doHttpGet(url, headers, &response);
+
+        return response;
+    }
+
+    return NULL;
+}
+
+char *getMyDeviceInfo() {
+    struct curl_slist *headers = NULL;
+    char *url;
+    char *response = NULL;
+
+    appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
+    appendHttpHeader(&headers, HEADER_AUTHORIZATION, getDeviceAuthorizationToken());
+
+    if(prepareUrl(&url, configurations.base_url, configurations.get_device_info)){
         doHttpGet(url, headers, &response);
 
         return response;
