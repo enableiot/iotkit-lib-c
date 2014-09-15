@@ -584,13 +584,18 @@ char *getDeviceAuthorizationToken() {
 
         iotkit_init();
 
-//        char * response = createAnAccount("mahatest");
+//        char * response = createAnAccount("willitcreate2");
+//        char * response = getAccountInformation();
+//        char * response = getAccountActivationCode();
+//        char * response = renewActivationCode();
 //        char * response = getNewAuthorizationToken("pradeepx.chenthati@intel.com", "Password1");
 //        char * response = validateAuthorizationToken();
-        char * response = listAllComponents();
-//        char * response = getComponentDetails();
-//        char * response = createAnComponentCatalog("funny13", "1.0", "sensor", "Number", "float", true, -150.0f, true, 150.0f, "Degrees Celsius", "timeSeries");
+//        char * response = getAuthorizationTokenMeInfo();
+//        char * response = listAllComponentCatalogs();
+        char * response = getComponentCatalogDetails();
+//        char * response = createAnComponentCatalog("funny16", "1.0", "sensor", "Number", "float", true, -150.0f, true, 150.0f, "Degrees Celsius", "timeSeries", NULL);
 //        char * response = updateAnComponentCatalog(NULL, "Number", "Integer", false, -150.0f, false, 150.0f, "masala", "timeSeries", NULL);
+//        char * response = validateDeviceToken();
 //        char * response = listAllDevices();
 //        char * response = getOneDeviceInfo();
 //        char * response = createADevice("02-00-86-81-77-44", "02-00-86-81-77-44", "ponky4");
@@ -599,7 +604,7 @@ char *getDeviceAuthorizationToken() {
 //        deleteADevice();
 //        char * response = addComponent("pune3", "temperature.v1.0");
 //        deleteComponent();
-//        char * response = submitData("3601c9ad-77db-4f9a-89bf-1e6a045edb21", "30.5");
+//        char * response = submitData("3601c9ad-77db-4f9a-89bf-1e6a045edb21", "15.5");
 //        char * response = retrieveData(1410387088000, 1410392576934, "02-00-86-81-77-33", "3601c9ad-77db-4f9a-89bf-1e6a045edb21");
         printf("Response Received :%s\n", response);
 

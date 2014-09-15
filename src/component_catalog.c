@@ -21,12 +21,12 @@
 
 #include "iotkit.h"
 
-char * listAllComponents() {
+char * listAllComponentCatalogs() {
     struct curl_slist *headers = NULL;
     char *url;
     char *response = NULL;
 
-    appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
+    appendHttpHeader(&headers, HEADER_AUTHORIZATION, getDeviceAuthorizationToken());
 
     if(prepareUrl(&url, configurations.base_url, configurations.list_components)) {
 
@@ -38,12 +38,12 @@ char * listAllComponents() {
     return NULL;
 }
 
-char * getComponentDetails() {
+char * getComponentCatalogDetails() {
     struct curl_slist *headers = NULL;
     char *url;
     char *response = NULL;
 
-    appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
+    appendHttpHeader(&headers, HEADER_AUTHORIZATION, getDeviceAuthorizationToken());
 
     if(prepareUrl(&url, configurations.base_url, configurations.get_component_details)) {
 
