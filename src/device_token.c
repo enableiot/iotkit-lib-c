@@ -35,6 +35,9 @@ void parseDeviceToken() {
     FILE *fp = fopen(config_file_path, "rb");
     if (fp == NULL) {
         fprintf(stderr,"Error can't open file %s\n", config_file_path);
+
+        configurations.device_id = NULL;
+        configurations.deviceToken = NULL;
     }
     else {
         fseek(fp, 0, SEEK_END);
