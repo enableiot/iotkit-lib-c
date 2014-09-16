@@ -122,6 +122,8 @@ char *createADevice(char *device_id, char *gateway_id, char *device_name) {
 
         doHttpPost(url, headers, body, &response);
 
+        storeDeviceID(response);
+
         return response;
     }
 
@@ -213,6 +215,8 @@ char *activateADevice(char *activation_code) {
         #endif
 
         doHttpPut(url, headers, body, &response);
+
+        storeDeviceToken(response);
 
         return response;
     }

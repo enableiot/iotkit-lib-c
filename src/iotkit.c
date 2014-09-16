@@ -570,9 +570,9 @@ char *getDeviceAuthorizationToken() {
 
 
 //        testGetNewAuthorizationToken();
-        testValidateAuthorizationToken();
-//        testCreateADevice();
-//        testActivateADevice("dPhMuBX4");
+//        testValidateAuthorizationToken();
+        testCreateADevice();
+        testActivateADevice("1qi3GW10");
 
         iotkit_cleanup();
     }
