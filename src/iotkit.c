@@ -26,6 +26,7 @@ static bool isInitialized = false;
 void iotkit_init() {
 
     parseConfiguration("../config/config.json");
+    parseDeviceToken();
 
     if(!isInitialized) {
         CURLcode code = rest_init(configurations.isSecure);
@@ -122,30 +123,6 @@ void parseConfiguration(char *config_file_path) {
                 configurations.data_account_id = strdup(jitem->valuestring);
             } else {
                 configurations.data_account_id = NULL;
-            }
-
-            jitem = cJSON_GetObjectItem(json, "device_id");
-            if (!isJsonString(jitem) && !isJsonBooleanFalse(jitem)) {
-                fprintf(stderr,"Invalid JSON format for json property %s\n", jitem->string);
-                return;
-            }
-
-            if (isJsonString(jitem)) {
-                configurations.device_id = strdup(jitem->valuestring);
-            } else {
-                configurations.device_id = NULL;
-            }
-
-            jitem = cJSON_GetObjectItem(json, "deviceToken");
-            if (!isJsonString(jitem) && !isJsonBooleanFalse(jitem)) {
-                fprintf(stderr,"Invalid JSON format for json property %s\n", jitem->string);
-                return;
-            }
-
-            if (isJsonString(jitem)) {
-                configurations.deviceToken = strdup(jitem->valuestring);
-            } else {
-                configurations.deviceToken = NULL;
             }
 
             jitem = cJSON_GetObjectItem(json, "authorization_key");
@@ -592,23 +569,23 @@ char *getDeviceAuthorizationToken() {
 //        char * response = validateAuthorizationToken();
 //        char * response = getAuthorizationTokenMeInfo();
 //        char * response = listAllComponentCatalogs();
-        char * response = getComponentCatalogDetails();
+//        char * response = getComponentCatalogDetails();
 //        char * response = createAnComponentCatalog("funny16", "1.0", "sensor", "Number", "float", true, -150.0f, true, 150.0f, "Degrees Celsius", "timeSeries", NULL);
 //        char * response = updateAnComponentCatalog(NULL, "Number", "Integer", false, -150.0f, false, 150.0f, "masala", "timeSeries", NULL);
 //        char * response = validateDeviceToken();
 //        char * response = listAllDevices();
 //        char * response = getOneDeviceInfo();
-//        char * response = createADevice("02-00-86-81-77-44", "02-00-86-81-77-44", "ponky4");
 //        char * response = updateADevice("02-00-86-81-77-44", "02-00-86-81-77-44", "pinky44");
-//        char * response = activateADevice("teT2244l");
 //        deleteADevice();
 //        char * response = addComponent("pune3", "temperature.v1.0");
 //        deleteComponent();
 //        char * response = submitData("3601c9ad-77db-4f9a-89bf-1e6a045edb21", "15.5");
 //        char * response = retrieveData(1410387088000, 1410392576934, "02-00-86-81-77-33", "3601c9ad-77db-4f9a-89bf-1e6a045edb21");
-        printf("Response Received :%s\n", response);
+//        printf("Response Received :%s\n", response);
 
 
+        testCreateADevice();
+        testActivateADevice("OKotVvpu");
 
         iotkit_cleanup();
     }
