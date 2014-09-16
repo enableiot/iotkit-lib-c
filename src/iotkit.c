@@ -26,6 +26,7 @@ static bool isInitialized = false;
 void iotkit_init() {
 
     parseConfiguration("../config/config.json");
+    parseAuthorizationToken();
     parseDeviceToken();
 
     if(!isInitialized) {
@@ -123,20 +124,6 @@ void parseConfiguration(char *config_file_path) {
                 configurations.data_account_id = strdup(jitem->valuestring);
             } else {
                 configurations.data_account_id = NULL;
-            }
-
-            jitem = cJSON_GetObjectItem(json, "authorization_key");
-            if (!isJsonString(jitem) && !isJsonBooleanFalse(jitem)) {
-                fprintf(stderr,"Invalid JSON format for json property %s\n", jitem->string);
-                return;
-            }
-
-            if (isJsonString(jitem)) {
-                configurations.authorization_key = strdup(jitem->valuestring);
-                printf("Read authorization_key is %s\n", configurations.authorization_key);
-            } else {
-                configurations.authorization_key = NULL;
-                puts("Read authorization_key is NULL");
             }
 
             jitem = cJSON_GetObjectItem(json, "host");
@@ -565,8 +552,6 @@ char *getDeviceAuthorizationToken() {
 //        char * response = getAccountInformation();
 //        char * response = getAccountActivationCode();
 //        char * response = renewActivationCode();
-//        char * response = getNewAuthorizationToken("pradeepx.chenthati@intel.com", "Password1");
-//        char * response = validateAuthorizationToken();
 //        char * response = getAuthorizationTokenMeInfo();
 //        char * response = listAllComponentCatalogs();
 //        char * response = getComponentCatalogDetails();
@@ -584,8 +569,10 @@ char *getDeviceAuthorizationToken() {
 //        printf("Response Received :%s\n", response);
 
 
-        testCreateADevice();
-        testActivateADevice("OKotVvpu");
+//        testGetNewAuthorizationToken();
+        testValidateAuthorizationToken();
+//        testCreateADevice();
+//        testActivateADevice("dPhMuBX4");
 
         iotkit_cleanup();
     }

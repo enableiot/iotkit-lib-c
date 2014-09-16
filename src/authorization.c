@@ -48,9 +48,9 @@ char *getNewAuthorizationToken(char *username, char *password) {
 
         doHttpPost(url, headers, body, &response);
 
-
-        // TODO: store the authorization token in the config.json file
-
+        if(response) {
+            storeAuthorizationToken(response);
+        }
 
         return response;
     }

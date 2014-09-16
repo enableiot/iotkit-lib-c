@@ -13,22 +13,25 @@
  */
 
 /**
- * @file authorization.c
+ * @file testauthorization.c
  * @brief Implementation of Authorization API
  *
  * Provides features for communication with IoT Cloud server
  */
 
-bool test_validateAuthorizationToken() {
-    struct curl_slist *headers = NULL;
+#include "../src/iotkit.h"
 
-    iotkit_init();
+bool testValidateAuthorizationToken() {
+    char * response = validateAuthorizationToken();
+    printf("Response Received :%s\n", response);
 
-    appendHttpHeader(&headers, "Content-Type", "application/json");
-    appendHttpHeader(&headers, "Authorization", "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJqdGkiOiI3ZGQ2Mzc1Yy02ZWNlLTQ2ZjUtYWVmYi0wODVlYzVlMjc4YzAiLCJpc3MiOiJodHRwOi8vZW5hYmxlaW90LmNvbSIsInN1YiI6IjUzY2Q2NDQ2ZmJhYzdlMDM1ZjcxYmM3ZSIsImV4cCI6IjIwMjQtMDgtMDRUMjI6MDI6MjguMzY5WiJ9.nSl4BC9z_3j8JOxcvfi9UtrgJjVRdx_szO00y1wn66mgdZre1xpjVOmxoB30Xi5cLU5l7CEPpmCXUnzXTqZs_3slkQtO2_Yxk77LamX5ePkRzfDq50yPVnFlQzrgRxs_bdKcEJQMrhdsIhGq_IsSFZB0QMPGEXIxbLe2V2rjbK4dDmazb8q7uhlZ8GqT8sMQnl717b6iqJ8WtGbbRcoWuh9uQqDJsb9B_d6xIDYVONr3DrdBfOytNQPeqFWzGMP7NC34ygRyqYg4lscbAPC4ghf1pZ1sjLJUPAmyBjf9De7nIlXcwIDZYu8K7tptZ6XOGqTQiGzGQsg6Ar35R7CPAA");
-
-    doHttpGet("https://dashboard.us.enableiot.com/v1/api/auth/tokeninfo", headers);
+    return true;
+}
 
 
-    iotkit_cleanup();
+bool testGetNewAuthorizationToken() {
+    char * response = getNewAuthorizationToken("pradeepx.chenthati@intel.com", "Password1");
+    printf("Response Received :%s\n", response);
+
+    return true;
 }
