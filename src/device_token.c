@@ -93,6 +93,30 @@ void parseDeviceToken() {
                 puts("Device Token is NULL");
             }
 
+            jitem = cJSON_GetObjectItem(json, "data_account_id");
+            if (!isJsonString(jitem) && !isJsonBooleanFalse(jitem)) {
+                fprintf(stderr,"Invalid JSON format for json property %s\n", jitem->string);
+                return;
+            }
+
+            if (isJsonString(jitem)) {
+                configurations.data_account_id = strdup(jitem->valuestring);
+            } else {
+                configurations.data_account_id = NULL;
+            }
+
+            jitem = cJSON_GetObjectItem(json, "data_account_name");
+            if (!isJsonString(jitem) && !isJsonBooleanFalse(jitem)) {
+                fprintf(stderr,"Invalid JSON format for json property %s\n", jitem->string);
+                return;
+            }
+
+            if (isJsonString(jitem)) {
+                configurations.data_account_name = strdup(jitem->valuestring);
+            } else {
+                configurations.data_account_name = NULL;
+            }
+
             cJSON_Delete(json);
         }
 
@@ -103,6 +127,71 @@ void parseDeviceToken() {
 
     return ;
 }
+
+/** Stores device configuration JSON
+*/
+void storeDeviceCredentials(char *deviceId, char *deviceToken, char *data_account_id, char *data_account_name) {
+    char *config_file_path = "../config/device_config.json";
+
+    printf("deviceId is :%s\n", deviceId);
+    printf("deviceToken is :%s\n", deviceToken);
+    printf("data_account_id is :%s\n", data_account_id);
+    printf("data_account_name is :%s\n", data_account_name);
+
+    FILE *fp = fopen(config_file_path, "w+");
+    if (fp == NULL) {
+        fprintf(stderr,"Error can't open file %s\n", config_file_path);
+    }
+    else {
+        cJSON *root;
+        char *out;
+        root=cJSON_CreateObject();
+
+        if(deviceId) {
+            cJSON_AddItemToObject(root, "deviceId", cJSON_CreateString(deviceId));
+            configurations.device_id = strdup(deviceId);
+        } else {
+            cJSON_AddItemToObject(root, "deviceId", cJSON_CreateFalse());
+        }
+
+        if(deviceToken) {
+            cJSON_AddItemToObject(root, "deviceToken", cJSON_CreateString(deviceToken));
+            configurations.deviceToken = strdup(deviceToken);
+        } else {
+            cJSON_AddItemToObject(root, "deviceToken", cJSON_CreateFalse());
+        }
+
+        if(data_account_id) {
+            cJSON_AddItemToObject(root, "data_account_id", cJSON_CreateString(data_account_id));
+            configurations.data_account_id = strdup(data_account_id);
+        } else {
+            cJSON_AddItemToObject(root, "data_account_id", cJSON_CreateFalse());
+        }
+
+        if(data_account_name) {
+            cJSON_AddItemToObject(root, "data_account_name", cJSON_CreateString(data_account_name));
+            configurations.data_account_name = strdup(data_account_name);
+        } else {
+            cJSON_AddItemToObject(root, "data_account_name", cJSON_CreateFalse());
+        }
+
+        out = cJSON_Print(root, 2);
+
+        #if DEBUG
+            printf("%s\n", out);
+        #endif
+
+        fwrite(out, strlen(out), sizeof(char), fp);
+
+        // free buffers
+        free(out);
+        cJSON_Delete(root);
+        fclose(fp);
+    }
+
+    return ;
+}
+
 
 void storeDeviceID(char *response) {
 
@@ -148,7 +237,7 @@ void storeDeviceID(char *response) {
 
             // overwrite device token if any present
             configurations.deviceToken = NULL;
-            storeDeviceCredentials(jitem->valuestring, configurations.deviceToken);
+            storeDeviceCredentials(jitem->valuestring, configurations.deviceToken, configurations.data_account_id, configurations.data_account_name);
 
             return true;
         }
@@ -197,56 +286,9 @@ void storeDeviceToken(char *response) {
                 accountId = strdup(jitem->valuestring);
             }
 
-            storeDeviceCredentials(configurations.device_id, deviceToken);
+            storeDeviceCredentials(configurations.device_id, deviceToken, configurations.data_account_id, configurations.data_account_name);
 
             return true;
         }
     }
-}
-
-/** Stores device configuration JSON
-*/
-void storeDeviceCredentials(char *deviceId, char *deviceToken) {
-    char *config_file_path = "../config/device_config.json";
-
-    printf("deviceId is :%s\n", deviceId);
-    printf("deviceToken is :%s\n", deviceToken);
-
-    FILE *fp = fopen(config_file_path, "w+");
-    if (fp == NULL) {
-        fprintf(stderr,"Error can't open file %s\n", config_file_path);
-    }
-    else {
-        cJSON *root;
-        char *out;
-        root=cJSON_CreateObject();
-
-        if(deviceId) {
-            cJSON_AddItemToObject(root, "deviceId", cJSON_CreateString(deviceId));
-            configurations.device_id = strdup(deviceId);
-        } else {
-            cJSON_AddItemToObject(root, "deviceId", cJSON_CreateFalse());
-        }
-
-        if(deviceToken) {
-            cJSON_AddItemToObject(root, "deviceToken", cJSON_CreateString(deviceToken));
-        } else {
-            cJSON_AddItemToObject(root, "deviceToken", cJSON_CreateFalse());
-        }
-
-        out = cJSON_Print(root, 2);
-
-        #if DEBUG
-            printf("%s\n", out);
-        #endif
-
-        fwrite(out, strlen(out), sizeof(char), fp);
-
-        // free buffers
-        free(out);
-        cJSON_Delete(root);
-        fclose(fp);
-    }
-
-    return ;
 }

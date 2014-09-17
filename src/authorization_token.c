@@ -141,7 +141,7 @@ void storeAuthorizationToken(char * response) {
 
             if(!jitem) {
                 // token not found; means the call did not go through successfully
-                fprintf(stderr,"Could not retrieve Authorization Token\n");
+                fprintf(stderr,"Could not retrieve payload from JSON response\n");
             } else {
                 child = cJSON_GetObjectItem(jitem, "exp");
 
@@ -194,4 +194,56 @@ void storeAuthorizationToken(char * response) {
     }
 
     return ;
+}
+
+void storeDataAccountIdInfo() {
+    cJSON *json, *jitem, *child;
+
+    // retrieve the expiry info
+    char * response = validateAuthorizationToken();
+    if(response != NULL) {
+        // parse the file
+        json = cJSON_Parse(response);
+        if (!json) {
+            fprintf(stderr,"Error Parsing response: [%s]\n",cJSON_GetErrorPtr());
+        }
+        else {
+            if (!isJsonObject(json)) {
+                fprintf(stderr,"Ignoring invalid JSON response while token validation\n");
+            }
+
+            jitem = cJSON_GetObjectItem(json, "payload");
+
+            if(!jitem) {
+                // token not found; means the call did not go through successfully
+                fprintf(stderr,"Could not retrieve payload from JSON response\n");
+            } else {
+                child = cJSON_GetObjectItem(jitem, "accounts");
+
+                if(child && isJsonArray(child)) {
+                    if(cJSON_GetArraySize(child) > 0) {
+                        // we consider only the first account details
+                        cJSON *item = cJSON_GetArrayItem(child, 0);
+
+                        if(item) {
+                            cJSON *accountId = cJSON_GetObjectItem(item, "id");
+                            cJSON *accountName = cJSON_GetObjectItem(item, "name");
+
+                            if(accountId && accountName) {
+                                storeDeviceCredentials(configurations.device_id, configurations.deviceToken, accountId->valuestring, accountName->valuestring);
+                            } else {
+                                fprintf(stderr,"Could not retrieve accounts id and name from JSON response\n");
+                            }
+                        } else {
+                            fprintf(stderr,"Could not retrieve accounts item from JSON response\n");
+                        }
+                    } else {
+                        fprintf(stderr,"account does not contain any values\n");
+                    }
+                } else {
+                    fprintf(stderr,"Could not retrieve account from JSON response\n");
+                }
+            }
+        }
+    }
 }

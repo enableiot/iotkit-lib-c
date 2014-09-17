@@ -53,7 +53,8 @@ typedef struct _Configurations {
     char *account_id;
     char *base_url;
 
-    char *data_account_id; // TODO: this should be an array of name & id values
+    char *data_account_id;
+    char *data_account_name;
     char *device_id;
     // account management
     char *create_an_account;

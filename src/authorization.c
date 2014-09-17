@@ -50,6 +50,11 @@ char *getNewAuthorizationToken(char *username, char *password) {
 
         if(response) {
             storeAuthorizationToken(response);
+
+            // if data account is already created using web portal
+            if(!configurations.data_account_id) {
+                storeDataAccountIdInfo();
+            }
         }
 
         return response;
@@ -70,8 +75,6 @@ char *validateAuthorizationToken() {
     if(prepareUrl(&url, configurations.base_url, configurations.auth_token_info)) {
 
         doHttpGet(url, headers, &response);
-
-        // TODO: store the account id in the config.json file
 
         return response;
     }
