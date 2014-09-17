@@ -35,3 +35,10 @@ bool testGetNewAuthorizationToken() {
 
     return true;
 }
+
+bool testGetAuthorizationTokenMeInfo() {
+    char * response = getAuthorizationTokenMeInfo();
+    printf("Response Received :%s\n", response);
+
+    return true;
+}
