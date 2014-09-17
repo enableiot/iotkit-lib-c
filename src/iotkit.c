@@ -540,7 +540,7 @@ char *getDeviceAuthorizationToken() {
 //        char * response = getAccountInformation();
 //        char * response = getAccountActivationCode();
 //        char * response = renewActivationCode();
-        char * response = listAllComponentCatalogs();
+//        char * response = listAllComponentCatalogs();
 //        char * response = getComponentCatalogDetails();
 //        char * response = createAnComponentCatalog("funny16", "1.0", "sensor", "Number", "float", true, -150.0f, true, 150.0f, "Degrees Celsius", "timeSeries", NULL);
 //        char * response = updateAnComponentCatalog(NULL, "Number", "Integer", false, -150.0f, false, 150.0f, "masala", "timeSeries", NULL);
@@ -549,11 +549,10 @@ char *getDeviceAuthorizationToken() {
 //        char * response = getOneDeviceInfo();
 //        char * response = updateADevice("02-00-86-81-77-44", "02-00-86-81-77-44", "pinky44");
 //        deleteADevice();
-//        char * response = addComponent("pune3", "temperature.v1.0");
 //        deleteComponent();
 //        char * response = submitData("3601c9ad-77db-4f9a-89bf-1e6a045edb21", "15.5");
 //        char * response = retrieveData(1410387088000, 1410392576934, "02-00-86-81-77-33", "3601c9ad-77db-4f9a-89bf-1e6a045edb21");
-        printf("Response Received :%s\n", response);
+//        printf("Response Received :%s\n", response);
 
 
 //        testGetNewAuthorizationToken();
@@ -561,6 +560,7 @@ char *getDeviceAuthorizationToken() {
 //        testGetAuthorizationTokenMeInfo();
 //        testCreateADevice();
 //        testActivateADevice("1qi3GW10");
+        testAddComponent();
 
         iotkit_cleanup();
     }

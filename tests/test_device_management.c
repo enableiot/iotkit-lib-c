@@ -34,3 +34,11 @@ bool testActivateADevice(char *authCode) {
 
     return true;
 }
+
+bool testAddComponent() {
+
+    char * response = addComponent("madras7", "temperature.v1.0");
+    printf("Response Received :%s\n", response);
+
+    return true;
+}

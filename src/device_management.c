@@ -242,8 +242,106 @@ char *deleteADevice() {
     return NULL;
 }
 
+/** Stores device configuration JSON
+*/
+void storeComponent(char *response) {
+    cJSON *json, *jitem, *child;
+    char *cid = NULL, *name = NULL, *type = NULL;
+    char *config_file_path = "../config/sensor-list.json";
+
+    if(response != NULL) {
+        // parse the file
+        json = cJSON_Parse(response);
+        if (!json) {
+            fprintf(stderr,"Error Parsing response: [%s]\n",cJSON_GetErrorPtr());
+        } else {
+            if (!isJsonObject(json)) {
+                fprintf(stderr,"Ignoring invalid JSON response while token validation\n");
+            }
+
+            jitem = cJSON_GetObjectItem(json, "cid");
+
+            if(jitem) {
+                cid = strdup(jitem->valuestring);
+            }
+
+            jitem = cJSON_GetObjectItem(json, "name");
+
+            if(jitem) {
+                name = strdup(jitem->valuestring);
+            }
+
+            jitem = cJSON_GetObjectItem(json, "type");
+
+            if(jitem) {
+                type = strdup(jitem->valuestring);
+            }
+
+            if(cid && name && type) {
+                cJSON *root;
+                char *out;
+                jitem=cJSON_CreateObject();
+
+                cJSON_AddItemToObject(jitem, "cid", cJSON_CreateString(cid));
+                cJSON_AddItemToObject(jitem, "name", cJSON_CreateString(name));
+                cJSON_AddItemToObject(jitem, "type", cJSON_CreateString(type));
+
+
+                FILE *fp = fopen(config_file_path, "rb");
+                if (fp == NULL) {
+                    root = cJSON_CreateArray();
+                }
+                else {
+                    fseek(fp, 0, SEEK_END);
+                    long size = ftell(fp);
+                    rewind(fp);
+
+                    // read the file
+                    char *buffer = (char *)malloc(size+1);
+                    fread(buffer, 1, size, fp);
+
+                    // parse the file
+                    root = cJSON_Parse(buffer);
+                    if (!root) {
+                        fprintf(stderr,"Error before: [%s]\n",cJSON_GetErrorPtr());
+                    }
+                    else {
+                        if (!isJsonArray(root)) {
+                            fprintf(stderr,"Invalid JSON format for %s file\n", config_file_path);
+                            return;
+                        }
+                    }
+                }
+
+                free(fp);
+
+                cJSON_AddItemToArray(root, jitem);
+
+                fp = fopen(config_file_path, "w+");
+                if (fp == NULL) {
+                    fprintf(stderr,"Error can't open file %s\n", config_file_path);
+                }
+                else {
+                    out = cJSON_Print(root, 2);
+
+                    #if DEBUG
+                        printf("%s\n", out);
+                    #endif
+
+                    fwrite(out, strlen(out), sizeof(char), fp);
+
+                    // free buffers
+                    free(out);
+                    cJSON_Delete(root);
+                    fclose(fp);
+                }
+            }
+        }
+    }
+}
+
 char *addComponent(char *cmp_name, char *cmp_type) {
-// TODO: TODO: TODO: Generate GUID
+    char  uuid_str[38];
     struct curl_slist *headers = NULL;
     char *url;
     char body[BODY_SIZE_MIN];
@@ -259,18 +357,24 @@ char *addComponent(char *cmp_name, char *cmp_type) {
         return NULL;
     }
 
+    // generate UUID
+    get_uuid_string(uuid_str,sizeof(uuid_str));
+
     if(prepareUrl(&url, configurations.base_url, configurations.add_a_component)) {
         appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
         appendHttpHeader(&headers, HEADER_AUTHORIZATION, getDeviceAuthorizationToken());
 
-//        sprintf(body, "{\"cid\":\"%s\",\"name\":\"%s\",\"type\":\"%s\"}", "aedf4b3b-32db-4e09-8da2-fbbdfbcee37b", cmp_name, cmp_type);
-        sprintf(body, "{\"cid\":\"%s\",\"name\":\"%s\",\"type\":\"%s\"}", "3601c9ad-77db-4f9a-89bf-1e6a045edb21", cmp_name, cmp_type);
+        sprintf(body, "{\"cid\":\"%s\",\"name\":\"%s\",\"type\":\"%s\"}", uuid_str, cmp_name, cmp_type);
 
         #if DEBUG
             printf("Prepared BODY is %s\n", body);
         #endif
 
         doHttpPost(url, headers, body, &response);
+
+        if(response) {
+            storeComponent(response);
+        }
 
         return response;
     }
