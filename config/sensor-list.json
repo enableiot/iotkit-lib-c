@@ -1,17 +1,1 @@
-[{
-    "cid": "82146068-3e18-11e4-8783-3996b583bd3e",
-    "name": "bombay2",
-    "type": "temperature.v1.0"
-  }, {
-    "cid": "2461c108-3e19-11e4-bfda-a1178f3da792",
-    "name": "bombay4",
-    "type": "temperature.v1.0"
-  }, {
-    "cid": "3ca18a5a-3e19-11e4-ba2e-bf5614825e86",
-    "name": "madras5",
-    "type": "temperature.v1.0"
-  }, {
-    "cid": "6eb2e7f0-3e19-11e4-b2bc-fff586b4667b",
-    "name": "madras7",
-    "type": "temperature.v1.0"
-  }]
+[]

@@ -1,6 +1,6 @@
 {
-  "deviceId": "02-00-86-81-77-bf",
-  "deviceToken": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJqdGkiOiI3NTEyMmFlMC1iNzExLTRkODctYmJjMS1kOWVlOTZiMzg1NzYiLCJpc3MiOiJodHRwOi8vZW5hYmxlaW90LmNvbSIsInN1YiI6IjAyLTAwLTg2LTgxLTc3LWJmIiwiZXhwIjoiMjAyNC0wOS0xM1QyMzozOToxMS40NzRaIn0.vXFn9uNgqV4MZ7bbMUBFtH8kY0PNr_bpbmiLZj_T9B_srFiv1mOUwgB0qfg_2BIMKnunbZeqbafCk-uX_hn3p92Eb2fanYR1q8G8ouKSj0-kIjvp5tkKRQazHk-LsL1BxFJKnHFTIyckmuHJEuSkaXNSrXyQYXWLkLOGXMzeio0IKmNWW9oXetaCmvqb54FbM0NdJ889jFzhJCkrrLipoUFV1aAh1FXgCDydSyQ5dIK_7W8A3v191kZslqZfbXdWTyVBEdxMAza0QZcE3d1BQVluWHDJbJm7SB7SBPrs0asKBDP5pT_D2nGEvvfq0hmKsWfs61f3C5sTbNRGonnVPw",
-  "data_account_id": "5cf1f891-b388-4795-8abc-b604ded6b163",
-  "data_account_name": "pradyp7"
+  "deviceId": false,
+  "deviceToken": false,
+  "data_account_id": false,
+  "data_account_name": false
 }
