@@ -121,6 +121,7 @@ void storeAuthorizationToken(char * response) {
             }
 
             authToken = strdup(jitem->valuestring);
+            configurations.authorization_key = authToken;
         }
     }
 
@@ -168,7 +169,6 @@ void storeAuthorizationToken(char * response) {
 
         if(authToken) {
             cJSON_AddItemToObject(root, "authorization", cJSON_CreateString(authToken));
-            configurations.authorization_key = authToken;
         } else {
             cJSON_AddItemToObject(root, "authorization", cJSON_CreateFalse());
         }
