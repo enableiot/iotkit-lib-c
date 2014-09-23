@@ -399,3 +399,7 @@ char *deleteComponent() {
 
     return NULL;
 }
+
+bool isDeviceActivated() {
+    return configurations.device_id && configurations.deviceToken;
+}

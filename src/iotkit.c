@@ -559,8 +559,9 @@ char *getDeviceAuthorizationToken() {
 //        testValidateAuthorizationToken();
 //        testGetAuthorizationTokenMeInfo();
 //        testCreateADevice();
-//        testActivateADevice("1qi3GW10");
-        testAddComponent();
+//        testActivateADevice("g1Pv2q5H");
+//        testAddComponent();
+        testDeviceActivationStatus();
 
         iotkit_cleanup();
     }

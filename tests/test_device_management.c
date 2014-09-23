@@ -21,7 +21,7 @@
 #include "../src/iotkit.h"
 
 bool testCreateADevice() {
-    char * response = createADevice("02-00-86-81-77-bf", "02-00-86-81-77-bf", "maha32");
+    char * response = createADevice("02-00-86-81-77-cf", "02-00-86-81-77-cf", "maha35");
     printf("Response Received :%s\n", response);
 
     return true;
@@ -39,6 +39,18 @@ bool testAddComponent() {
 
     char * response = addComponent("madras7", "temperature.v1.0");
     printf("Response Received :%s\n", response);
+
+    return true;
+}
+
+bool testDeviceActivationStatus() {
+    bool isActivated = isDeviceActivated();
+
+    if(isActivated) {
+        puts("Device activated : true");
+    } else {
+        puts("Device activated : false");
+    }
 
     return true;
 }
