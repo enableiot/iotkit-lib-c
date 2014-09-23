@@ -85,7 +85,7 @@ typedef struct _Configurations {
     char *delete_a_device;
     char *add_a_component;
     char *delete_a_component;
-    char *deviceToken; // TODO: check how to store this value
+    char *deviceToken;
 
     // data api
     char *submit_data;
