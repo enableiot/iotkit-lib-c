@@ -47,6 +47,17 @@
 #define HEADER_AUTHORIZATION "Authorization"
 #define HEADER_AUTHORIZATION_BEARER "Bearer "
 
+/** Sensor list to hold sensors
+*/
+typedef struct _SensorComp {
+    char *cid;
+    char *name;
+    char *type;
+
+    struct SensorComp *next;
+} SensorComp;
+
+
 typedef struct _Configurations {
     bool isSecure;
 
@@ -94,6 +105,7 @@ typedef struct _Configurations {
 
 
 Configurations configurations;
+SensorComp *sensorsList;
 
 void parseConfiguration(char *config_file_path);
 bool prepareUrl(char **full_url, char *url_prepend, char *url_append);

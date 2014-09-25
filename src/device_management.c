@@ -340,6 +340,148 @@ void storeComponent(char *response) {
     }
 }
 
+void parseComponentsList() {
+    char *config_file_path = "../config/sensor-list.json";
+    char *out;
+    int i = 0;
+    cJSON *json, *jitem, *child;
+    char *cid, *name, *type;
+    SensorComp *traverse = NULL;
+
+    FILE *fp = fopen(config_file_path, "rb");
+    if (fp == NULL) {
+        fprintf(stderr,"Error can't open file %s\n", config_file_path);
+    }
+    else {
+        fseek(fp, 0, SEEK_END);
+        long size = ftell(fp);
+        rewind(fp);
+
+        // read the file
+        char *buffer = (char *)malloc(size+1);
+        fread(buffer, 1, size, fp);
+
+        // parse the file
+        json = cJSON_Parse(buffer);
+        if (!json) {
+            fprintf(stderr,"Error before: [%s]\n",cJSON_GetErrorPtr());
+        }
+        else {
+            #if DEBUG
+                out = cJSON_Print(json, 2);
+                printf("%s\n", out);
+                free(out);
+            #endif
+
+            if (!isJsonArray(json)) {
+                fprintf(stderr,"Invalid JSON format for %s file\n", config_file_path);
+                return;
+            }
+
+            for (i = 0; i < cJSON_GetArraySize(json); i++) {
+                jitem=cJSON_GetArrayItem(json,i);
+
+                child = cJSON_GetObjectItem(jitem, "cid");
+                if (!isJsonString(child)) {
+                    fprintf(stderr,"Invalid JSON format for json property %s\n", child->string);
+                    return;
+                }
+
+                cid = strdup(child->valuestring);
+
+                child = cJSON_GetObjectItem(jitem, "name");
+                if (!isJsonString(child)) {
+                    fprintf(stderr,"Invalid JSON format for json property %s\n", child->string);
+                    return;
+                }
+
+                name = strdup(child->valuestring);
+
+                child = cJSON_GetObjectItem(jitem, "type");
+                if (!isJsonString(child)) {
+                    fprintf(stderr,"Invalid JSON format for json property %s\n", child->string);
+                    return;
+                }
+
+                type = strdup(child->valuestring);
+
+                SensorComp *newSensor = (SensorComp *)malloc(sizeof(SensorComp));
+                if (newSensor != NULL) {
+                    newSensor->next = NULL;
+                    newSensor->cid = cid;
+                    newSensor->name = name;
+                    newSensor->type = type;
+
+                    if(sensorsList == NULL) {
+                        sensorsList = newSensor;
+                    } else {
+                        traverse = sensorsList;
+                        while(traverse->next != NULL) {
+                            traverse = traverse->next;
+                        }
+
+                        traverse->next = newSensor;
+                    }
+                }
+            }
+
+            cJSON_Delete(json);
+        }
+
+        #if DEBUG
+            traverse = sensorsList;
+            while(traverse != NULL) {
+                printf("Component id : %s\n", traverse->cid);
+                printf("Name : %s\n", traverse->name);
+                printf("Type : %s\n", traverse->type);
+
+                traverse = traverse->next;
+            }
+        #endif
+
+        // free buffers
+        fclose(fp);
+        free(buffer);
+    }
+
+    return ;
+}
+
+
+bool isSensorRegistered(char *name) {
+    SensorComp *traverse = sensorsList;
+
+    if(!name) {
+        fprintf(stderr, "isSensorRegistered::Component Name cannot be NULL");
+        return false;
+    }
+    while(traverse != NULL) {
+        if(strcmp(name, traverse->name) == 0)
+            return true;
+
+        traverse = traverse->next;
+    }
+
+    return false;
+}
+
+char *getSensorComponentId(char *name) {
+    SensorComp *traverse = sensorsList;
+
+    if(!name) {
+        fprintf(stderr, "getSensorComponentId::Component Name cannot be NULL");
+        return NULL;
+    }
+    while(traverse != NULL) {
+        if(strcmp(name, traverse->name) == 0)
+            return traverse->cid;
+
+        traverse = traverse->next;
+    }
+
+    return NULL;
+}
+
 char *addComponent(char *cmp_name, char *cmp_type) {
     char  uuid_str[38];
     struct curl_slist *headers = NULL;

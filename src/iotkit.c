@@ -28,6 +28,7 @@ void iotkit_init() {
     parseConfiguration("../config/config.json");
     parseAuthorizationToken();
     parseDeviceToken();
+    parseComponentsList();
 
     if(!isInitialized) {
         CURLcode code = rest_init(configurations.isSecure);
@@ -561,7 +562,11 @@ char *getDeviceAuthorizationToken() {
 //        testCreateADevice();
 //        testActivateADevice("g1Pv2q5H");
 //        testAddComponent();
-        testDeviceActivationStatus();
+//        testDeviceActivationStatus();
+
+//        testSensorRegistrationStatus();
+        testGetSensorId();
+
 
         iotkit_cleanup();
     }

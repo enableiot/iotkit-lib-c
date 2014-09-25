@@ -54,3 +54,19 @@ bool testDeviceActivationStatus() {
 
     return true;
 }
+
+bool testSensorRegistrationStatus() {
+    if(isSensorRegistered("madras7")) {
+        printf("Yes, sensor is already registered !!\n");
+    } else {
+        printf("No, sensor is not yet registered !!\n");
+    }
+
+    return true;
+}
+
+bool testGetSensorId() {
+    printf("Sensor id for \"%s\" is :%s\n", "madras7", getSensorComponentId("madras7"));
+
+    return true;
+}
