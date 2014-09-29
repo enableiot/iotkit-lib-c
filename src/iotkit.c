@@ -543,7 +543,6 @@ char *getDeviceAuthorizationToken() {
 //        char * response = renewActivationCode();
 //        char * response = listAllComponentCatalogs();
 //        char * response = getComponentCatalogDetails();
-//        char * response = createAnComponentCatalog("funny16", "1.0", "sensor", "Number", "float", true, -150.0f, true, 150.0f, "Degrees Celsius", "timeSeries", NULL);
 //        char * response = updateAnComponentCatalog(NULL, "Number", "Integer", false, -150.0f, false, 150.0f, "masala", "timeSeries", NULL);
 //        char * response = validateDeviceToken();
 //        char * response = listAllDevices();
@@ -565,8 +564,9 @@ char *getDeviceAuthorizationToken() {
 //        testDeviceActivationStatus();
 
 //        testSensorRegistrationStatus();
-        testGetSensorId();
+//        testGetSensorId();
 
+        testCreateAnComponentCatalog();
 
         iotkit_cleanup();
     }
