@@ -46,7 +46,7 @@ char *createAnAccount(char *account_name) {
     return NULL;
 }
 
-char *getAccountInformation() { // TODO: this should take data account id as a parameter
+char *getAccountInformation() {
     struct curl_slist *headers = NULL;
     char *url;
     char *response = NULL;
@@ -63,7 +63,7 @@ char *getAccountInformation() { // TODO: this should take data account id as a p
     return NULL;
 }
 
-char *getAccountActivationCode() { // TODO: this should take data account id as a parameter
+char *getAccountActivationCode() {
     struct curl_slist *headers = NULL;
     char *url;
     char *response = NULL;
@@ -92,7 +92,6 @@ char *renewActivationCode() {
         appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
         appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
 
-        // TODO: GET THE NEW ACTIVATION CODE AND STORE IT IN CONFIG FILE
         doHttpPut(url, headers, NULL, &response);
 
         return response;
@@ -113,7 +112,6 @@ char *updateAnAccount(char *account_name) {
         appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
 
         sprintf(body, "{\"name\":\"%s\"}", account_name);
-        // TODO: GET THE NEW ACTIVATION CODE AND STORE IT IN CONFIG FILE
 
         doHttpPut(url, headers, body, &response);
 
@@ -132,8 +130,6 @@ char *deleteAnAccount() {
 
         appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
         appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
-
-        // TODO: GET THE NEW ACTIVATION CODE AND STORE IT IN CONFIG FILE
 
         doHttpDelete(url, headers);
 

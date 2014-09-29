@@ -96,8 +96,6 @@ char *getAuthorizationTokenMeInfo() {
 
         doHttpGet(url, headers, &response);
 
-        // TODO: store the account name etc in config.json file
-
         return response;
     }
 
