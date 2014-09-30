@@ -37,3 +37,18 @@ bool testCreateAnComponentCatalog() {
 
     return true;
 }
+
+bool testUpdateAnComponentCatalog() {
+    ComponentCatalog *cmpObject = createComponentCatalogObject(NULL, NULL, "actuator", "Number", "integer", "Degrees Celsius", "timeSeries");
+    addMinValue(cmpObject, -150.0f);
+    addMaxValue(cmpObject, 150.0f);
+    addCommandString(cmpObject, "on");
+
+    addCommandParams(cmpObject, "my1", "1-5");
+    addCommandParams(cmpObject, "my2", "5-10");
+
+    char * response = updateAnComponentCatalog(cmpObject);
+    printf("Response Received :%s\n", response);
+
+    return true;
+}
