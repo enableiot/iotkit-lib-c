@@ -408,7 +408,7 @@ bool prepareUrl(char **full_url, char *url_prepend, char *url_append) {
             // TODO: TODO: Will see how to implement this in a better way
             int url_post_size = 0;
 
-            url_post_size = (start - url_append) + strlen("temperature.v1.0") + strlen(end);
+            url_post_size = (start - url_append) + strlen("actua12.v1.4") + strlen(end);
 
             if(url_post == NULL) {
                 url_post = (char *)malloc(sizeof(char) * url_post_size);
@@ -420,7 +420,7 @@ bool prepareUrl(char **full_url, char *url_prepend, char *url_append) {
                 strncat(url_post, url_append, (start - url_append));
             }
 
-            strcat(url_post, "temperature.v1.0");
+            strcat(url_post, "actua12.v1.4");
         } else if(strcmp(strtoken, "device_id") == 0) {
             int url_post_size = 0;
 
@@ -566,7 +566,8 @@ char *getDeviceAuthorizationToken() {
 //        testSensorRegistrationStatus();
 //        testGetSensorId();
 
-        testCreateAnComponentCatalog();
+//        testCreateAnComponentCatalog();
+        testUpdateAnComponentCatalog();
 
         iotkit_cleanup();
     }

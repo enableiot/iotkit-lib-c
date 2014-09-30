@@ -233,11 +233,7 @@ char *createAnComponentCatalog(ComponentCatalog *cmpCatalogObject) {
     return NULL;
 }
 
-char *updateAnComponentCatalog(char *cmp_type, char *cmp_datatype, \
-        char *cmp_format, bool isMinPresent, double cmp_minvalue, bool isMaxPresent, double cmp_maxvalue,
-        char *cmp_unit, char *cmp_display, char *cmp_command) {
-
-// TODO: TODO: TODO: TODO: THIS DOES NOT SUPPORT ACTUATOR AS OF NOW
+char *updateAnComponentCatalog(ComponentCatalog *cmpCatalogObject) {
 
     struct curl_slist *headers = NULL;
     char *url;
@@ -245,88 +241,125 @@ char *updateAnComponentCatalog(char *cmp_type, char *cmp_datatype, \
     char *response = NULL;
     bool isCommaRequired = false;
 
+    if(strcmp(cmpCatalogObject->type, "actuator") ==0 && cmpCatalogObject->parameters == NULL) {
+        printf("Command Parameters are mandatory for component catalog type \"actuator\"\n");
+
+        return NULL;
+    }
+
     if(prepareUrl(&url, configurations.base_url, configurations.update_an_cmp_catalog)) {
         appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
         appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
 
         strcpy(body, "{");
 
-        if(cmp_type != NULL) {
+        if(cmpCatalogObject->type != NULL) {
             strcat(body, "\"type\":\"");
-            strcat(body, cmp_type);
+            strcat(body, cmpCatalogObject->type);
             strcat(body, "\"");
+
             isCommaRequired = true;
         }
 
-        if(cmp_datatype != NULL) {
+        if(cmpCatalogObject->datatype != NULL) {
             if(isCommaRequired) {
                 strcat(body, ",");
             }
-            strcat(body, "\"dataType\":\"");
-            strcat(body, cmp_datatype);
+
+            *strcat(body, "\"dataType\":\"");
+            strcat(body, cmpCatalogObject->datatype);
             strcat(body, "\"");
+
             isCommaRequired = true;
         }
 
-        if(cmp_format != NULL) {
+        if(cmpCatalogObject->format) {
             if(isCommaRequired) {
                 strcat(body, ",");
             }
+
             strcat(body, "\"format\":\"");
-            strcat(body, cmp_format);
+            strcat(body, cmpCatalogObject->format);
             strcat(body, "\"");
+
             isCommaRequired = true;
         }
 
         char value[BODY_SIZE_MIN];
-        if(isMinPresent == true) {
-            sprintf(value, "%f", cmp_minvalue);
+        if(cmpCatalogObject->isMinPresent == true) {
             if(isCommaRequired) {
                 strcat(body, ",");
             }
+
+            sprintf(value, "%f", cmpCatalogObject->minvalue);
             strcat(body, "\"min\":");
             strcat(body, value);
+
             isCommaRequired = true;
         }
 
-        if(isMaxPresent == true) {
-            sprintf(value, "%f", cmp_maxvalue);
+        if(cmpCatalogObject->isMaxPresent == true) {
             if(isCommaRequired) {
                 strcat(body, ",");
             }
+
+            sprintf(value, "%f", cmpCatalogObject->maxvalue);
             strcat(body, "\"max\":");
             strcat(body, value);
+
             isCommaRequired = true;
         }
 
-        if(cmp_unit != NULL) {
+        if(cmpCatalogObject->unit) {
             if(isCommaRequired) {
                 strcat(body, ",");
             }
+
             strcat(body, "\"measureunit\":\"");
-            strcat(body, cmp_unit);
+            strcat(body, cmpCatalogObject->unit);
             strcat(body, "\"");
+
             isCommaRequired = true;
         }
 
-        if(cmp_display != NULL) {
+        if(cmpCatalogObject->display) {
             if(isCommaRequired) {
                 strcat(body, ",");
             }
+
             strcat(body, "\"display\":\"");
-            strcat(body, cmp_display);
+            strcat(body, cmpCatalogObject->display);
             strcat(body, "\"");
+
             isCommaRequired = true;
         }
 
-        if(cmp_command != NULL) {
-            // TODO: TODO: NEED TO BE VALIDATED FOR ACTUATOR
+        if(cmpCatalogObject->command != NULL) {
+            ActuatorCommandParams * traverse = cmpCatalogObject->parameters;
+
             if(isCommaRequired) {
                 strcat(body, ",");
             }
-            strcat(body, "\"command\":\"");
-            strcat(body, cmp_command);
-            strcat(body, "\"");
+
+            strcat(body, "\"command\":{\"parameters\":[");
+
+            while(traverse != NULL) {
+                strcat(body, "{\"name\":\"");
+                strcat(body, traverse->name);
+                strcat(body, "\",\"values\":\"");
+                strcat(body, traverse->value);
+                strcat(body, "\"}");
+
+                traverse = traverse->next;
+
+                if(traverse != NULL) {
+                    strcat(body, ",");
+                }
+            }
+
+            strcat(body, "],\"commandString\":\"");
+            strcat(body, cmpCatalogObject->command);
+            strcat(body, "\"}");
         }
 
         strcat(body, "}");
