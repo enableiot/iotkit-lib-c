@@ -19,6 +19,9 @@
  * Provides features for communication with IoT Cloud server
  */
 
+#ifndef __COMPONENT_CATALOG_H
+#define __COMPONENT_CATALOG_H
+
 #include "iotkit.h"
 
 /** Actuator Command list
@@ -46,3 +49,5 @@ typedef struct _ComponentCatalog {
 
     ActuatorCommandParams *parameters;
 } ComponentCatalog;
+
+#endif
