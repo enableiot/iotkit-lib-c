@@ -559,7 +559,7 @@ char *getDeviceAuthorizationToken() {
 //        testValidateAuthorizationToken();
 //        testGetAuthorizationTokenMeInfo();
 //        testCreateADevice();
-//        testActivateADevice("g1Pv2q5H");
+//        testActivateADevice("rQe7V4n1");
 //        testAddComponent();
 //        testDeviceActivationStatus();
 

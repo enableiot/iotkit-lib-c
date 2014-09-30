@@ -19,7 +19,7 @@
  * Provides features for communication with IoT Cloud server
  */
 
-#include "iotkit.h"
+#include "component_catalog.h"
 
 char * listAllComponentCatalogs() {
     struct curl_slist *headers = NULL;
@@ -55,20 +55,94 @@ char * getComponentCatalogDetails() {
     return NULL;
 }
 
-char *createAnComponentCatalog(char *cmp_name, char *cmp_version, char *cmp_type, char *cmp_datatype, \
-        char *cmp_format, bool isMinPresent, double cmp_minvalue, bool isMaxPresent, double cmp_maxvalue, \
-        char *cmp_unit, char *cmp_display, char *cmp_command, char *cmd_name, char *cmd_value) {
+ComponentCatalog *createComponentCatalogObject(char *cmp_name, char *cmp_version, char *cmp_type, char *cmp_datatype, \
+            char *cmp_format, char *cmp_unit, char *cmp_display) {
+    ComponentCatalog *newObject = (ComponentCatalog *)malloc(sizeof(ComponentCatalog));
+
+    if(!newObject) {
+        return NULL;
+    }
+
+    newObject->name = cmp_name;
+    newObject->version = cmp_version;
+    newObject->type = cmp_type;
+    newObject->datatype = cmp_datatype;
+    newObject->format = cmp_format;
+
+    newObject->unit = cmp_unit;
+    newObject->display = cmp_display;
+
+    newObject->isMinPresent = false;
+    newObject->isMaxPresent = false;
+
+    newObject->minvalue = 0.0f;
+    newObject->maxvalue = 0.0f;
+
+    newObject->parameters = NULL;
+
+    return newObject;
+}
+
+ComponentCatalog *addMinValue(ComponentCatalog *cmpCatalogObject, double cmp_minvalue) {
+    cmpCatalogObject->isMinPresent = true;
+    cmpCatalogObject->minvalue = cmp_minvalue;
+
+    return cmpCatalogObject;
+}
+
+ComponentCatalog *addMaxValue(ComponentCatalog *cmpCatalogObject, double cmp_maxvalue) {
+    cmpCatalogObject->isMaxPresent = true;
+    cmpCatalogObject->maxvalue = cmp_maxvalue;
+
+    return cmpCatalogObject;
+}
+
+ComponentCatalog *addCommandString(ComponentCatalog *cmpCatalogObject, char *cmp_command) {
+    cmpCatalogObject->command = cmp_command;
+
+    return cmpCatalogObject;
+}
+
+ComponentCatalog *addCommandParams(ComponentCatalog *cmpCatalogObject, char *cmd_name, char *cmd_value) {
+    ActuatorCommandParams *newParam = (ActuatorCommandParams *)malloc(sizeof(ActuatorCommandParams));
+
+    newParam->name = cmd_name;
+    newParam->value = cmd_value;
+    newParam->next = NULL;
+
+    if(!cmpCatalogObject->parameters) {
+        cmpCatalogObject->parameters = newParam;
+    } else {
+        ActuatorCommandParams *traverse = cmpCatalogObject->parameters;
+
+        while(traverse->next != NULL) {
+            traverse = traverse->next;
+        }
+
+        traverse->next = newParam;
+    }
+
+    return cmpCatalogObject;
+}
+
+char *createAnComponentCatalog(ComponentCatalog *cmpCatalogObject) {
 
     struct curl_slist *headers = NULL;
     char *url;
     char body[BODY_SIZE_MIN];
     char *response = NULL;
 
-    if(cmp_name == NULL || cmp_version == NULL || \
-            cmp_type == NULL || cmp_datatype == NULL || \
-            cmp_format == NULL || cmp_unit == NULL || \
-            cmp_display == NULL) {
+    if(cmpCatalogObject->name == NULL || cmpCatalogObject->version == NULL || \
+            cmpCatalogObject->type == NULL || cmpCatalogObject->datatype == NULL || \
+            cmpCatalogObject->format == NULL || cmpCatalogObject->unit == NULL || \
+            cmpCatalogObject->display == NULL) {
         printf("Mandatory field missing to create component catalog\n");
+
+        return NULL;
+    }
+
+    if(strcmp(cmpCatalogObject->type, "actuator") ==0 && cmpCatalogObject->parameters == NULL) {
+        printf("Command Parameters are mandatory for component catalog type \"actuator\"\n");
 
         return NULL;
     }
@@ -79,75 +153,67 @@ char *createAnComponentCatalog(char *cmp_name, char *cmp_version, char *cmp_type
 
         strcpy(body, "{");
 
-        if(cmp_name != NULL) {
-            strcat(body, "\"dimension\":\"");
-            strcat(body, cmp_name);
-            strcat(body, "\"");
-        }
+        strcat(body, "\"dimension\":\"");
+        strcat(body, cmpCatalogObject->name);
+        strcat(body, "\"");
 
-        if(cmp_version != NULL) {
-            strcat(body, ",\"version\":\"");
-            strcat(body, cmp_version);
-            strcat(body, "\"");
-        }
+        strcat(body, ",\"version\":\"");
+        strcat(body, cmpCatalogObject->version);
+        strcat(body, "\"");
 
-        if(cmp_type != NULL) {
-            strcat(body, ",\"type\":\"");
-            strcat(body, cmp_type);
-            strcat(body, "\"");
-        }
+        strcat(body, ",\"type\":\"");
+        strcat(body, cmpCatalogObject->type);
+        strcat(body, "\"");
 
-        if(cmp_datatype != NULL) {
-            strcat(body, ",\"dataType\":\"");
-            strcat(body, cmp_datatype);
-            strcat(body, "\"");
-        }
+        strcat(body, ",\"dataType\":\"");
+        strcat(body, cmpCatalogObject->datatype);
+        strcat(body, "\"");
 
-        if(cmp_format != NULL) {
-            strcat(body, ",\"format\":\"");
-            strcat(body, cmp_format);
-            strcat(body, "\"");
-        }
+        strcat(body, ",\"format\":\"");
+        strcat(body, cmpCatalogObject->format);
+        strcat(body, "\"");
 
         char value[BODY_SIZE_MIN];
-        if(isMinPresent == true) {
-            sprintf(value, "%f", cmp_minvalue);
+        if(cmpCatalogObject->isMinPresent == true) {
+            sprintf(value, "%f", cmpCatalogObject->minvalue);
             strcat(body, ",\"min\":");
             strcat(body, value);
         }
 
-        if(isMaxPresent == true) {
-            sprintf(value, "%f", cmp_maxvalue);
+        if(cmpCatalogObject->isMaxPresent == true) {
+            sprintf(value, "%f", cmpCatalogObject->maxvalue);
             strcat(body, ",\"max\":");
             strcat(body, value);
         }
 
-        if(cmp_unit != NULL) {
-            strcat(body, ",\"measureunit\":\"");
-            strcat(body, cmp_unit);
-            strcat(body, "\"");
-        }
+        strcat(body, ",\"measureunit\":\"");
+        strcat(body, cmpCatalogObject->unit);
+        strcat(body, "\"");
 
-        if(cmp_display != NULL) {
-            strcat(body, ",\"display\":\"");
-            strcat(body, cmp_display);
-            strcat(body, "\"");
-        }
+        strcat(body, ",\"display\":\"");
+        strcat(body, cmpCatalogObject->display);
+        strcat(body, "\"");
 
-        if(cmp_command != NULL) {
+        if(cmpCatalogObject->command != NULL) {
+            ActuatorCommandParams * traverse = cmpCatalogObject->parameters;
             strcat(body, ",\"command\":{\"parameters\":[");
 
-            // TODO: should support multiple cmd_name & cmd_values
-            if(cmd_name != NULL) {
+            while(traverse != NULL) {
                 strcat(body, "{\"name\":\"");
-                strcat(body, cmd_name);
+                strcat(body, traverse->name);
                 strcat(body, "\",\"values\":\"");
-                strcat(body, cmd_value);
+                strcat(body, traverse->value);
                 strcat(body, "\"}");
+
+                traverse = traverse->next;
+
+                if(traverse != NULL) {
+                    strcat(body, ",");
+                }
             }
 
             strcat(body, "],\"commandString\":\"");
-            strcat(body, cmp_command);
+            strcat(body, cmpCatalogObject->command);
             strcat(body, "\"}");
         }
 

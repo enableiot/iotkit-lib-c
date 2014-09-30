@@ -13,32 +13,36 @@
  */
 
 /**
- * @file testauthorization.c
+ * @file authorization.c
  * @brief Implementation of Authorization API
  *
  * Provides features for communication with IoT Cloud server
  */
 
-#include "../src/iotkit.h"
+#include "iotkit.h"
 
-bool testValidateAuthorizationToken() {
-    char * response = validateAuthorizationToken();
-    printf("Response Received :%s\n", response);
+/** Actuator Command list
+*/
+typedef struct _ActuatorCommandParams {
+    char *name;
+    char *value;
 
-    return true;
-}
+    struct ActuatorCommandParams *next;
+} ActuatorCommandParams;
 
+typedef struct _ComponentCatalog {
+    char *name;
+    char *version;
+    char *type;
+    char *datatype;
+    char *format;
+    bool isMinPresent;
+    double minvalue;
+    bool isMaxPresent;
+    double maxvalue;
+    char *unit;
+    char *display;
+    char *command;
 
-bool testGetNewAuthorizationToken() {
-    char * response = getNewAuthorizationToken("pradeep.chenthati@aricent.com", "Password1");
-    printf("Response Received :%s\n", response);
-
-    return true;
-}
-
-bool testGetAuthorizationTokenMeInfo() {
-    char * response = getAuthorizationTokenMeInfo();
-    printf("Response Received :%s\n", response);
-
-    return true;
-}
+    ActuatorCommandParams *parameters;
+} ComponentCatalog;

@@ -18,11 +18,21 @@
  * Test Suite for component catalog
  */
 
-#include "../src/iotkit.h"
+#include "../src/component_catalog.h"
 
 bool testCreateAnComponentCatalog() {
 //    char * response = createAnComponentCatalog("funny16", "1.0", "sensor", "Number", "float", true, -150.0f, true, 150.0f, "Degrees Celsius", "timeSeries", NULL);
-    char * response = createAnComponentCatalog("actua12", "1.0", "actuator", "Number", "float", true, -150.0f, true, 150.0f, "Degrees Celsius", "timeSeries", "on", "my1", "1-5");
+
+    ComponentCatalog *cmpObject = createComponentCatalogObject("actua12", "1.0", "actuator", "Number", "float", "Degrees Celsius", "timeSeries");
+    addMinValue(cmpObject, -150.0f);
+    addMaxValue(cmpObject, 150.0f);
+    addCommandString(cmpObject, "on");
+
+    addCommandParams(cmpObject, "my1", "1-5");
+    addCommandParams(cmpObject, "my2", "1,2");
+    addCommandParams(cmpObject, "my3", "5,6,7");
+
+    char * response = createAnComponentCatalog(cmpObject);
     printf("Response Received :%s\n", response);
 
     return true;
