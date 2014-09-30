@@ -133,10 +133,12 @@ void parseDeviceToken() {
 void storeDeviceCredentials(char *deviceId, char *deviceToken, char *data_account_id, char *data_account_name) {
     char *config_file_path = "../config/device_config.json";
 
-    printf("deviceId is :%s\n", deviceId);
-    printf("deviceToken is :%s\n", deviceToken);
-    printf("data_account_id is :%s\n", data_account_id);
-    printf("data_account_name is :%s\n", data_account_name);
+    #if DEBUG
+        printf("deviceId is :%s\n", deviceId);
+        printf("deviceToken is :%s\n", deviceToken);
+        printf("data_account_id is :%s\n", data_account_id);
+        printf("data_account_name is :%s\n", data_account_name);
+    #endif
 
     FILE *fp = fopen(config_file_path, "w+");
     if (fp == NULL) {
