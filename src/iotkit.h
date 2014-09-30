@@ -22,7 +22,6 @@
 #ifndef __IOTKIT_H
 #define __IOTKIT_H
 
-
 #include <stdlib.h>
 #include <stdbool.h>
 #include "../lib/cJSON/cJSON.h"
