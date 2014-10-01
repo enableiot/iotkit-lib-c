@@ -25,14 +25,6 @@
 #include "iotkit.h"
 #include <sys/time.h>
 
-/** Device Id list
-*/
-typedef struct _IdList {
-    char *id;
-
-    struct IdList *next;
-} IdList;
-
 typedef struct _RetrieveData {
     long fromMillis;
     long toMillis;

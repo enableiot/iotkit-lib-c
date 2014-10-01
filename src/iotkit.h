@@ -102,6 +102,22 @@ typedef struct _Configurations {
 } Configurations;
 
 
+/** Id list
+*/
+typedef struct _IdList {
+    char *id;
+
+    struct IdList *next;
+} IdList;
+
+typedef struct _KeyValueParams {
+    char *name;
+    char *value;
+
+    struct KeyValueParams *next;
+} KeyValueParams;
+
+
 Configurations configurations;
 SensorComp *sensorsList;
 
