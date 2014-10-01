@@ -100,21 +100,6 @@ void parseConfiguration(char *config_file_path) {
             }
             configurations.isSecure = true;
 
-
-            jitem = cJSON_GetObjectItem(json, "account_id");
-            if (!isJsonString(jitem) && !isJsonBooleanFalse(jitem)) {
-                fprintf(stderr,"Invalid JSON format for json property %s\n", jitem->string);
-                return;
-            }
-
-            if (isJsonString(jitem)) {
-                configurations.account_id = strdup(jitem->valuestring);
-                printf("Read Account ID %s\n", configurations.account_id);
-            } else {
-                configurations.account_id = NULL;
-                puts("Read Account ID is NULL");
-            }
-
             jitem = cJSON_GetObjectItem(json, "host");
             if (!isJsonString(jitem)) {
                 fprintf(stderr,"Invalid JSON format for json property %s\n", jitem->string);
@@ -360,27 +345,7 @@ bool prepareUrl(char **full_url, char *url_prepend, char *url_append) {
         strncpy(strtoken, start + 1, strtokensize -1);
         strtoken[strtokensize - 1] = '\0';
 
-        if(strcmp(strtoken, "account_id") == 0) {
-            int url_post_size = 0;
-
-            if(configurations.account_id == NULL){
-                puts("User account ID not Found");
-                return false;
-            }
-            url_post_size = (start - url_append) + strlen(configurations.account_id) + strlen(end);
-
-            if(url_post == NULL) {
-                url_post = (char *)malloc(sizeof(char) * url_post_size);
-                strncpy(url_post, url_append, (start - url_append));
-                url_post[start - url_append] = '\0';
-            } else {
-                url_post_size += strlen(url_post);
-                url_post = (char *)realloc(url_post, sizeof(char) * url_post_size);
-                strncat(url_post, url_append, (start - url_append));
-            }
-
-            strcat(url_post, configurations.account_id);
-        } else if(strcmp(strtoken, "data_account_id") == 0) {
+        if(strcmp(strtoken, "data_account_id") == 0) {
             // TODO: TODO: Right now this is done for one data account per one user account
             // TODO: TODO: Multiple data accounts per user account should be supported
             int url_post_size = 0;

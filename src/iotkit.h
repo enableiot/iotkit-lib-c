@@ -60,7 +60,6 @@ typedef struct _SensorComp {
 typedef struct _Configurations {
     bool isSecure;
 
-    char *account_id;
     char *base_url;
 
     char *data_account_id;
