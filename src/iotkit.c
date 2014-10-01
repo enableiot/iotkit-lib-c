@@ -550,9 +550,9 @@ char *getDeviceAuthorizationToken() {
 //        char * response = updateADevice("02-00-86-81-77-44", "02-00-86-81-77-44", "pinky44");
 //        deleteADevice();
 //        deleteComponent();
-//        char * response = submitData("3601c9ad-77db-4f9a-89bf-1e6a045edb21", "15.5");
+        char * response = submitData("madras7", "16.52");
 //        char * response = retrieveData(1410387088000, 1410392576934, "02-00-86-81-77-33", "3601c9ad-77db-4f9a-89bf-1e6a045edb21");
-//        printf("Response Received :%s\n", response);
+        printf("Response Received :%s\n", response);
 
 
 //        testGetNewAuthorizationToken();
@@ -567,7 +567,7 @@ char *getDeviceAuthorizationToken() {
 //        testGetSensorId();
 
 //        testCreateAnComponentCatalog();
-        testUpdateAnComponentCatalog();
+//        testUpdateAnComponentCatalog();
 
         iotkit_cleanup();
     }

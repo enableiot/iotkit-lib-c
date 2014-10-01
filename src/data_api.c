@@ -32,27 +32,33 @@ long getCurrentTimeInMillis() {
     return millis;
 }
 
-char *submitData(char *cid, char *value) {
-// TODO: TODO: pass sensor name instead of cid as argument and later lookup for its cid
+char *submitData(char *cname, char *value) {
 // TODO: TODO: TODO: Support location info
     struct curl_slist *headers = NULL;
     char *url;
     char body[BODY_SIZE_MED];
     char *response = NULL;
+    char *cid = NULL;
     char currentTimeInMills[BODY_SIZE_MED];
 
+    if(!cname) {
+        fprintf(stderr, "submitData::Component Name cannot be NULL\n");
+        return NULL;
+    }
+
+    cid = getSensorComponentId(cname);
     if(!cid) {
-        fprintf(stderr, "submitData::Component ID cannot be NULL");
+        fprintf(stderr, "submitData::Component is not registered\n");
         return NULL;
     }
 
     if(!value) {
-        fprintf(stderr, "submitData::Value cannot be NULL");
+        fprintf(stderr, "submitData::Value cannot be NULL\n");
         return NULL;
     }
 
     if(!configurations.data_account_id) {
-        fprintf(stderr, "submitData::Account is NULL. Device appears to be unactivated");
+        fprintf(stderr, "submitData::Account is NULL. Device appears to be unactivated\n");
         return NULL;
     }
 
