@@ -33,8 +33,6 @@ char *validateDeviceToken() {
 
         doHttpGet(url, headers, &response);
 
-        // TODO: store the account id in the config.json file
-
         return response;
     }
 
