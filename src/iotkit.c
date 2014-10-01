@@ -550,7 +550,7 @@ char *getDeviceAuthorizationToken() {
 //        char * response = updateADevice("02-00-86-81-77-44", "02-00-86-81-77-44", "pinky44");
 //        deleteADevice();
 //        deleteComponent();
-        char * response = submitData("madras7", "16.52");
+        char * response = submitData("madras7", "26.15", "45.540164", "-122.926048", "124.3");
 //        char * response = retrieveData(1410387088000, 1410392576934, "02-00-86-81-77-33", "3601c9ad-77db-4f9a-89bf-1e6a045edb21");
         printf("Response Received :%s\n", response);
 

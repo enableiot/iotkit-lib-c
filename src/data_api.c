@@ -32,8 +32,7 @@ long getCurrentTimeInMillis() {
     return millis;
 }
 
-char *submitData(char *cname, char *value) {
-// TODO: TODO: TODO: Support location info
+char *submitData(char *cname, char *value, char *latitude, char *longitude, char *height) {
     struct curl_slist *headers = NULL;
     char *url;
     char body[BODY_SIZE_MED];
@@ -77,6 +76,21 @@ char *submitData(char *cname, char *value) {
         strcat(body, cid);
         strcat(body, "\",\"on\":");
         strcat(body, currentTimeInMills);
+
+        if(latitude != NULL && longitude != NULL) {
+            strcat(body, ",\"loc\":[");
+
+            strcat(body, latitude);
+            strcat(body, ",");
+            strcat(body, longitude);
+
+            if(height) {
+                strcat(body, ",");
+                strcat(body, height);
+            }
+            strcat(body, "]");
+        }
+
         strcat(body, ",\"value\":\"");
         strcat(body, value);
         strcat(body, "\"}]}");
