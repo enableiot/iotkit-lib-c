@@ -19,8 +19,7 @@
  * Provides features for communication with IoT Cloud server
  */
 
-#include "iotkit.h"
-#include <sys/time.h>
+#include "data_api.h"
 
 long getCurrentTimeInMillis() {
     struct timeval tv;
@@ -107,22 +106,82 @@ char *submitData(char *cname, char *value, char *latitude, char *longitude, char
     return NULL;
 }
 
-char *retrieveData(long fromMillis, long toMillis, char *deviceId, char *componentId) {
-// TODO: TODO: should be able to retrieve data from multiple devices
-// TODO: TODO: should be able to retrieve data for multiple sensor components
+RetrieveData *createRetrieveDataObject(long fromMillis, long toMillis) {
+    RetrieveData *retrieveObj = (RetrieveData *)malloc(sizeof(RetrieveData));
+    if(!retrieveObj) {
+        fprintf(stderr, "createRetrieveDataObject::Could not allocate memory\n");
+        return NULL;
+    }
+
+    retrieveObj->fromMillis = fromMillis;
+    retrieveObj->toMillis = toMillis;
+
+    retrieveObj->componentId = NULL;
+    retrieveObj->deviceList = NULL;
+
+    return retrieveObj;
+}
+
+RetrieveData *addDeviceId(RetrieveData *retrieveObj, char *id) {
+    IdList *addId;
+
+    addId = (IdList *)malloc(sizeof(IdList));
+    addId->id = id;
+    addId->next = NULL;
+
+    if(!retrieveObj->deviceList) {
+        retrieveObj->deviceList = addId;
+    } else {
+        IdList *traverseId = retrieveObj->deviceList;
+
+        while(traverseId->next) {
+            traverseId = traverseId->next;
+        }
+        traverseId->next = addId;
+    }
+
+    return retrieveObj;
+}
+
+RetrieveData *addSensorId(RetrieveData *retrieveObj, char *sensorName) {
+    char *cid = NULL;
+    IdList *addId;
+
+    cid = getSensorComponentId(sensorName);
+
+    addId = (IdList *)malloc(sizeof(IdList));
+    addId->id = cid;
+    addId->next = NULL;
+
+    if(!retrieveObj->componentId) {
+        retrieveObj->componentId = addId;
+    } else {
+        IdList *traverseId = retrieveObj->componentId;
+
+        while(traverseId->next) {
+            traverseId = traverseId->next;
+        }
+        traverseId->next = addId;
+    }
+
+    return retrieveObj;
+}
+
+char *retrieveData(RetrieveData *retrieveObj) {
     struct curl_slist *headers = NULL;
     char *url;
     char body[BODY_SIZE_MED];
     char *response = NULL;
     char fromTimeInMillis[BODY_SIZE_MIN];
     char toTimeInMillis[BODY_SIZE_MIN];
+    IdList *traverse = NULL;
 
-    if(!deviceId) {
+    if(!retrieveObj->deviceList) {
         fprintf(stderr, "retrieveData::Device ID cannot be NULL");
         return NULL;
     }
 
-    if(!componentId) {
+    if(!retrieveObj->componentId) {
         fprintf(stderr, "retrieveData::Component ID cannot be NULL");
         return NULL;
     }
@@ -131,20 +190,47 @@ char *retrieveData(long fromMillis, long toMillis, char *deviceId, char *compone
         appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
         appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
 
-        sprintf(fromTimeInMillis, "%ld", fromMillis);
-        sprintf(toTimeInMillis, "%ld", toMillis);
+        sprintf(fromTimeInMillis, "%ld", retrieveObj->fromMillis);
+        sprintf(toTimeInMillis, "%ld", retrieveObj->toMillis);
 
         strcpy(body, "{");
         strcat(body, "\"from\":");
         strcat(body, fromTimeInMillis);
         strcat(body, ",\"to\":");
         strcat(body, toTimeInMillis);
-        strcat(body, ",\"targetFilter\":{\"deviceList\":[\"");
-        strcat(body, deviceId);
-        strcat(body, "\"]},\"metrics\":[{\"id\":\"");
-        strcat(body, componentId);
-        strcat(body, "\",\"op\":\"none\"");
-        strcat(body, "}]}");
+        strcat(body, ",\"targetFilter\":{\"deviceList\":[");
+
+        traverse = retrieveObj->deviceList;
+        while(traverse != NULL) {
+            strcat(body, "\"");
+            strcat(body, traverse->id);
+            strcat(body, "\"");
+
+            traverse = traverse->next;
+
+            if(traverse) {
+                strcat(body, ",");
+            }
+        }
+
+        strcat(body, "]}");
+
+        strcat(body, ",\"metrics\":[");
+
+        traverse = retrieveObj->componentId;
+        while(traverse != NULL) {
+            strcat(body, "{\"id\":\"");
+            strcat(body, traverse->id);
+            strcat(body, "\",\"op\":\"none\"}");
+
+            traverse = traverse->next;
+
+            if(traverse) {
+                strcat(body, ",");
+            }
+        }
+
+        strcat(body, "]}");
 
         #if DEBUG
             printf("Prepared BODY is %s\n", body);
