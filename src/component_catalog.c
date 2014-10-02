@@ -28,7 +28,7 @@ char * listAllComponentCatalogs() {
 
     appendHttpHeader(&headers, HEADER_AUTHORIZATION, getDeviceAuthorizationToken());
 
-    if(prepareUrl(&url, configurations.base_url, configurations.list_components)) {
+    if(prepareUrl(&url, configurations.base_url, configurations.list_components, NULL)) {
 
         doHttpGet(url, headers, &response);
 
@@ -38,14 +38,20 @@ char * listAllComponentCatalogs() {
     return NULL;
 }
 
-char * getComponentCatalogDetails() {
+char * getComponentCatalogDetails(char *cmp_id) {
     struct curl_slist *headers = NULL;
     char *url;
     char *response = NULL;
+    KeyValueParams *urlParams = NULL;
+
+    urlParams = (KeyValueParams *)malloc(sizeof(KeyValueParams));
+    urlParams->name = "cmp_catalog_id";
+    urlParams->value = cmp_id;
+    urlParams->next = NULL;
 
     appendHttpHeader(&headers, HEADER_AUTHORIZATION, getDeviceAuthorizationToken());
 
-    if(prepareUrl(&url, configurations.base_url, configurations.get_component_details)) {
+    if(prepareUrl(&url, configurations.base_url, configurations.get_component_details, urlParams)) {
 
         doHttpGet(url, headers, &response);
 
@@ -147,7 +153,7 @@ char *createAnComponentCatalog(ComponentCatalog *cmpCatalogObject) {
         return NULL;
     }
 
-    if(prepareUrl(&url, configurations.base_url, configurations.create_an_cmp_catalog)) {
+    if(prepareUrl(&url, configurations.base_url, configurations.create_an_cmp_catalog, NULL)) {
         appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
         appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
 
@@ -233,13 +239,14 @@ char *createAnComponentCatalog(ComponentCatalog *cmpCatalogObject) {
     return NULL;
 }
 
-char *updateAnComponentCatalog(ComponentCatalog *cmpCatalogObject) {
+char *updateAnComponentCatalog(ComponentCatalog *cmpCatalogObject, char *cmp_id) {
 
     struct curl_slist *headers = NULL;
     char *url;
     char body[BODY_SIZE_MIN];
     char *response = NULL;
     bool isCommaRequired = false;
+    KeyValueParams *urlParams = NULL;
 
     if(strcmp(cmpCatalogObject->type, "actuator") ==0 && cmpCatalogObject->parameters == NULL) {
         printf("Command Parameters are mandatory for component catalog type \"actuator\"\n");
@@ -247,7 +254,12 @@ char *updateAnComponentCatalog(ComponentCatalog *cmpCatalogObject) {
         return NULL;
     }
 
-    if(prepareUrl(&url, configurations.base_url, configurations.update_an_cmp_catalog)) {
+    urlParams = (KeyValueParams *)malloc(sizeof(KeyValueParams));
+    urlParams->name = "cmp_catalog_id";
+    urlParams->value = cmp_id;
+    urlParams->next = NULL;
+
+    if(prepareUrl(&url, configurations.base_url, configurations.update_an_cmp_catalog, urlParams)) {
         appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
         appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
 

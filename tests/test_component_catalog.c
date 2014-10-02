@@ -23,7 +23,7 @@
 bool testCreateAnComponentCatalog() {
 //    char * response = createAnComponentCatalog("funny16", "1.0", "sensor", "Number", "float", true, -150.0f, true, 150.0f, "Degrees Celsius", "timeSeries", NULL);
 
-    ComponentCatalog *cmpObject = createComponentCatalogObject("actua12", "1.0", "actuator", "Number", "float", "Degrees Celsius", "timeSeries");
+    ComponentCatalog *cmpObject = createComponentCatalogObject("actua13", "1.0", "actuator", "Number", "float", "Degrees Celsius", "timeSeries");
     addMinValue(cmpObject, -150.0f);
     addMaxValue(cmpObject, 150.0f);
     addCommandString(cmpObject, "on");
@@ -39,7 +39,7 @@ bool testCreateAnComponentCatalog() {
 }
 
 bool testUpdateAnComponentCatalog() {
-    ComponentCatalog *cmpObject = createComponentCatalogObject(NULL, NULL, "actuator", "Number", "integer", "Degrees Celsius", "timeSeries");
+    ComponentCatalog *cmpObject = createComponentCatalogObject(NULL, NULL, "actuator", "Number", "integer", "Degrees Celsius2", "timeSeries");
     addMinValue(cmpObject, -150.0f);
     addMaxValue(cmpObject, 150.0f);
     addCommandString(cmpObject, "off");
@@ -47,7 +47,7 @@ bool testUpdateAnComponentCatalog() {
     addCommandParams(cmpObject, "my12", "1-5");
     addCommandParams(cmpObject, "my22", "5-10");
 
-    char * response = updateAnComponentCatalog(cmpObject);
+    char * response = updateAnComponentCatalog(cmpObject, "actua13.v1.0");
     printf("Response Received :%s\n", response);
 
     return true;

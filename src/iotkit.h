@@ -122,7 +122,7 @@ Configurations configurations;
 SensorComp *sensorsList;
 
 void parseConfiguration(char *config_file_path);
-bool prepareUrl(char **full_url, char *url_prepend, char *url_append);
+bool prepareUrl(char **full_url, char *url_prepend, char *url_append, KeyValueParams *urlParams);
 char *getConfigAuthorizationToken();
 
 #endif

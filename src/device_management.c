@@ -29,7 +29,7 @@ char *validateDeviceToken() {
     appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
     appendHttpHeader(&headers, HEADER_AUTHORIZATION, getDeviceAuthorizationToken());
 
-    if(prepareUrl(&url, configurations.base_url, configurations.auth_token_info)) {
+    if(prepareUrl(&url, configurations.base_url, configurations.auth_token_info, NULL)) {
 
         doHttpGet(url, headers, &response);
 
@@ -47,7 +47,7 @@ char *listAllDevices() {
     appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
     appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
 
-    if(prepareUrl(&url, configurations.base_url, configurations.list_all_devices)){
+    if(prepareUrl(&url, configurations.base_url, configurations.list_all_devices, NULL)){
         doHttpGet(url, headers, &response);
 
         return response;
@@ -64,7 +64,7 @@ char *getMyDeviceInfo() {
     appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
     appendHttpHeader(&headers, HEADER_AUTHORIZATION, getDeviceAuthorizationToken());
 
-    if(prepareUrl(&url, configurations.base_url, configurations.get_device_info)){
+    if(prepareUrl(&url, configurations.base_url, configurations.get_device_info, NULL)){
         doHttpGet(url, headers, &response);
 
         return response;
@@ -81,7 +81,7 @@ char *getOneDeviceInfo() {
     appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
     appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
 
-    if(prepareUrl(&url, configurations.base_url, configurations.get_device_info)){
+    if(prepareUrl(&url, configurations.base_url, configurations.get_device_info, NULL)){
         doHttpGet(url, headers, &response);
 
         return response;
@@ -190,7 +190,7 @@ char *createADevice(DeviceCreationObj *createDeviceObj) {
         return NULL;
     }
 
-    if(prepareUrl(&url, configurations.base_url, configurations.create_a_device)) {
+    if(prepareUrl(&url, configurations.base_url, configurations.create_a_device, NULL)) {
         appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
         appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
 
@@ -272,7 +272,7 @@ char *updateADevice(DeviceCreationObj *createDeviceObj) {
     char *response = NULL;
     bool isCommaRequired = false;
 
-    if(prepareUrl(&url, configurations.base_url, configurations.update_a_device)) {
+    if(prepareUrl(&url, configurations.base_url, configurations.update_a_device, NULL)) {
         appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
         appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
 
@@ -361,7 +361,7 @@ char *activateADevice(char *activation_code) {
         return NULL;
     }
 
-    if(prepareUrl(&url, configurations.base_url, configurations.activate_a_device)) {
+    if(prepareUrl(&url, configurations.base_url, configurations.activate_a_device, NULL)) {
         appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
         appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
 
@@ -392,7 +392,7 @@ char *deleteADevice() {
     char *url;
     char *response = NULL;
 
-    if(prepareUrl(&url, configurations.base_url, configurations.delete_a_device)) {
+    if(prepareUrl(&url, configurations.base_url, configurations.delete_a_device, NULL)) {
 
         appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
         appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
@@ -665,7 +665,7 @@ char *addComponent(char *cmp_name, char *cmp_type) {
     // generate UUID
     get_uuid_string(uuid_str,sizeof(uuid_str));
 
-    if(prepareUrl(&url, configurations.base_url, configurations.add_a_component)) {
+    if(prepareUrl(&url, configurations.base_url, configurations.add_a_component, NULL)) {
         appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
         appendHttpHeader(&headers, HEADER_AUTHORIZATION, getDeviceAuthorizationToken());
 
@@ -692,7 +692,7 @@ char *deleteComponent() {
     char *url;
     char *response = NULL;
 
-    if(prepareUrl(&url, configurations.base_url, configurations.delete_a_component)) {
+    if(prepareUrl(&url, configurations.base_url, configurations.delete_a_component, NULL)) {
 
         appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
         appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());

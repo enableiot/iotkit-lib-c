@@ -32,7 +32,7 @@ char *createAnAccount(char *account_name) {
         return NULL;
     }
 
-    if(prepareUrl(&url, configurations.base_url, configurations.create_an_account)) {
+    if(prepareUrl(&url, configurations.base_url, configurations.create_an_account, NULL)) {
         appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
         appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
 
@@ -54,7 +54,7 @@ char *getAccountInformation() {
     appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
     appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
 
-    if(prepareUrl(&url, configurations.base_url, configurations.get_account_information)){
+    if(prepareUrl(&url, configurations.base_url, configurations.get_account_information, NULL)){
         doHttpGet(url, headers, &response);
 
         return response;
@@ -71,7 +71,7 @@ char *getAccountActivationCode() {
     appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
     appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
 
-    if(prepareUrl(&url, configurations.base_url, configurations.get_account_activation_code)) {
+    if(prepareUrl(&url, configurations.base_url, configurations.get_account_activation_code, NULL)) {
 
         doHttpGet(url, headers, &response);
 
@@ -87,7 +87,7 @@ char *renewActivationCode() {
     char *url;
     char *response = NULL;
 
-    if(prepareUrl(&url, configurations.base_url, configurations.renew_account_activation)) {
+    if(prepareUrl(&url, configurations.base_url, configurations.renew_account_activation, NULL)) {
 
         appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
         appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
@@ -106,7 +106,7 @@ char *updateAnAccount(char *account_name) {
     char body[BODY_SIZE_MIN];
     char *response = NULL;
 
-    if(prepareUrl(&url, configurations.base_url, configurations.update_an_account_name)) {
+    if(prepareUrl(&url, configurations.base_url, configurations.update_an_account_name, NULL)) {
 
         appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
         appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
@@ -126,7 +126,7 @@ char *deleteAnAccount() {
     char *url;
     char *response = NULL;
 
-    if(prepareUrl(&url, configurations.base_url, configurations.delete_an_account_name)) {
+    if(prepareUrl(&url, configurations.base_url, configurations.delete_an_account_name, NULL)) {
 
         appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
         appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());

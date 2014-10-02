@@ -40,7 +40,7 @@ char *getNewAuthorizationToken(char *username, char *password) {
     }
 
 
-    if(prepareUrl(&url, configurations.base_url, configurations.new_auth_token)) {
+    if(prepareUrl(&url, configurations.base_url, configurations.new_auth_token, NULL)) {
 
         sprintf(body, "{\"username\":\"%s\",\"password\":\"%s\"}", username, password);
 
@@ -72,7 +72,7 @@ char *validateAuthorizationToken() {
     appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
     appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
 
-    if(prepareUrl(&url, configurations.base_url, configurations.auth_token_info)) {
+    if(prepareUrl(&url, configurations.base_url, configurations.auth_token_info, NULL)) {
 
         doHttpGet(url, headers, &response);
 
@@ -92,7 +92,7 @@ char *getAuthorizationTokenMeInfo() {
     appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
     appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
 
-    if(prepareUrl(&url, configurations.base_url, configurations.me_info)) {
+    if(prepareUrl(&url, configurations.base_url, configurations.me_info, NULL)) {
 
         doHttpGet(url, headers, &response);
 

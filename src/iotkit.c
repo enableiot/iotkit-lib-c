@@ -321,7 +321,7 @@ void parseConfiguration(char *config_file_path) {
 }
 
 
-bool prepareUrl(char **full_url, char *url_prepend, char *url_append) {
+bool prepareUrl(char **full_url, char *url_prepend, char *url_append, KeyValueParams *urlParams) {
     int urlSize;
     char *url_post = NULL;
 
@@ -367,12 +367,26 @@ bool prepareUrl(char **full_url, char *url_prepend, char *url_append) {
 
             strcat(url_post, configurations.data_account_id);
         } else if(strcmp(strtoken, "cmp_catalog_id") == 0) {
-            // TODO: TODO: Right now value is fixed
-            // TODO: TODO: Will see how to implement this in a better way
             int url_post_size = 0;
+            char *catalog_id = NULL;
 
-            url_post_size = (start - url_append) + strlen("actua12.v1.4") + strlen(end);
+            url_post_size = (start - url_append) + strlen(end);
 
+            while(urlParams != NULL) {
+                if(strcmp(urlParams->name, strtoken) == 0) {
+                    catalog_id = urlParams->value;
+                    break;
+                }
+
+                urlParams = urlParams->next;
+            }
+
+            if(!catalog_id) {
+                // leave the url intact with the actual url parameter since it is not resolved in the parameter list
+                catalog_id = "{cmp_catalog_id}";
+            }
+
+            url_post_size += strlen(catalog_id);
             if(url_post == NULL) {
                 url_post = (char *)malloc(sizeof(char) * url_post_size);
                 strncpy(url_post, url_append, (start - url_append));
@@ -383,7 +397,7 @@ bool prepareUrl(char **full_url, char *url_prepend, char *url_append) {
                 strncat(url_post, url_append, (start - url_append));
             }
 
-            strcat(url_post, "actua12.v1.4");
+            strcat(url_post, catalog_id);
         } else if(strcmp(strtoken, "device_id") == 0) {
             int url_post_size = 0;
 
@@ -505,8 +519,7 @@ char *getDeviceAuthorizationToken() {
 //        char * response = getAccountActivationCode();
 //        char * response = renewActivationCode();
 //        char * response = listAllComponentCatalogs();
-//        char * response = getComponentCatalogDetails();
-//        char * response = updateAnComponentCatalog(NULL, "Number", "Integer", false, -150.0f, false, 150.0f, "masala", "timeSeries", NULL);
+//        char * response = getComponentCatalogDetails("actua13.v1.0");
 //        char * response = validateDeviceToken();
 //        char * response = listAllDevices();
 //        char * response = getOneDeviceInfo();
@@ -521,8 +534,8 @@ char *getDeviceAuthorizationToken() {
 //        testValidateAuthorizationToken();
 //        testGetAuthorizationTokenMeInfo();
 //        testCreateADevice();
-        testUpdateADevice();
-//        testActivateADevice("rQe7V4n1");
+//        testUpdateADevice();
+//        testActivateADevice("FaGgt4XT");
 
 //        testDeviceActivationStatus();
 
@@ -531,7 +544,7 @@ char *getDeviceAuthorizationToken() {
 //        testGetSensorId();
 
 //        testCreateAnComponentCatalog();
-//        testUpdateAnComponentCatalog();
+        testUpdateAnComponentCatalog();
 
 //        testRetrieveData();
 

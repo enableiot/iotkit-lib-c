@@ -60,7 +60,7 @@ char *submitData(char *cname, char *value, char *latitude, char *longitude, char
         return NULL;
     }
 
-    if(prepareUrl(&url, configurations.base_url, configurations.submit_data)) {
+    if(prepareUrl(&url, configurations.base_url, configurations.submit_data, NULL)) {
         appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
         appendHttpHeader(&headers, HEADER_AUTHORIZATION, getDeviceAuthorizationToken());
 
@@ -186,7 +186,7 @@ char *retrieveData(RetrieveData *retrieveObj) {
         return NULL;
     }
 
-    if(prepareUrl(&url, configurations.base_url, configurations.retrieve_data)) {
+    if(prepareUrl(&url, configurations.base_url, configurations.retrieve_data, NULL)) {
         appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
         appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
 
