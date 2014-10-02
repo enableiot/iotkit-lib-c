@@ -645,6 +645,79 @@ char *getSensorComponentId(char *name) {
     return NULL;
 }
 
+bool storeSensorsFromList() {
+    SensorComp *traverse = sensorsList;
+    cJSON *root, *jitem;
+    char *config_file_path = "../config/sensor-list.json";
+    FILE *fp = NULL;
+    char *out;
+
+    root=cJSON_CreateArray();
+
+    while(traverse != NULL) {
+        jitem=cJSON_CreateObject();
+
+        cJSON_AddItemToObject(jitem, "cid", cJSON_CreateString(traverse->cid));
+        cJSON_AddItemToObject(jitem, "name", cJSON_CreateString(traverse->name));
+        cJSON_AddItemToObject(jitem, "type", cJSON_CreateString(traverse->type));
+
+        cJSON_AddItemToArray(root, jitem);
+
+        traverse = traverse->next;
+    }
+
+    fp = fopen(config_file_path, "w+");
+    if (fp == NULL) {
+        fprintf(stderr,"Error can't open file %s\n", config_file_path);
+    } else {
+        out = cJSON_Print(root, 2);
+
+        #if DEBUG
+            printf("%s\n", out);
+        #endif
+
+        fwrite(out, strlen(out), sizeof(char), fp);
+
+        // free buffers
+        free(out);
+        cJSON_Delete(root);
+        fclose(fp);
+    }
+}
+
+bool removeSensorComponentFromCache(char *name) {
+    SensorComp *traverse = sensorsList;
+    SensorComp *prevNode = NULL;
+
+    if(!name) {
+        fprintf(stderr, "removeSensorComponentFromCache::Component Name cannot be NULL");
+        return NULL;
+    }
+    while(traverse != NULL) {
+        if(strcmp(name, traverse->name) == 0) {
+            if(!prevNode) {
+                // means this is root node
+                sensorsList = traverse->next;
+            } else {
+                prevNode->next = traverse->next;
+            }
+
+            free(traverse->cid);
+            free(traverse->name);
+            free(traverse->type);
+            free(traverse);
+
+            storeSensorsFromList();
+            return true;
+        }
+
+        prevNode = traverse;
+        traverse = traverse->next;
+    }
+
+    return false;
+}
+
 char *addComponent(char *cmp_name, char *cmp_type) {
     char  uuid_str[38];
     struct curl_slist *headers = NULL;
@@ -687,17 +760,31 @@ char *addComponent(char *cmp_name, char *cmp_type) {
     return NULL;
 }
 
-char *deleteComponent() {
+char *deleteComponent(char *sensor_name) {
     struct curl_slist *headers = NULL;
     char *url;
     char *response = NULL;
+    KeyValueParams *urlParams = NULL;
+    char *cid = NULL;
+    long httpResponseCode = 0;
 
-    if(prepareUrl(&url, configurations.base_url, configurations.delete_a_component, NULL)) {
+    cid = getSensorComponentId(sensor_name);
+    urlParams = (KeyValueParams *)malloc(sizeof(KeyValueParams));
+    urlParams->name = "cid";
+    urlParams->value = cid;
+    urlParams->next = NULL;
+
+    if(prepareUrl(&url, configurations.base_url, configurations.delete_a_component, urlParams)) {
 
         appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
         appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
 
-        doHttpDelete(url, headers);
+        doHttpDelete(url, headers, &httpResponseCode);
+
+        if(httpResponseCode == 204) {
+            // delete successful, perform cleanup
+            removeSensorComponentFromCache(sensor_name);
+        }
 
         return response;
     }

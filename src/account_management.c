@@ -125,13 +125,18 @@ char *deleteAnAccount() {
     struct curl_slist *headers = NULL;
     char *url;
     char *response = NULL;
+    long httpResponseCode = 0;
 
     if(prepareUrl(&url, configurations.base_url, configurations.delete_an_account_name, NULL)) {
 
         appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
         appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
 
-        doHttpDelete(url, headers);
+        doHttpDelete(url, headers, &httpResponseCode);
+
+        if(httpResponseCode == 204) {
+            // delete successful, perform cleanup
+        }
 
         return response;
     }

@@ -242,10 +242,11 @@ int doHttpPost(char *url, struct curl_slist *headers, char *body, char **respons
     return 0;
 }
 
-int doHttpDelete(char *url, struct curl_slist *headers) {
+int doHttpDelete(char *url, struct curl_slist *headers, long *httpResponseCode) {
     CURL *curl;
     CURLcode res;
 
+    *httpResponseCode = 0;
     curl = curl_easy_init();
     if(curl) {
 
@@ -265,6 +266,9 @@ int doHttpDelete(char *url, struct curl_slist *headers) {
         curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, "DELETE");
 
         res = curl_easy_perform(curl);
+
+        curl_easy_getinfo (curl, CURLINFO_RESPONSE_CODE, httpResponseCode);
+
         if(res != CURLE_OK) {
             fprintf(stderr, "curl_easy_perform() failed: %s\n",
                   curl_easy_strerror(res));

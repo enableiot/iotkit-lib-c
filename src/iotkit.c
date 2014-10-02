@@ -420,10 +420,26 @@ bool prepareUrl(char **full_url, char *url_prepend, char *url_append, KeyValuePa
 
             strcat(url_post, configurations.device_id);
         } else if(strcmp(strtoken, "cid") == 0) {
-        // TODO: cid to be retrieved from configuration file
             int url_post_size = 0;
+            char *sensor_name = NULL;
 
-            url_post_size = (start - url_append) + strlen("85b6915e-99b7-4ca4-b3a1-f1e3fea6be3d") + strlen(end);
+            url_post_size = (start - url_append) + strlen(end);
+
+            while(urlParams != NULL) {
+                if(strcmp(urlParams->name, strtoken) == 0) {
+                    sensor_name = urlParams->value;
+                    break;
+                }
+
+                urlParams = urlParams->next;
+            }
+
+            if(!sensor_name) {
+                // leave the url intact with the actual url parameter since it is not resolved in the parameter list
+                sensor_name = "{cid}";
+            }
+
+            url_post_size += strlen(sensor_name);
 
             if(url_post == NULL) {
                 url_post = (char *)malloc(sizeof(char) * url_post_size);
@@ -435,7 +451,7 @@ bool prepareUrl(char **full_url, char *url_prepend, char *url_append, KeyValuePa
                 strncat(url_post, url_append, (start - url_append));
             }
 
-            strcat(url_post, "85b6915e-99b7-4ca4-b3a1-f1e3fea6be3d");
+            strcat(url_post, sensor_name);
         } else {
             int url_post_size = 0;
 
@@ -525,7 +541,7 @@ char *getDeviceAuthorizationToken() {
 //        char * response = getOneDeviceInfo();
 //        char * response = updateADevice("02-00-86-81-77-44", "02-00-86-81-77-44", "pinky44");
 //        deleteADevice();
-//        deleteComponent();
+        deleteComponent("madras12");
 //        char * response = submitData("madras7", "26.15", "45.540164", "-122.926048", "124.3");
 //        printf("Response Received :%s\n", response);
 
@@ -544,7 +560,7 @@ char *getDeviceAuthorizationToken() {
 //        testGetSensorId();
 
 //        testCreateAnComponentCatalog();
-        testUpdateAnComponentCatalog();
+//        testUpdateAnComponentCatalog();
 
 //        testRetrieveData();
 
