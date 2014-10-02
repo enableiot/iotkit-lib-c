@@ -346,8 +346,6 @@ bool prepareUrl(char **full_url, char *url_prepend, char *url_append) {
         strtoken[strtokensize - 1] = '\0';
 
         if(strcmp(strtoken, "data_account_id") == 0) {
-            // TODO: TODO: Right now this is done for one data account per one user account
-            // TODO: TODO: Multiple data accounts per user account should be supported
             int url_post_size = 0;
 
             if(configurations.data_account_id == NULL){
