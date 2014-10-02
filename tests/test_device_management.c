@@ -18,10 +18,21 @@
  * Test to create a device
  */
 
-#include "../src/iotkit.h"
+#include "../src/device_management.h"
 
 bool testCreateADevice() {
-    char * response = createADevice("02-00-86-81-77-cf", "02-00-86-81-77-cf", "maha35");
+    DeviceCreationObj *createDeviceObj;
+
+    createDeviceObj = createDeviceCreationObject("02-00-86-81-77-ff", "02-00-86-81-77-ff", "maha36");
+    addLocInfo(createDeviceObj, "45.540164", "-122.926048", "55.0");
+    addTagInfo(createDeviceObj, "USA");
+    addTagInfo(createDeviceObj, "Oregon");
+    addTagInfo(createDeviceObj, "Hillsboro");
+    addAttributesInfo(createDeviceObj, "vendor", "Intel");
+    addAttributesInfo(createDeviceObj, "platform", "x86");
+    addAttributesInfo(createDeviceObj, "os", "Ubuntu");
+
+    char * response = createADevice(createDeviceObj);
     printf("Response Received :%s\n", response);
 
     return true;

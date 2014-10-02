@@ -19,7 +19,7 @@
  * Provides features for communication with IoT Cloud server
  */
 
-#include "iotkit.h"
+#include "device_management.h"
 
 char *validateDeviceToken() {
     struct curl_slist *headers = NULL;
@@ -90,24 +90,102 @@ char *getOneDeviceInfo() {
     return NULL;
 }
 
-char *createADevice(char *device_id, char *gateway_id, char *device_name) {
-// TODO: TODO: TODO: Support for tags, loc and attributes while creating a device
+DeviceCreationObj *createDeviceCreationObject(char *device_id, char *gateway_id, char *device_name) {
+    DeviceCreationObj *createDeviceObj = (DeviceCreationObj *)malloc(sizeof(DeviceCreationObj));
+    if(!createDeviceObj) {
+        fprintf(stderr, "createRetrieveDataObject::Could not allocate memory\n");
+        return NULL;
+    }
+
+    createDeviceObj->device_id = device_id;
+    createDeviceObj->gateway_id = gateway_id;
+    createDeviceObj->device_name = device_name;
+
+    createDeviceObj->tags = NULL;
+
+    createDeviceObj->latitude = NULL;
+    createDeviceObj->longitude = NULL;
+    createDeviceObj->height = NULL;
+
+    createDeviceObj->attributes = NULL;
+
+    return createDeviceObj;
+}
+
+DeviceCreationObj *addLocInfo(DeviceCreationObj *createDeviceObj, char *latitude, char *longitude, char *height) {
+
+    if(latitude && longitude) {
+        createDeviceObj->latitude = latitude;
+        createDeviceObj->longitude = longitude;
+
+        if(height) {
+            createDeviceObj->height = height;
+        }
+    }
+
+    return createDeviceObj;
+}
+
+DeviceCreationObj *addTagInfo(DeviceCreationObj *createDeviceObj, char *tagName) {
+    IdList *tagData;
+
+    tagData = (IdList *)malloc(sizeof(IdList));
+    tagData->id = tagName;
+    tagData->next = NULL;
+
+    if(!createDeviceObj->tags) {
+        createDeviceObj->tags = tagData;
+    } else {
+        IdList *traverseId = createDeviceObj->tags;
+
+        while(traverseId->next) {
+            traverseId = traverseId->next;
+        }
+        traverseId->next = tagData;
+    }
+
+    return createDeviceObj;
+}
+
+DeviceCreationObj *addAttributesInfo(DeviceCreationObj *createDeviceObj, char *name, char *value) {
+    KeyValueParams *keyValue;
+
+    keyValue = (KeyValueParams *)malloc(sizeof(KeyValueParams));
+    keyValue->name = name;
+    keyValue->value = value;
+    keyValue->next = NULL;
+
+    if(!createDeviceObj->attributes) {
+        createDeviceObj->attributes = keyValue;
+    } else {
+        KeyValueParams *traverseId = createDeviceObj->attributes;
+
+        while(traverseId->next) {
+            traverseId = traverseId->next;
+        }
+        traverseId->next = keyValue;
+    }
+
+    return createDeviceObj;
+}
+
+char *createADevice(DeviceCreationObj *createDeviceObj) {
     struct curl_slist *headers = NULL;
     char *url;
     char body[BODY_SIZE_MED];
     char *response = NULL;
 
-    if(!device_id) {
+    if(!createDeviceObj->device_id) {
         fprintf(stderr, "createADevice::Device ID cannot be NULL");
         return NULL;
     }
 
-    if(!gateway_id) {
+    if(!createDeviceObj->gateway_id) {
         fprintf(stderr, "createADevice::Gateway ID cannot be NULL");
         return NULL;
     }
 
-    if(!device_name) {
+    if(!createDeviceObj->device_name) {
         fprintf(stderr, "createADevice::Device Name cannot be NULL");
         return NULL;
     }
@@ -116,7 +194,66 @@ char *createADevice(char *device_id, char *gateway_id, char *device_name) {
         appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
         appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
 
-        sprintf(body, "{\"deviceId\":\"%s\",\"gatewayId\":\"%s\",\"name\":\"%s\"}", device_id, gateway_id, device_name);
+        sprintf(body, "{\"deviceId\":\"%s\",\"gatewayId\":\"%s\",\"name\":\"%s\"", createDeviceObj->device_id, createDeviceObj->gateway_id, createDeviceObj->device_name);
+
+        if(createDeviceObj->tags) {
+        IdList *traverse = createDeviceObj->tags;
+
+            strcat(body, ",\"tags\":[");
+
+            while(traverse != NULL) {
+                strcat(body, "\"");
+                strcat(body, traverse->id);
+                strcat(body, "\"");
+
+                traverse = traverse->next;
+                if(traverse != NULL) {
+                    strcat(body, ",");
+                }
+            }
+
+            strcat(body, "]");
+        }
+
+        if(createDeviceObj->latitude && createDeviceObj->longitude) {
+            strcat(body, ",\"loc\":[");
+            strcat(body, createDeviceObj->latitude);
+            strcat(body, ",");
+            strcat(body, createDeviceObj->longitude);
+
+            if(createDeviceObj->height) {
+                strcat(body, ",");
+                strcat(body, createDeviceObj->height);
+            }
+            strcat(body, "]");
+        }
+
+        if(createDeviceObj->attributes) {
+            KeyValueParams *traverseParams = createDeviceObj->attributes;
+
+            strcat(body, ",\"attributes\":{");
+
+            while(traverseParams != NULL) {
+                strcat(body, "\"");
+                strcat(body, traverseParams->name);
+                strcat(body, "\":\"");
+                strcat(body, traverseParams->value);
+                strcat(body, "\"");
+
+                traverseParams = traverseParams->next;
+                if(traverseParams != NULL) {
+                    strcat(body, ",");
+                }
+            }
+
+            strcat(body, "}");
+        }
+
+        strcat(body, "}");
+
+        #if 1
+            printf("Prepared BODY is %s\n", body);
+        #endif
 
         doHttpPost(url, headers, body, &response);
 
