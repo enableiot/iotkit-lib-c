@@ -265,45 +265,73 @@ char *createADevice(DeviceCreationObj *createDeviceObj) {
     return NULL;
 }
 
-char *updateADevice(char *device_id, char *gateway_id, char *device_name) {
-
-// TODO: TODO: TODO: This does not support tags, loc and attributes while updating a device
-
+char *updateADevice(DeviceCreationObj *createDeviceObj) {
     struct curl_slist *headers = NULL;
     char *url;
     char body[BODY_SIZE_MED];
     char *response = NULL;
     bool isCommaRequired = false;
 
-    if(!device_id) {
-        fprintf(stderr, "updateADevice::Device ID cannot be NULL");
-        return NULL;
-    }
-
     if(prepareUrl(&url, configurations.base_url, configurations.update_a_device)) {
         appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
         appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
 
-        strcpy(body, "{");
+       sprintf(body, "{\"gatewayId\":\"%s\",\"name\":\"%s\"", createDeviceObj->gateway_id, createDeviceObj->device_name);
 
-        if(gateway_id != NULL) {
-            strcat(body, "\"gatewayId\":\"");
-            strcat(body, gateway_id);
-            strcat(body, "\"");
-            isCommaRequired = true;
-        }
+               if(createDeviceObj->tags) {
+               IdList *traverse = createDeviceObj->tags;
 
-        if(device_name != NULL) {
-            if(isCommaRequired) {
-                strcat(body, ",");
-            }
-            strcat(body, "\"name\":\"");
-            strcat(body, device_name);
-            strcat(body, "\"");
-            isCommaRequired = true;
-        }
+                   strcat(body, ",\"tags\":[");
 
-        strcat(body, "}");
+                   while(traverse != NULL) {
+                       strcat(body, "\"");
+                       strcat(body, traverse->id);
+                       strcat(body, "\"");
+
+                       traverse = traverse->next;
+                       if(traverse != NULL) {
+                           strcat(body, ",");
+                       }
+                   }
+
+                   strcat(body, "]");
+               }
+
+               if(createDeviceObj->latitude && createDeviceObj->longitude) {
+                   strcat(body, ",\"loc\":[");
+                   strcat(body, createDeviceObj->latitude);
+                   strcat(body, ",");
+                   strcat(body, createDeviceObj->longitude);
+
+                   if(createDeviceObj->height) {
+                       strcat(body, ",");
+                       strcat(body, createDeviceObj->height);
+                   }
+                   strcat(body, "]");
+               }
+
+               if(createDeviceObj->attributes) {
+                   KeyValueParams *traverseParams = createDeviceObj->attributes;
+
+                   strcat(body, ",\"attributes\":{");
+
+                   while(traverseParams != NULL) {
+                       strcat(body, "\"");
+                       strcat(body, traverseParams->name);
+                       strcat(body, "\":\"");
+                       strcat(body, traverseParams->value);
+                       strcat(body, "\"");
+
+                       traverseParams = traverseParams->next;
+                       if(traverseParams != NULL) {
+                           strcat(body, ",");
+                       }
+                   }
+
+                   strcat(body, "}");
+               }
+
+               strcat(body, "}");
 
         #if DEBUG
             printf("Prepared BODY is %s\n", body);

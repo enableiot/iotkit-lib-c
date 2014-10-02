@@ -522,7 +522,8 @@ char *getDeviceAuthorizationToken() {
 //        testGetNewAuthorizationToken();
 //        testValidateAuthorizationToken();
 //        testGetAuthorizationTokenMeInfo();
-        testCreateADevice();
+//        testCreateADevice();
+        testUpdateADevice();
 //        testActivateADevice("rQe7V4n1");
 
 //        testDeviceActivationStatus();

@@ -38,6 +38,24 @@ bool testCreateADevice() {
     return true;
 }
 
+bool testUpdateADevice() {
+    DeviceCreationObj *createDeviceObj;
+
+    createDeviceObj = createDeviceCreationObject(NULL, "02-00-86-81-88-ff", "maha37");
+    addLocInfo(createDeviceObj, "55.540164", "-112.926048", "25.0");
+    addTagInfo(createDeviceObj, "United States of America");
+    addTagInfo(createDeviceObj, "Oregon State");
+    addTagInfo(createDeviceObj, "Hillsboro City");
+    addAttributesInfo(createDeviceObj, "vendor", "Intel Corp.");
+    addAttributesInfo(createDeviceObj, "platform", "x86");
+    addAttributesInfo(createDeviceObj, "os", "Ubuntu 14.04");
+
+    char * response = updateADevice(createDeviceObj);
+    printf("Response Received :%s\n", response);
+
+    return true;
+}
+
 bool testActivateADevice(char *authCode) {
 
     char * response = activateADevice(authCode);
