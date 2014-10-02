@@ -251,7 +251,7 @@ char *createADevice(DeviceCreationObj *createDeviceObj) {
 
         strcat(body, "}");
 
-        #if 1
+        #if DEBUG
             printf("Prepared BODY is %s\n", body);
         #endif
 
