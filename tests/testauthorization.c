@@ -22,7 +22,10 @@
 #include "../src/iotkit.h"
 
 bool testValidateAuthorizationToken() {
-    char * response = validateAuthorizationToken();
+    char *response = NULL;
+    long httpResponseCode;
+
+    validateAuthorizationToken(&httpResponseCode, &response);
     printf("Response Received :%s\n", response);
 
     return true;
@@ -30,14 +33,20 @@ bool testValidateAuthorizationToken() {
 
 
 bool testGetNewAuthorizationToken() {
-    char * response = getNewAuthorizationToken("pradeep.chenthati@aricent.com", "Password1");
+    char *response = NULL;
+    long httpResponseCode;
+
+    getNewAuthorizationToken("pradeep.chenthati@aricent.com", "Password1", &httpResponseCode, &response);
     printf("Response Received :%s\n", response);
 
     return true;
 }
 
 bool testGetAuthorizationTokenMeInfo() {
-    char * response = getAuthorizationTokenMeInfo();
+    char *response = NULL;
+    long httpResponseCode;
+
+    getAuthorizationTokenMeInfo(&httpResponseCode, &response);
     printf("Response Received :%s\n", response);
 
     return true;

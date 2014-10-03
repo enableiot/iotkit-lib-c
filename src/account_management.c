@@ -21,15 +21,14 @@
 
 #include "iotkit.h"
 
-char *createAnAccount(char *account_name) {
+bool createAnAccount(char *account_name, long *httpResponseCode, char **response) {
     struct curl_slist *headers = NULL;
     char *url;
     char body[BODY_SIZE_MIN];
-    char *response = NULL;
 
     if(!account_name) {
         fprintf(stderr, "createAnAccount::Account name cannot be NULL");
-        return NULL;
+        return false;
     }
 
     if(prepareUrl(&url, configurations.base_url, configurations.create_an_account, NULL)) {
@@ -38,73 +37,69 @@ char *createAnAccount(char *account_name) {
 
         sprintf(body, "{\"name\":\"%s\"}", account_name);
 
-        doHttpPost(url, headers, body, &response);
+        doHttpPost(url, headers, body, httpResponseCode, response);
 
-        return response;
+        return true;
     }
 
-    return NULL;
+    return false;
 }
 
-char *getAccountInformation() {
+bool getAccountInformation(long *httpResponseCode, char **response) {
     struct curl_slist *headers = NULL;
     char *url;
-    char *response = NULL;
 
     appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
     appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
 
     if(prepareUrl(&url, configurations.base_url, configurations.get_account_information, NULL)){
-        doHttpGet(url, headers, &response);
+        doHttpGet(url, headers, httpResponseCode, response);
 
-        return response;
+        return true;
     }
 
-    return NULL;
+    return false;
 }
 
-char *getAccountActivationCode() {
+bool getAccountActivationCode(long *httpResponseCode, char **response) {
     struct curl_slist *headers = NULL;
     char *url;
-    char *response = NULL;
 
     appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
     appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
 
     if(prepareUrl(&url, configurations.base_url, configurations.get_account_activation_code, NULL)) {
 
-        doHttpGet(url, headers, &response);
+        doHttpGet(url, headers, httpResponseCode, response);
 
-        return response;
+        return true;
     }
 
-    return NULL;
+    return false;
 }
 
 
-char *renewActivationCode() {
+bool renewActivationCode(long *httpResponseCode, char **response) {
     struct curl_slist *headers = NULL;
     char *url;
-    char *response = NULL;
 
     if(prepareUrl(&url, configurations.base_url, configurations.renew_account_activation, NULL)) {
 
         appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
         appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
 
-        doHttpPut(url, headers, NULL, &response);
+        doHttpPut(url, headers, NULL, httpResponseCode, response);
 
-        return response;
+        return true;
     }
 
-    return NULL;
+    return false;
 }
 
-char *updateAnAccount(char *account_name) {
+bool updateAnAccount(char *account_name, long *httpResponseCode, char **response) {
     struct curl_slist *headers = NULL;
     char *url;
     char body[BODY_SIZE_MIN];
-    char *response = NULL;
 
     if(prepareUrl(&url, configurations.base_url, configurations.update_an_account_name, NULL)) {
 
@@ -113,33 +108,31 @@ char *updateAnAccount(char *account_name) {
 
         sprintf(body, "{\"name\":\"%s\"}", account_name);
 
-        doHttpPut(url, headers, body, &response);
+        doHttpPut(url, headers, body, httpResponseCode, response);
 
-        return response;
+        return true;
     }
 
-    return NULL;
+    return false;
 }
 
-char *deleteAnAccount() {
+bool deleteAnAccount(long *httpResponseCode, char **response) {
     struct curl_slist *headers = NULL;
     char *url;
-    char *response = NULL;
-    long httpResponseCode = 0;
 
     if(prepareUrl(&url, configurations.base_url, configurations.delete_an_account_name, NULL)) {
 
         appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
         appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
 
-        doHttpDelete(url, headers, &httpResponseCode);
+        doHttpDelete(url, headers, httpResponseCode);
 
         if(httpResponseCode == 204) {
             // delete successful, perform cleanup
         }
 
-        return response;
+        return true;
     }
 
-    return NULL;
+    return false;
 }

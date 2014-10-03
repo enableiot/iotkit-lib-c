@@ -530,7 +530,6 @@ char *getDeviceAuthorizationToken() {
 
         iotkit_init();
 
-//        char * response = createAnAccount("willitcreate2");
 //        char * response = getAccountInformation();
 //        char * response = getAccountActivationCode();
 //        char * response = renewActivationCode();
@@ -541,12 +540,12 @@ char *getDeviceAuthorizationToken() {
 //        char * response = getOneDeviceInfo();
 //        char * response = updateADevice("02-00-86-81-77-44", "02-00-86-81-77-44", "pinky44");
 //        deleteADevice();
-        deleteComponent("madras12");
+//        deleteComponent("madras12");
 //        char * response = submitData("madras7", "26.15", "45.540164", "-122.926048", "124.3");
 //        printf("Response Received :%s\n", response);
 
 
-//        testGetNewAuthorizationToken();
+        testGetNewAuthorizationToken();
 //        testValidateAuthorizationToken();
 //        testGetAuthorizationTokenMeInfo();
 //        testCreateADevice();

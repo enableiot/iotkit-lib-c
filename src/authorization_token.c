@@ -95,9 +95,10 @@ void storeAuthorizationToken(char * response) {
     char *config_file_path = "../config/authorization.json";
     char *authToken = NULL;
     char *expiry = NULL;
-    char * validateToken = NULL;
+    char *validateToken = NULL;
     FILE *fp = NULL;
     cJSON *json, *jitem, *child;
+    long validateHttpResponseCode;
 
     if(response != NULL) {
         // parse the file
@@ -126,7 +127,7 @@ void storeAuthorizationToken(char * response) {
     }
 
     // retrieve the expiry info
-    validateToken = validateAuthorizationToken();
+    validateAuthorizationToken(&validateHttpResponseCode, &validateToken);
     if(validateToken != NULL) {
         // parse the file
         json = cJSON_Parse(validateToken);
@@ -198,9 +199,11 @@ void storeAuthorizationToken(char * response) {
 
 void storeDataAccountIdInfo() {
     cJSON *json, *jitem, *child;
+    long validateHttpResponseCode;
+    char *response = NULL;
 
     // retrieve the expiry info
-    char * response = validateAuthorizationToken();
+    validateAuthorizationToken(&validateHttpResponseCode, &response);
     if(response != NULL) {
         // parse the file
         json = cJSON_Parse(response);

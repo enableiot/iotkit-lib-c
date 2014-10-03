@@ -21,27 +21,25 @@
 
 #include "component_catalog.h"
 
-char * listAllComponentCatalogs() {
+bool listAllComponentCatalogs(long *httpResponseCode, char **response) {
     struct curl_slist *headers = NULL;
     char *url;
-    char *response = NULL;
 
     appendHttpHeader(&headers, HEADER_AUTHORIZATION, getDeviceAuthorizationToken());
 
     if(prepareUrl(&url, configurations.base_url, configurations.list_components, NULL)) {
 
-        doHttpGet(url, headers, &response);
+        doHttpGet(url, headers, httpResponseCode, response);
 
-        return response;
+        return true;
     }
 
-    return NULL;
+    return false;
 }
 
-char * getComponentCatalogDetails(char *cmp_id) {
+bool getComponentCatalogDetails(char *cmp_id, long *httpResponseCode, char **response) {
     struct curl_slist *headers = NULL;
     char *url;
-    char *response = NULL;
     KeyValueParams *urlParams = NULL;
 
     urlParams = (KeyValueParams *)malloc(sizeof(KeyValueParams));
@@ -53,12 +51,12 @@ char * getComponentCatalogDetails(char *cmp_id) {
 
     if(prepareUrl(&url, configurations.base_url, configurations.get_component_details, urlParams)) {
 
-        doHttpGet(url, headers, &response);
+        doHttpGet(url, headers, httpResponseCode, response);
 
-        return response;
+        return true;
     }
 
-    return NULL;
+    return false;
 }
 
 ComponentCatalog *createComponentCatalogObject(char *cmp_name, char *cmp_version, char *cmp_type, char *cmp_datatype, \
@@ -131,12 +129,11 @@ ComponentCatalog *addCommandParams(ComponentCatalog *cmpCatalogObject, char *cmd
     return cmpCatalogObject;
 }
 
-char *createAnComponentCatalog(ComponentCatalog *cmpCatalogObject) {
+bool createAnComponentCatalog(ComponentCatalog *cmpCatalogObject, long *httpResponseCode, char **response) {
 
     struct curl_slist *headers = NULL;
     char *url;
     char body[BODY_SIZE_MIN];
-    char *response = NULL;
 
     if(cmpCatalogObject->name == NULL || cmpCatalogObject->version == NULL || \
             cmpCatalogObject->type == NULL || cmpCatalogObject->datatype == NULL || \
@@ -144,13 +141,13 @@ char *createAnComponentCatalog(ComponentCatalog *cmpCatalogObject) {
             cmpCatalogObject->display == NULL) {
         printf("Mandatory field missing to create component catalog\n");
 
-        return NULL;
+        return false;
     }
 
     if(strcmp(cmpCatalogObject->type, "actuator") ==0 && cmpCatalogObject->parameters == NULL) {
         printf("Command Parameters are mandatory for component catalog type \"actuator\"\n");
 
-        return NULL;
+        return false;
     }
 
     if(prepareUrl(&url, configurations.base_url, configurations.create_an_cmp_catalog, NULL)) {
@@ -231,27 +228,27 @@ char *createAnComponentCatalog(ComponentCatalog *cmpCatalogObject) {
             printf("Prepared BODY is %s\n", body);
         #endif
 
-        doHttpPost(url, headers, body, &response);
+        doHttpPost(url, headers, body, httpResponseCode, response);
 
-        return response;
+        return true;
     }
 
-    return NULL;
+    return false;
 }
 
-char *updateAnComponentCatalog(ComponentCatalog *cmpCatalogObject, char *cmp_id) {
+bool updateAnComponentCatalog(ComponentCatalog *cmpCatalogObject, char *cmp_id, long *httpResponseCode, char **response) {
 
     struct curl_slist *headers = NULL;
     char *url;
     char body[BODY_SIZE_MIN];
-    char *response = NULL;
     bool isCommaRequired = false;
     KeyValueParams *urlParams = NULL;
+    char value[BODY_SIZE_MIN];
 
     if(strcmp(cmpCatalogObject->type, "actuator") ==0 && cmpCatalogObject->parameters == NULL) {
         printf("Command Parameters are mandatory for component catalog type \"actuator\"\n");
 
-        return NULL;
+        return false;
     }
 
     urlParams = (KeyValueParams *)malloc(sizeof(KeyValueParams));
@@ -297,7 +294,6 @@ char *updateAnComponentCatalog(ComponentCatalog *cmpCatalogObject, char *cmp_id)
             isCommaRequired = true;
         }
 
-        char value[BODY_SIZE_MIN];
         if(cmpCatalogObject->isMinPresent == true) {
             if(isCommaRequired) {
                 strcat(body, ",");
@@ -380,10 +376,10 @@ char *updateAnComponentCatalog(ComponentCatalog *cmpCatalogObject, char *cmp_id)
             printf("Prepared BODY is %s\n", body);
         #endif
 
-        doHttpPut(url, headers, body, &response);
+        doHttpPut(url, headers, body, httpResponseCode, response);
 
-        return response;
+        return true;
     }
 
-    return NULL;
+    return false;
 }

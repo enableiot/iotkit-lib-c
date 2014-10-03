@@ -22,6 +22,8 @@
 
 bool testRetrieveData() {
     RetrieveData *retrieveObj;
+    char *response = NULL;
+    long httpResponseCode;
 
     retrieveObj = createRetrieveDataObject(1410387088000, 1412198993108);
     addDeviceId(retrieveObj, "02-00-86-81-77-cf");
@@ -29,7 +31,7 @@ bool testRetrieveData() {
     addSensorId(retrieveObj, "madras7");
     addSensorId(retrieveObj, "madras9");
 
-    char * response = retrieveData(retrieveObj);
+    retrieveData(retrieveObj, &httpResponseCode, &response);
     printf("Response Received :%s\n", response);
 
     return true;

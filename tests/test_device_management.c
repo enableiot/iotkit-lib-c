@@ -22,6 +22,8 @@
 
 bool testCreateADevice() {
     DeviceCreationObj *createDeviceObj;
+    char *response = NULL;
+    long httpResponseCode;
 
     createDeviceObj = createDeviceCreationObject("02-00-86-81-77-ff", "02-00-86-81-77-ff", "maha36");
     addLocInfo(createDeviceObj, "45.540164", "-122.926048", "55.0");
@@ -32,7 +34,7 @@ bool testCreateADevice() {
     addAttributesInfo(createDeviceObj, "platform", "x86");
     addAttributesInfo(createDeviceObj, "os", "Ubuntu");
 
-    char * response = createADevice(createDeviceObj);
+    createADevice(createDeviceObj, &httpResponseCode, &response);
     printf("Response Received :%s\n", response);
 
     return true;
@@ -40,6 +42,8 @@ bool testCreateADevice() {
 
 bool testUpdateADevice() {
     DeviceCreationObj *createDeviceObj;
+    char *response = NULL;
+    long httpResponseCode;
 
     createDeviceObj = createDeviceCreationObject(NULL, "02-00-86-81-88-ff", "maha37");
     addLocInfo(createDeviceObj, "55.540164", "-112.926048", "25.0");
@@ -50,23 +54,27 @@ bool testUpdateADevice() {
     addAttributesInfo(createDeviceObj, "platform", "x86");
     addAttributesInfo(createDeviceObj, "os", "Ubuntu 14.04");
 
-    char * response = updateADevice(createDeviceObj);
+    updateADevice(createDeviceObj, &httpResponseCode, &response);
     printf("Response Received :%s\n", response);
 
     return true;
 }
 
 bool testActivateADevice(char *authCode) {
+    char *response = NULL;
+    long httpResponseCode;
 
-    char * response = activateADevice(authCode);
+    activateADevice(authCode, &httpResponseCode, &response);
     printf("Response Received :%s\n", response);
 
     return true;
 }
 
 bool testAddComponent() {
+    char *response = NULL;
+    long httpResponseCode;
 
-    char * response = addComponent("madras7", "temperature.v1.0");
+    addComponent("madras7", "temperature.v1.0", &httpResponseCode, &response);
     printf("Response Received :%s\n", response);
 
     return true;

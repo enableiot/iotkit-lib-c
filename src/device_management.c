@@ -21,73 +21,69 @@
 
 #include "device_management.h"
 
-char *validateDeviceToken() {
+bool validateDeviceToken(long *httpResponseCode, char **response) {
     struct curl_slist *headers = NULL;
     char *url;
-    char *response = NULL;
 
     appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
     appendHttpHeader(&headers, HEADER_AUTHORIZATION, getDeviceAuthorizationToken());
 
     if(prepareUrl(&url, configurations.base_url, configurations.auth_token_info, NULL)) {
 
-        doHttpGet(url, headers, &response);
+        doHttpGet(url, headers, httpResponseCode, response);
 
-        return response;
+        return true;
     }
 
-    return NULL;
+    return false;
 }
 
-char *listAllDevices() {
+bool listAllDevices(long *httpResponseCode, char **response) {
     struct curl_slist *headers = NULL;
     char *url;
-    char *response = NULL;
 
     appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
     appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
 
     if(prepareUrl(&url, configurations.base_url, configurations.list_all_devices, NULL)){
-        doHttpGet(url, headers, &response);
+        doHttpGet(url, headers, httpResponseCode, response);
 
-        return response;
+        return true;
     }
 
-    return NULL;
+    return false;
 }
 
-char *getMyDeviceInfo() {
+bool getMyDeviceInfo(long *httpResponseCode, char **response) {
     struct curl_slist *headers = NULL;
     char *url;
-    char *response = NULL;
 
     appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
     appendHttpHeader(&headers, HEADER_AUTHORIZATION, getDeviceAuthorizationToken());
 
     if(prepareUrl(&url, configurations.base_url, configurations.get_device_info, NULL)){
-        doHttpGet(url, headers, &response);
+        doHttpGet(url, headers, httpResponseCode, response);
 
-        return response;
+        return true;
     }
 
-    return NULL;
+    return false;
 }
 
-char *getOneDeviceInfo() {
+bool getOneDeviceInfo(long *httpResponseCode, char **response) {
     struct curl_slist *headers = NULL;
     char *url;
-    char *response = NULL;
 
     appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
     appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
 
     if(prepareUrl(&url, configurations.base_url, configurations.get_device_info, NULL)){
-        doHttpGet(url, headers, &response);
+        doHttpGet(url, headers, httpResponseCode, response);
 
-        return response;
+        return true;
     }
 
-    return NULL;
+    return false;
 }
 
 DeviceCreationObj *createDeviceCreationObject(char *device_id, char *gateway_id, char *device_name) {
@@ -169,25 +165,24 @@ DeviceCreationObj *addAttributesInfo(DeviceCreationObj *createDeviceObj, char *n
     return createDeviceObj;
 }
 
-char *createADevice(DeviceCreationObj *createDeviceObj) {
+bool createADevice(DeviceCreationObj *createDeviceObj, long *httpResponseCode, char **response) {
     struct curl_slist *headers = NULL;
     char *url;
     char body[BODY_SIZE_MED];
-    char *response = NULL;
 
     if(!createDeviceObj->device_id) {
         fprintf(stderr, "createADevice::Device ID cannot be NULL");
-        return NULL;
+        return false;
     }
 
     if(!createDeviceObj->gateway_id) {
         fprintf(stderr, "createADevice::Gateway ID cannot be NULL");
-        return NULL;
+        return false;
     }
 
     if(!createDeviceObj->device_name) {
         fprintf(stderr, "createADevice::Device Name cannot be NULL");
-        return NULL;
+        return false;
     }
 
     if(prepareUrl(&url, configurations.base_url, configurations.create_a_device, NULL)) {
@@ -255,21 +250,22 @@ char *createADevice(DeviceCreationObj *createDeviceObj) {
             printf("Prepared BODY is %s\n", body);
         #endif
 
-        doHttpPost(url, headers, body, &response);
+        doHttpPost(url, headers, body, httpResponseCode, response);
 
-        storeDeviceID(response);
+        if(response) {
+            storeDeviceID(*response);
+        }
 
-        return response;
+        return true;
     }
 
-    return NULL;
+    return false;
 }
 
-char *updateADevice(DeviceCreationObj *createDeviceObj) {
+bool updateADevice(DeviceCreationObj *createDeviceObj, long *httpResponseCode, char **response) {
     struct curl_slist *headers = NULL;
     char *url;
     char body[BODY_SIZE_MED];
-    char *response = NULL;
     bool isCommaRequired = false;
 
     if(prepareUrl(&url, configurations.base_url, configurations.update_a_device, NULL)) {
@@ -337,28 +333,27 @@ char *updateADevice(DeviceCreationObj *createDeviceObj) {
             printf("Prepared BODY is %s\n", body);
         #endif
 
-        doHttpPut(url, headers, body, &response);
+        doHttpPut(url, headers, body, httpResponseCode, response);
 
-        return response;
+        return true;
     }
 
-    return NULL;
+    return false;
 }
 
-char *activateADevice(char *activation_code) {
+bool activateADevice(char *activation_code, long *httpResponseCode, char **response) {
     struct curl_slist *headers = NULL;
     char *url;
     char body[BODY_SIZE_MED];
-    char *response = NULL;
 
     if(configurations.deviceToken) {
         fprintf(stderr, "activateADevice::Device appears to be already activated. Could not proceed\n");
-        return NULL;
+        return false;
     }
 
     if(!activation_code) {
         fprintf(stderr, "activateADevice::Activation Code cannot be NULL");
-        return NULL;
+        return false;
     }
 
     if(prepareUrl(&url, configurations.base_url, configurations.activate_a_device, NULL)) {
@@ -377,32 +372,33 @@ char *activateADevice(char *activation_code) {
             printf("Prepared BODY is %s\n", body);
         #endif
 
-        doHttpPut(url, headers, body, &response);
+        doHttpPut(url, headers, body, httpResponseCode, response);
 
-        storeDeviceToken(response);
+        if(response) {
+            storeDeviceToken(*response);
+        }
 
-        return response;
+        return true;
     }
 
-    return NULL;
+    return false;
 }
 
-char *deleteADevice() {
+bool deleteADevice(long *httpResponseCode, char **response) {
     struct curl_slist *headers = NULL;
     char *url;
-    char *response = NULL;
 
     if(prepareUrl(&url, configurations.base_url, configurations.delete_a_device, NULL)) {
 
         appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
         appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
 
-        doHttpDelete(url, headers);
+        doHttpDelete(url, headers, httpResponseCode);
 
-        return response;
+        return true;
     }
 
-    return NULL;
+    return false;
 }
 
 /** Stores device configuration JSON
@@ -691,7 +687,7 @@ bool removeSensorComponentFromCache(char *name) {
 
     if(!name) {
         fprintf(stderr, "removeSensorComponentFromCache::Component Name cannot be NULL");
-        return NULL;
+        return false;
     }
     while(traverse != NULL) {
         if(strcmp(name, traverse->name) == 0) {
@@ -718,21 +714,20 @@ bool removeSensorComponentFromCache(char *name) {
     return false;
 }
 
-char *addComponent(char *cmp_name, char *cmp_type) {
+bool addComponent(char *cmp_name, char *cmp_type, long *httpResponseCode, char **response) {
     char  uuid_str[38];
     struct curl_slist *headers = NULL;
     char *url;
     char body[BODY_SIZE_MIN];
-    char *response = NULL;
 
     if(!cmp_name) {
         fprintf(stderr, "createAComponent::Component Name cannot be NULL");
-        return NULL;
+        return false;
     }
 
     if(!cmp_type) {
         fprintf(stderr, "createAComponent::Component Type cannot be NULL");
-        return NULL;
+        return false;
     }
 
     // generate UUID
@@ -748,25 +743,23 @@ char *addComponent(char *cmp_name, char *cmp_type) {
             printf("Prepared BODY is %s\n", body);
         #endif
 
-        doHttpPost(url, headers, body, &response);
+        doHttpPost(url, headers, body, httpResponseCode, response);
 
         if(response) {
-            storeComponent(response);
+            storeComponent(*response);
         }
 
-        return response;
+        return true;
     }
 
-    return NULL;
+    return false;
 }
 
-char *deleteComponent(char *sensor_name) {
+bool deleteComponent(char *sensor_name, long *httpResponseCode, char **response) {
     struct curl_slist *headers = NULL;
     char *url;
-    char *response = NULL;
     KeyValueParams *urlParams = NULL;
     char *cid = NULL;
-    long httpResponseCode = 0;
 
     cid = getSensorComponentId(sensor_name);
     urlParams = (KeyValueParams *)malloc(sizeof(KeyValueParams));
@@ -779,17 +772,17 @@ char *deleteComponent(char *sensor_name) {
         appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
         appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
 
-        doHttpDelete(url, headers, &httpResponseCode);
+        doHttpDelete(url, headers, httpResponseCode);
 
         if(httpResponseCode == 204) {
             // delete successful, perform cleanup
             removeSensorComponentFromCache(sensor_name);
         }
 
-        return response;
+        return true;
     }
 
-    return NULL;
+    return false;
 }
 
 bool isDeviceActivated() {

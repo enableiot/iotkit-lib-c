@@ -31,33 +31,32 @@ long getCurrentTimeInMillis() {
     return millis;
 }
 
-char *submitData(char *cname, char *value, char *latitude, char *longitude, char *height) {
+bool submitData(char *cname, char *value, char *latitude, char *longitude, char *height, long *httpResponseCode, char **response) {
     struct curl_slist *headers = NULL;
     char *url;
     char body[BODY_SIZE_MED];
-    char *response = NULL;
     char *cid = NULL;
     char currentTimeInMills[BODY_SIZE_MED];
 
     if(!cname) {
         fprintf(stderr, "submitData::Component Name cannot be NULL\n");
-        return NULL;
+        return false;
     }
 
     cid = getSensorComponentId(cname);
     if(!cid) {
         fprintf(stderr, "submitData::Component is not registered\n");
-        return NULL;
+        return false;
     }
 
     if(!value) {
         fprintf(stderr, "submitData::Value cannot be NULL\n");
-        return NULL;
+        return false;
     }
 
     if(!configurations.data_account_id) {
         fprintf(stderr, "submitData::Account is NULL. Device appears to be unactivated\n");
-        return NULL;
+        return false;
     }
 
     if(prepareUrl(&url, configurations.base_url, configurations.submit_data, NULL)) {
@@ -98,12 +97,12 @@ char *submitData(char *cname, char *value, char *latitude, char *longitude, char
             printf("Prepared BODY is %s\n", body);
         #endif
 
-        doHttpPost(url, headers, body, &response);
+        doHttpPost(url, headers, body, httpResponseCode, response);
 
-        return response;
+        return true;
     }
 
-    return NULL;
+    return false;
 }
 
 RetrieveData *createRetrieveDataObject(long fromMillis, long toMillis) {
@@ -167,23 +166,22 @@ RetrieveData *addSensorId(RetrieveData *retrieveObj, char *sensorName) {
     return retrieveObj;
 }
 
-char *retrieveData(RetrieveData *retrieveObj) {
+bool retrieveData(RetrieveData *retrieveObj, long *httpResponseCode, char **response) {
     struct curl_slist *headers = NULL;
     char *url;
     char body[BODY_SIZE_MED];
-    char *response = NULL;
     char fromTimeInMillis[BODY_SIZE_MIN];
     char toTimeInMillis[BODY_SIZE_MIN];
     IdList *traverse = NULL;
 
     if(!retrieveObj->deviceList) {
         fprintf(stderr, "retrieveData::Device ID cannot be NULL");
-        return NULL;
+        return false;
     }
 
     if(!retrieveObj->componentId) {
         fprintf(stderr, "retrieveData::Component ID cannot be NULL");
-        return NULL;
+        return false;
     }
 
     if(prepareUrl(&url, configurations.base_url, configurations.retrieve_data, NULL)) {
@@ -236,10 +234,10 @@ char *retrieveData(RetrieveData *retrieveObj) {
             printf("Prepared BODY is %s\n", body);
         #endif
 
-        doHttpPost(url, headers, body, &response);
+        doHttpPost(url, headers, body, httpResponseCode, response);
 
-        return response;
+        return true;
     }
 
-    return NULL;
+    return false;
 }

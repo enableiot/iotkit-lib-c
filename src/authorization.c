@@ -23,20 +23,19 @@
 #include "iotkit.h"
 
 
-char *getNewAuthorizationToken(char *username, char *password) {
+bool getNewAuthorizationToken(char *username, char *password, long *httpResponseCode, char **response) {
     struct curl_slist *headers = NULL;
     char *url;
     char body[BODY_SIZE_MIN];
-    char *response = NULL;
 
     if(!username) {
         fprintf(stderr, "Username cannot be NULL");
-        return NULL;
+        return false;
     }
 
     if(!password) {
         fprintf(stderr, "Password cannot be NULL");
-        return NULL;
+        return false;
     }
 
 
@@ -46,10 +45,10 @@ char *getNewAuthorizationToken(char *username, char *password) {
 
         appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
 
-        doHttpPost(url, headers, body, &response);
+        doHttpPost(url, headers, body, httpResponseCode, response);
 
         if(response) {
-            storeAuthorizationToken(response);
+            storeAuthorizationToken(*response);
 
             // if data account is already created using web portal
             if(!configurations.data_account_id) {
@@ -57,47 +56,45 @@ char *getNewAuthorizationToken(char *username, char *password) {
             }
         }
 
-        return response;
+        return true;
     }
 
-    return NULL;
+    return false;
 }
 
 
-char *validateAuthorizationToken() {
+bool validateAuthorizationToken(long *httpResponseCode, char **response) {
     struct curl_slist *headers = NULL;
     char *url;
-    char *response = NULL;
 
     appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
     appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
 
     if(prepareUrl(&url, configurations.base_url, configurations.auth_token_info, NULL)) {
 
-        doHttpGet(url, headers, &response);
+        doHttpGet(url, headers, httpResponseCode, response);
 
-        return response;
+        return true;
     }
 
-    return NULL;
+    return false;
 }
 
 
 
-char *getAuthorizationTokenMeInfo() {
+bool getAuthorizationTokenMeInfo(long *httpResponseCode, char **response) {
     struct curl_slist *headers = NULL;
     char *url;
-    char *response = NULL;
 
     appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
     appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
 
     if(prepareUrl(&url, configurations.base_url, configurations.me_info, NULL)) {
 
-        doHttpGet(url, headers, &response);
+        doHttpGet(url, headers, httpResponseCode, response);
 
-        return response;
+        return true;
     }
 
-    return NULL;
+    return false;
 }

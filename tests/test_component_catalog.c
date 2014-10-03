@@ -21,7 +21,8 @@
 #include "../src/component_catalog.h"
 
 bool testCreateAnComponentCatalog() {
-//    char * response = createAnComponentCatalog("funny16", "1.0", "sensor", "Number", "float", true, -150.0f, true, 150.0f, "Degrees Celsius", "timeSeries", NULL);
+    char *response = NULL;
+    long httpResponseCode;
 
     ComponentCatalog *cmpObject = createComponentCatalogObject("actua13", "1.0", "actuator", "Number", "float", "Degrees Celsius", "timeSeries");
     addMinValue(cmpObject, -150.0f);
@@ -32,13 +33,16 @@ bool testCreateAnComponentCatalog() {
     addCommandParams(cmpObject, "my2", "1,2");
     addCommandParams(cmpObject, "my3", "5,6,7");
 
-    char * response = createAnComponentCatalog(cmpObject);
+    createAnComponentCatalog(cmpObject, &httpResponseCode, &response);
     printf("Response Received :%s\n", response);
 
     return true;
 }
 
 bool testUpdateAnComponentCatalog() {
+    char *response = NULL;
+    long httpResponseCode;
+
     ComponentCatalog *cmpObject = createComponentCatalogObject(NULL, NULL, "actuator", "Number", "integer", "Degrees Celsius2", "timeSeries");
     addMinValue(cmpObject, -150.0f);
     addMaxValue(cmpObject, 150.0f);
@@ -47,7 +51,7 @@ bool testUpdateAnComponentCatalog() {
     addCommandParams(cmpObject, "my12", "1-5");
     addCommandParams(cmpObject, "my22", "5-10");
 
-    char * response = updateAnComponentCatalog(cmpObject, "actua13.v1.0");
+    updateAnComponentCatalog(cmpObject, "actua13.v1.0", &httpResponseCode, &response);
     printf("Response Received :%s\n", response);
 
     return true;
