@@ -111,7 +111,7 @@ size_t static write_callback_func(void *buffer, size_t size, size_t nmemb, char 
     return write_length;
 }
 
-int doHttpGet(char *url, struct curl_slist *headers, char **response) {
+int doHttpGet(char *url, struct curl_slist *headers, long *httpResponseCode, char **response) {
     CURL *curl;
     CURLcode res;
 
@@ -137,6 +137,12 @@ int doHttpGet(char *url, struct curl_slist *headers, char **response) {
         curl_easy_setopt(curl, CURLOPT_WRITEDATA, response);
 
         res = curl_easy_perform(curl);
+
+        if(httpResponseCode) {
+            *httpResponseCode = 0;
+            curl_easy_getinfo (curl, CURLINFO_RESPONSE_CODE, httpResponseCode);
+        }
+
         if(res != CURLE_OK) {
             fprintf(stderr, "curl_easy_perform() failed: %s\n",
                   curl_easy_strerror(res));
@@ -152,7 +158,7 @@ int doHttpGet(char *url, struct curl_slist *headers, char **response) {
 }
 
 
-int doHttpPut(char *url, struct curl_slist *headers, char *body, char **response) {
+int doHttpPut(char *url, struct curl_slist *headers, char *body, long *httpResponseCode, char **response) {
     CURL *curl;
     CURLcode res;
 
@@ -184,6 +190,12 @@ int doHttpPut(char *url, struct curl_slist *headers, char *body, char **response
         curl_easy_setopt(curl, CURLOPT_WRITEDATA, response);
 
         res = curl_easy_perform(curl);
+
+        if(httpResponseCode) {
+            *httpResponseCode = 0;
+            curl_easy_getinfo (curl, CURLINFO_RESPONSE_CODE, httpResponseCode);
+        }
+
         if(res != CURLE_OK) {
             fprintf(stderr, "curl_easy_perform() failed: %s\n",
                   curl_easy_strerror(res));
@@ -198,7 +210,7 @@ int doHttpPut(char *url, struct curl_slist *headers, char *body, char **response
     return 0;
 }
 
-int doHttpPost(char *url, struct curl_slist *headers, char *body, char **response) {
+int doHttpPost(char *url, struct curl_slist *headers, char *body, long *httpResponseCode, char **response) {
     CURL *curl;
     CURLcode res;
 
@@ -228,6 +240,12 @@ int doHttpPost(char *url, struct curl_slist *headers, char *body, char **respons
         curl_easy_setopt(curl, CURLOPT_WRITEDATA, response);
 
         res = curl_easy_perform(curl);
+
+        if(httpResponseCode) {
+            *httpResponseCode = 0;
+            curl_easy_getinfo (curl, CURLINFO_RESPONSE_CODE, httpResponseCode);
+        }
+
         if(res != CURLE_OK) {
             fprintf(stderr, "curl_easy_perform() failed: %s\n",
                   curl_easy_strerror(res));
@@ -246,7 +264,6 @@ int doHttpDelete(char *url, struct curl_slist *headers, long *httpResponseCode) 
     CURL *curl;
     CURLcode res;
 
-    *httpResponseCode = 0;
     curl = curl_easy_init();
     if(curl) {
 
@@ -267,7 +284,10 @@ int doHttpDelete(char *url, struct curl_slist *headers, long *httpResponseCode) 
 
         res = curl_easy_perform(curl);
 
-        curl_easy_getinfo (curl, CURLINFO_RESPONSE_CODE, httpResponseCode);
+        if(httpResponseCode) {
+            *httpResponseCode = 0;
+            curl_easy_getinfo (curl, CURLINFO_RESPONSE_CODE, httpResponseCode);
+        }
 
         if(res != CURLE_OK) {
             fprintf(stderr, "curl_easy_perform() failed: %s\n",
