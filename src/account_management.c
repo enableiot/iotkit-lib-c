@@ -100,7 +100,7 @@ bool updateAnAccount(char *account_name, long *httpResponseCode, char **response
     struct curl_slist *headers = NULL;
     char *url;
     char body[BODY_SIZE_MIN];
-
+    // TODO: json object needs to be sent for updation
     if(prepareUrl(&url, configurations.base_url, configurations.update_an_account_name, NULL)) {
 
         appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
