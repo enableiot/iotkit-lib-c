@@ -136,3 +136,19 @@ bool deleteAnAccount(long *httpResponseCode, char **response) {
 
     return false;
 }
+
+bool getUserAssociatedWithAccount(long *httpResponseCode, char **response) {
+    struct curl_slist *headers = NULL;
+    char *url;
+
+    appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
+
+    if(prepareUrl(&url, configurations.base_url, configurations.get_user_associated_with_account, NULL)) {
+
+        doHttpGet(url, headers, httpResponseCode, response);
+
+        return true;
+    }
+
+    return false;
+}

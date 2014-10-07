@@ -110,3 +110,18 @@ bool testDeleteAnAccount() {
 
     return false;
 }
+
+bool testGetUserAssociatedWithAccount() {
+    char *response = NULL;
+    long httpResponseCode;
+
+    getUserAssociatedWithAccount(&httpResponseCode, &response);
+
+    printf("Response Received :%s\n", response);
+
+    if(httpResponseCode == 200) {
+        return true;
+    }
+
+    return false;
+}
