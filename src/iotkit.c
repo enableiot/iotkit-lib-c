@@ -459,6 +459,27 @@ bool prepareUrl(char **full_url, char *url_prepend, char *url_append, KeyValuePa
             }
 
             strcat(url_post, sensor_name);
+        } else if(strcmp(strtoken, "user_account_id") == 0) {
+            int url_post_size = 0;
+
+            if(configurations.user_account_id == NULL){
+                puts("User Account ID not Found");
+                return false;
+            }
+
+            url_post_size = (start - url_append) + strlen(configurations.user_account_id) + strlen(end);
+
+            if(url_post == NULL) {
+                url_post = (char *)malloc(sizeof(char) * url_post_size);
+                strncpy(url_post, url_append, (start - url_append));
+                url_post[start - url_append] = '\0';
+            } else {
+                url_post_size += strlen(url_post);
+                url_post = (char *)realloc(url_post, sizeof(char) * url_post_size);
+                strncat(url_post, url_append, (start - url_append));
+            }
+
+            strcat(url_post, configurations.user_account_id);
         } else {
             int url_post_size = 0;
 
@@ -549,9 +570,9 @@ char *getDeviceAuthorizationToken() {
 //        printf("Response Received :%s\n", response);
 
 
-        testGetUserAssociatedWithAccount();
+//        testGetUserAssociatedWithAccount();
 
-//        testGetNewAuthorizationToken();
+        testGetNewAuthorizationToken();
 //        testValidateAuthorizationToken();
 //        testGetAuthorizationTokenMeInfo();
 //        testCreateADevice();

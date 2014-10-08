@@ -76,6 +76,8 @@ typedef struct _Configurations {
 
     // account authorization
     char *authorization_key;
+    char *authorization_key_expiry;
+    char *user_account_id;
     char *new_auth_token;
     char *auth_token_info;
     char *me_info;

@@ -78,6 +78,34 @@ void parseAuthorizationToken() {
                 puts("Read authorization_key is NULL");
             }
 
+            jitem = cJSON_GetObjectItem(json, "expiry");
+            if (!isJsonString(jitem) && !isJsonBooleanFalse(jitem)) {
+                fprintf(stderr,"Invalid JSON format for json property %s\n", jitem->string);
+                return;
+            }
+
+            if (isJsonString(jitem)) {
+                configurations.authorization_key_expiry = strdup(jitem->valuestring);
+                printf("Read authorization_key expiry is %s\n", configurations.authorization_key_expiry);
+            } else {
+                configurations.authorization_key_expiry = NULL;
+                puts("Read authorization_key expiry is NULL");
+            }
+
+            jitem = cJSON_GetObjectItem(json, "user_account_id");
+            if (!isJsonString(jitem) && !isJsonBooleanFalse(jitem)) {
+                fprintf(stderr,"Invalid JSON format for json property %s\n", jitem->string);
+                return;
+            }
+
+            if (isJsonString(jitem)) {
+                configurations.user_account_id = strdup(jitem->valuestring);
+                printf("Read user_account_id is %s\n", configurations.user_account_id);
+            } else {
+                configurations.user_account_id = NULL;
+                puts("Read user_account_id is NULL");
+            }
+
             cJSON_Delete(json);
         }
 
@@ -95,6 +123,7 @@ void storeAuthorizationToken(char * response) {
     char *config_file_path = "../config/authorization.json";
     char *authToken = NULL;
     char *expiry = NULL;
+    char *user_account_id = NULL;
     char *validateToken = NULL;
     FILE *fp = NULL;
     cJSON *json, *jitem, *child;
@@ -150,6 +179,12 @@ void storeAuthorizationToken(char * response) {
                 if(child) {
                     expiry = strdup(child->valuestring);
                 }
+
+                child = cJSON_GetObjectItem(jitem, "sub");
+
+                if(child) {
+                    user_account_id = strdup(child->valuestring);
+                }
             }
         }
     }
@@ -178,6 +213,12 @@ void storeAuthorizationToken(char * response) {
             cJSON_AddItemToObject(root, "expiry", cJSON_CreateString(expiry));
         } else {
             cJSON_AddItemToObject(root, "expiry", cJSON_CreateFalse());
+        }
+
+        if(user_account_id) {
+            cJSON_AddItemToObject(root, "user_account_id", cJSON_CreateString(user_account_id));
+        } else {
+            cJSON_AddItemToObject(root, "user_account_id", cJSON_CreateFalse());
         }
 
         out = cJSON_Print(root, 2);
