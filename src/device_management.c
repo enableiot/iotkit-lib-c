@@ -61,7 +61,7 @@ bool getMyDeviceInfo(long *httpResponseCode, char **response) {
     appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
     appendHttpHeader(&headers, HEADER_AUTHORIZATION, getDeviceAuthorizationToken());
 
-    if(prepareUrl(&url, configurations.base_url, configurations.get_device_info, NULL)){
+    if(prepareUrl(&url, configurations.base_url, configurations.get_my_device_info, NULL)){
         doHttpGet(url, headers, httpResponseCode, response);
 
         return true;
@@ -70,14 +70,20 @@ bool getMyDeviceInfo(long *httpResponseCode, char **response) {
     return false;
 }
 
-bool getOneDeviceInfo(long *httpResponseCode, char **response) {
+bool getOneDeviceInfo(char *device_id, long *httpResponseCode, char **response) {
     struct curl_slist *headers = NULL;
     char *url;
+    KeyValueParams *urlParams = NULL;
+
+    urlParams = (KeyValueParams *)malloc(sizeof(KeyValueParams));
+    urlParams->name = "other_device_id";
+    urlParams->value = device_id;
+    urlParams->next = NULL;
 
     appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
     appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
 
-    if(prepareUrl(&url, configurations.base_url, configurations.get_device_info, NULL)){
+    if(prepareUrl(&url, configurations.base_url, configurations.get_device_info, urlParams)){
         doHttpGet(url, headers, httpResponseCode, response);
 
         return true;
@@ -384,11 +390,17 @@ bool activateADevice(char *activation_code, long *httpResponseCode, char **respo
     return false;
 }
 
-bool deleteADevice(long *httpResponseCode, char **response) {
+bool deleteADevice(char *device_id, long *httpResponseCode, char **response) {
     struct curl_slist *headers = NULL;
     char *url;
+    KeyValueParams *urlParams = NULL;
 
-    if(prepareUrl(&url, configurations.base_url, configurations.delete_a_device, NULL)) {
+    urlParams = (KeyValueParams *)malloc(sizeof(KeyValueParams));
+    urlParams->name = "other_device_id";
+    urlParams->value = device_id;
+    urlParams->next = NULL;
+
+    if(prepareUrl(&url, configurations.base_url, configurations.delete_a_device, urlParams)) {
 
         appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
         appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());

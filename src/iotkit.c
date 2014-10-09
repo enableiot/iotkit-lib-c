@@ -261,6 +261,13 @@ void parseConfiguration(char *config_file_path) {
             }
             configurations.get_device_info = strdup(child2->valuestring);
 
+            child2 = cJSON_GetObjectItem(child1, "get_my_device_info");
+            if (!isJsonString(child2)) {
+                fprintf(stderr,"Invalid JSON format for json property %s\n", child2->string);
+                return;
+            }
+            configurations.get_my_device_info = strdup(child2->valuestring);
+
             child2 = cJSON_GetObjectItem(child1, "create_a_device");
             if (!isJsonString(child2)) {
                 fprintf(stderr,"Invalid JSON format for json property %s\n", child2->string);
@@ -380,38 +387,6 @@ bool prepareUrl(char **full_url, char *url_prepend, char *url_append, KeyValuePa
             }
 
             strcat(url_post, configurations.data_account_id);
-        } else if(strcmp(strtoken, "cmp_catalog_id") == 0) {
-            int url_post_size = 0;
-            char *catalog_id = NULL;
-
-            url_post_size = (start - url_append) + strlen(end);
-
-            while(urlParams != NULL) {
-                if(strcmp(urlParams->name, strtoken) == 0) {
-                    catalog_id = urlParams->value;
-                    break;
-                }
-
-                urlParams = urlParams->next;
-            }
-
-            if(!catalog_id) {
-                // leave the url intact with the actual url parameter since it is not resolved in the parameter list
-                catalog_id = "{cmp_catalog_id}";
-            }
-
-            url_post_size += strlen(catalog_id);
-            if(url_post == NULL) {
-                url_post = (char *)malloc(sizeof(char) * url_post_size);
-                strncpy(url_post, url_append, (start - url_append));
-                url_post[start - url_append] = '\0';
-            } else {
-                url_post_size += strlen(url_post);
-                url_post = (char *)realloc(url_post, sizeof(char) * url_post_size);
-                strncat(url_post, url_append, (start - url_append));
-            }
-
-            strcat(url_post, catalog_id);
         } else if(strcmp(strtoken, "device_id") == 0) {
             int url_post_size = 0;
 
@@ -433,39 +408,6 @@ bool prepareUrl(char **full_url, char *url_prepend, char *url_append, KeyValuePa
             }
 
             strcat(url_post, configurations.device_id);
-        } else if(strcmp(strtoken, "cid") == 0) {
-            int url_post_size = 0;
-            char *sensor_name = NULL;
-
-            url_post_size = (start - url_append) + strlen(end);
-
-            while(urlParams != NULL) {
-                if(strcmp(urlParams->name, strtoken) == 0) {
-                    sensor_name = urlParams->value;
-                    break;
-                }
-
-                urlParams = urlParams->next;
-            }
-
-            if(!sensor_name) {
-                // leave the url intact with the actual url parameter since it is not resolved in the parameter list
-                sensor_name = "{cid}";
-            }
-
-            url_post_size += strlen(sensor_name);
-
-            if(url_post == NULL) {
-                url_post = (char *)malloc(sizeof(char) * url_post_size);
-                strncpy(url_post, url_append, (start - url_append));
-                url_post[start - url_append] = '\0';
-            } else {
-                url_post_size += strlen(url_post);
-                url_post = (char *)realloc(url_post, sizeof(char) * url_post_size);
-                strncat(url_post, url_append, (start - url_append));
-            }
-
-            strcat(url_post, sensor_name);
         } else if(strcmp(strtoken, "user_account_id") == 0) {
             int url_post_size = 0;
 
@@ -489,20 +431,38 @@ bool prepareUrl(char **full_url, char *url_prepend, char *url_append, KeyValuePa
             strcat(url_post, configurations.user_account_id);
         } else {
             int url_post_size = 0;
+            KeyValueParams *traverseParams = urlParams;
+            char *paramValue = NULL;
 
-            url_post_size = (end - url_append) + strlen(end);
+            while(traverseParams != NULL) {
+                if(strcmp(traverseParams->name, strtoken) == 0) {
+                    paramValue = traverseParams->value;
+                    break;
+                }
+
+                traverseParams = traverseParams->next;
+            }
+
+            if(!paramValue) {
+                paramValue = (char *)malloc(sizeof(char) * strlen(strtoken)) + 2;
+                strcpy(paramValue, "{");
+                strcat(paramValue, strtoken);
+                strcat(paramValue, "}");
+            }
+
+            url_post_size = (start - url_append) + strlen(paramValue) + strlen(end);
 
             if(url_post == NULL) {
                 url_post = (char *)malloc(sizeof(char) * url_post_size);
-                strncpy(url_post, url_append, (end - url_append));
+                strncpy(url_post, url_append, (start - url_append));
                 url_post[start - url_append] = '\0';
             } else {
                 url_post_size += strlen(url_post);
                 url_post = (char *)realloc(url_post, sizeof(char) * url_post_size);
-                strncat(url_post, url_append, (end - url_append));
+                strncat(url_post, url_append, (start - url_append));
             }
 
-            strcat(url_post, "}");
+            strcat(url_post, paramValue);
         }
 
         url_append = end + 1;
@@ -565,27 +525,28 @@ char *getDeviceAuthorizationToken() {
 
         iotkit_init();
 
-//        char * response = listAllComponentCatalogs();
-//        char * response = getComponentCatalogDetails("actua13.v1.0");
-//        char * response = validateDeviceToken();
-//        char * response = listAllDevices();
-//        char * response = getOneDeviceInfo();
-//        char * response = updateADevice("02-00-86-81-77-44", "02-00-86-81-77-44", "pinky44");
-//        deleteADevice();
-//        deleteComponent("madras12");
-//        char * response = submitData("madras7", "26.15", "45.540164", "-122.926048", "124.3");
-//        printf("Response Received :%s\n", response);
-
-
 //        testGetUserAssociatedWithAccount();
-        testUpdateUserAssociatedWithAccount();
+//        testUpdateUserAssociatedWithAccount();
 
 //        testGetNewAuthorizationToken();
 //        testValidateAuthorizationToken();
 //        testGetAuthorizationTokenMeInfo();
+
+//        testListAllComponentCatalogs();
+//        testGetComponentCatalogDetails();
+
+//        testSubmitData();
+
+//        testValidateDeviceToken();
+//        testListAllDevices();
+//        testGetMyDeviceInfo();
+//        testGetOneDeviceInfo();
+//        testDeleteADevice();
+        testDeleteComponent();
+
 //        testCreateADevice();
 //        testUpdateADevice();
-//        testActivateADevice("FaGgt4XT");
+//        testActivateADevice("hvPgWC6q");
 
 //        testDeviceActivationStatus();
 
