@@ -20,6 +20,16 @@
 
 #include "../src/data_api.h"
 
+bool testSubmitData() {
+    char *response = NULL;
+    long httpResponseCode;
+
+    submitData("madras7", "26.15", "45.540164", "-122.926048", "124.3", &httpResponseCode, &response);
+    printf("Response Received :%s\n", response);
+
+    return true;
+}
+
 bool testRetrieveData() {
     RetrieveData *retrieveObj;
     char *response = NULL;

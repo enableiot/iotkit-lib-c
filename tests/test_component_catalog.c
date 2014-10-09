@@ -20,6 +20,28 @@
 
 #include "../src/component_catalog.h"
 
+bool testListAllComponentCatalogs() {
+    char *response = NULL;
+    long httpResponseCode;
+
+    listAllComponentCatalogs(&httpResponseCode, &response);
+
+    printf("Response Received :%s\n", response);
+
+    return true;
+}
+
+bool testGetComponentCatalogDetails() {
+    char *response = NULL;
+    long httpResponseCode;
+
+    getComponentCatalogDetails("actua13.v1.0", &httpResponseCode, &response);
+
+    printf("Response Received :%s\n", response);
+
+    return true;
+}
+
 bool testCreateAnComponentCatalog() {
     char *response = NULL;
     long httpResponseCode;

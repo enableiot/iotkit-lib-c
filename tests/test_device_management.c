@@ -20,6 +20,50 @@
 
 #include "../src/device_management.h"
 
+bool testValidateDeviceToken() {
+    char *response = NULL;
+    long httpResponseCode;
+
+    validateDeviceToken(&httpResponseCode, &response);
+
+    printf("Response Received :%s\n", response);
+
+    return true;
+}
+
+bool testListAllDevices() {
+    char *response = NULL;
+    long httpResponseCode;
+
+    listAllDevices(&httpResponseCode, &response);
+
+    printf("Response Received :%s\n", response);
+
+    return true;
+}
+
+bool testGetMyDeviceInfo() {
+    char *response = NULL;
+    long httpResponseCode;
+
+    getMyDeviceInfo(&httpResponseCode, &response);
+
+    printf("Response Received :%s\n", response);
+
+    return true;
+}
+
+bool testGetOneDeviceInfo() {
+    char *response = NULL;
+    long httpResponseCode;
+
+    getOneDeviceInfo("02-00-86-81-77-cf", &httpResponseCode, &response);
+
+    printf("Response Received :%s\n", response);
+
+    return true;
+}
+
 bool testCreateADevice() {
     DeviceCreationObj *createDeviceObj;
     char *response = NULL;
@@ -70,11 +114,31 @@ bool testActivateADevice(char *authCode) {
     return true;
 }
 
+bool testDeleteADevice() {
+    char *response = NULL;
+    long httpResponseCode;
+
+    deleteADevice("02-00-86-81-77-cf", &httpResponseCode, &response);
+    printf("Response Received :%s\n", response);
+
+    return true;
+}
+
 bool testAddComponent() {
     char *response = NULL;
     long httpResponseCode;
 
     addComponent("madras7", "temperature.v1.0", &httpResponseCode, &response);
+    printf("Response Received :%s\n", response);
+
+    return true;
+}
+
+bool testDeleteComponent() {
+    char *response = NULL;
+    long httpResponseCode;
+
+    deleteComponent("madras7", &httpResponseCode, &response);
     printf("Response Received :%s\n", response);
 
     return true;
