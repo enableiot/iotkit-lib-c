@@ -1,5 +1,5 @@
 /*
- * Authorization API module to communicate with IoT Cloud via REST APIs
+ * Account Management API module to communicate with IoT Cloud via REST APIs
  * Copyright (c) 2014, Intel Corporation.
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -13,13 +13,13 @@
  */
 
 /**
- * @file authorization.c
- * @brief Implementation of Authorization API
+ * @file account_management.c
+ * @brief Implementation of Account Management API
  *
  * Provides features for communication with IoT Cloud server
  */
 
-#include "iotkit.h"
+#include "account_management.h"
 
 bool createAnAccount(char *account_name, long *httpResponseCode, char **response) {
     struct curl_slist *headers = NULL;
@@ -146,6 +146,126 @@ bool getUserAssociatedWithAccount(long *httpResponseCode, char **response) {
     if(prepareUrl(&url, configurations.base_url, configurations.get_user_associated_with_account, NULL)) {
 
         doHttpGet(url, headers, httpResponseCode, response);
+
+        return true;
+    }
+
+    return false;
+}
+
+UpdateUserAccount *createUpdateUserAccountObject() {
+    UpdateUserAccount *newObject = (UpdateUserAccount *)malloc(sizeof(UpdateUserAccount));
+
+    if(!newObject) {
+        return NULL;
+    }
+
+    newObject->attributes = NULL;
+    newObject->email = NULL;
+    newObject->termsAndConditions = false;
+    newObject->verified = false;
+}
+
+UpdateUserAccount *addUpdateUserAccountAttributes(UpdateUserAccount *updateUserAccount, char *name, char *value) {
+    KeyValueParams *newParam = (KeyValueParams *)malloc(sizeof(KeyValueParams));
+
+    newParam->name = name;
+    newParam->value = value;
+    newParam->next = NULL;
+
+    if(!updateUserAccount->attributes) {
+        updateUserAccount->attributes = newParam;
+    } else {
+        KeyValueParams *traverse = updateUserAccount->attributes;
+
+        while(traverse->next != NULL) {
+            traverse = traverse->next;
+        }
+
+        traverse->next = newParam;
+    }
+
+    return updateUserAccount;
+}
+
+UpdateUserAccount *addUpdateUserAccountEmail(UpdateUserAccount *updateUserAccount, char *email) {
+    updateUserAccount->email = email;
+
+    return updateUserAccount;
+}
+
+UpdateUserAccount *addUpdateUserAccountTerms(UpdateUserAccount *updateUserAccount, bool terms) {
+    updateUserAccount->termsAndConditions = terms;
+
+    return updateUserAccount;
+}
+
+UpdateUserAccount *addUpdateUserAccountVerified(UpdateUserAccount *updateUserAccount, bool verified) {
+    updateUserAccount->verified = verified;
+
+    return updateUserAccount;
+}
+
+bool updateUserAssociatedWithAccount(UpdateUserAccount *updateUserAccount, long *httpResponseCode, char **response) {
+    struct curl_slist *headers = NULL;
+    char *url;
+    char body[BODY_SIZE_MED];
+    KeyValueParams *traverse = updateUserAccount->attributes;
+
+    appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
+
+    if(prepareUrl(&url, configurations.base_url, configurations.get_user_associated_with_account, NULL)) {
+
+        strcpy(body, "{");
+
+        strcat(body, "\"id\":\"");
+        strcat(body, configurations.data_account_id);
+        strcat(body, "\",");
+
+        strcat(body, "\"attributes\":{");
+        while(traverse) {
+            strcat(body, "\"");
+            strcat(body, traverse->name);
+            strcat(body, "\":\"");
+            strcat(body, traverse->value);
+            strcat(body, "\"");
+
+            traverse = traverse->next;
+
+            if(traverse) {
+                strcat(body, ",");
+            }
+        }
+        strcat(body, "},");
+
+        if(updateUserAccount->email) {
+            strcat(body, "\"email\":\"");
+            strcat(body, updateUserAccount->email);
+            strcat(body, "\",");
+        }
+
+        strcat(body, "\"termsAndConditions\":\"");
+        if(updateUserAccount->termsAndConditions) {
+            strcat(body, "true");
+        } else {
+            strcat(body, "false");
+        }
+        strcat(body, "\",");
+
+        strcat(body, "\"verified\":\"");
+        if(updateUserAccount->verified) {
+            strcat(body, "true");
+        } else {
+            strcat(body, "false");
+        }
+
+        strcat(body, "}");
+
+        #if DEBUG
+            printf("Prepared BODY is %s\n", body);
+        #endif
+
+        doHttpPut(url, headers, body, httpResponseCode, response);
 
         return true;
     }
