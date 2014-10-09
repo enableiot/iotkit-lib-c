@@ -152,7 +152,7 @@ bool getUserAssociatedWithAccount(long *httpResponseCode, char **response) {
 
     return false;
 }
-
+/*
 UpdateUserAccount *createUpdateUserAccountObject() {
     UpdateUserAccount *newObject = (UpdateUserAccount *)malloc(sizeof(UpdateUserAccount));
 
@@ -214,13 +214,17 @@ bool updateUserAssociatedWithAccount(UpdateUserAccount *updateUserAccount, long 
 
     appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
 
-    if(prepareUrl(&url, configurations.base_url, configurations.get_user_associated_with_account, NULL)) {
+    if(prepareUrl(&url, configurations.base_url, configurations.update_user_associated_with_account, NULL)) {
 
         strcpy(body, "{");
 
         strcat(body, "\"id\":\"");
         strcat(body, configurations.data_account_id);
         strcat(body, "\",");
+
+        strcat(body, "\"accounts\":{\"");
+        strcat(body, configurations.data_account_id);
+        strcat(body, "\":\"admin\"},");
 
         strcat(body, "\"attributes\":{");
         while(traverse) {
@@ -252,7 +256,7 @@ bool updateUserAssociatedWithAccount(UpdateUserAccount *updateUserAccount, long 
         }
         strcat(body, "\",");
 
-        strcat(body, "\"verified\":\"");
+        strcat(body, "\"verified\":");
         if(updateUserAccount->verified) {
             strcat(body, "true");
         } else {
@@ -272,3 +276,4 @@ bool updateUserAssociatedWithAccount(UpdateUserAccount *updateUserAccount, long 
 
     return false;
 }
+*/

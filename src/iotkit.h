@@ -73,6 +73,7 @@ typedef struct _Configurations {
     char *update_an_account_name;
     char *delete_an_account_name;
     char *get_user_associated_with_account;
+    char *update_user_associated_with_account;
 
     // account authorization
     char *authorization_key;

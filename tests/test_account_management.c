@@ -18,7 +18,7 @@
  * Test Suite for Account Management
  */
 
-#include "../src/iotkit.h"
+#include "../src/account_management.h"
 
 bool testCreateAnAccount() {
     char *response = NULL;
@@ -125,3 +125,27 @@ bool testGetUserAssociatedWithAccount() {
 
     return false;
 }
+/*
+bool testUpdateUserAssociatedWithAccount() {
+    UpdateUserAccount *userData = NULL;
+    char *response = NULL;
+    long httpResponseCode;
+
+    userData = createUpdateUserAccountObject();
+    addUpdateUserAccountAttributes(userData, "phone", "5036568978");
+    addUpdateUserAccountAttributes(userData, "new_name", "new_value");
+    //addUpdateUserAccountEmail(userData, "pradyp7tmp@gmail.com");
+    addUpdateUserAccountTerms(userData, true);
+    addUpdateUserAccountVerified(userData, true);
+
+    updateUserAssociatedWithAccount(userData, &httpResponseCode, &response);
+
+    printf("Response Received :%s\n", response);
+
+    if(httpResponseCode == 200) {
+        return true;
+    }
+
+    return false;
+}
+*/

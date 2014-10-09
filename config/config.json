@@ -17,7 +17,8 @@
             "update_an_account_name" : "/v1/api/accounts/{data_account_id}",
             "delete_an_account_name" : "/v1/api/accounts/{data_account_id}",
             "renew_account_activation" : "/v1/api/accounts/{data_account_id}/activationcode/refresh",
-            "get_user_associated_with_account" : "/v1/api/accounts/{data_account_id}/users"
+            "get_user_associated_with_account" : "/v1/api/accounts/{data_account_id}/users",
+            "update_user_associated_with_account" : "/v1/api/accounts/{data_account_id}/users/{user_account_id}"
         },
         "authorization": {
             "new_auth_token" : "/v1/api/auth/token",
