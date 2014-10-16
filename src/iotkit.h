@@ -110,11 +110,11 @@ typedef struct _Configurations {
 
 /** Id list
 */
-typedef struct _IdList {
-    char *id;
+typedef struct _StringList {
+    char *data;
 
-    struct IdList *next;
-} IdList;
+    struct StringList *next;
+} StringList;
 
 typedef struct _KeyValueParams {
     char *name;

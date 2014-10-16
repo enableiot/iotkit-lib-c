@@ -129,16 +129,16 @@ DeviceCreationObj *addLocInfo(DeviceCreationObj *createDeviceObj, char *latitude
 }
 
 DeviceCreationObj *addTagInfo(DeviceCreationObj *createDeviceObj, char *tagName) {
-    IdList *tagData;
+    StringList *tagData;
 
-    tagData = (IdList *)malloc(sizeof(IdList));
-    tagData->id = tagName;
+    tagData = (StringList *)malloc(sizeof(StringList));
+    tagData->data = tagName;
     tagData->next = NULL;
 
     if(!createDeviceObj->tags) {
         createDeviceObj->tags = tagData;
     } else {
-        IdList *traverseId = createDeviceObj->tags;
+        StringList *traverseId = createDeviceObj->tags;
 
         while(traverseId->next) {
             traverseId = traverseId->next;
@@ -198,13 +198,13 @@ bool createADevice(DeviceCreationObj *createDeviceObj, long *httpResponseCode, c
         sprintf(body, "{\"deviceId\":\"%s\",\"gatewayId\":\"%s\",\"name\":\"%s\"", createDeviceObj->device_id, createDeviceObj->gateway_id, createDeviceObj->device_name);
 
         if(createDeviceObj->tags) {
-        IdList *traverse = createDeviceObj->tags;
+        StringList *traverse = createDeviceObj->tags;
 
             strcat(body, ",\"tags\":[");
 
             while(traverse != NULL) {
                 strcat(body, "\"");
-                strcat(body, traverse->id);
+                strcat(body, traverse->data);
                 strcat(body, "\"");
 
                 traverse = traverse->next;
@@ -281,13 +281,13 @@ bool updateADevice(DeviceCreationObj *createDeviceObj, long *httpResponseCode, c
        sprintf(body, "{\"gatewayId\":\"%s\",\"name\":\"%s\"", createDeviceObj->gateway_id, createDeviceObj->device_name);
 
                if(createDeviceObj->tags) {
-               IdList *traverse = createDeviceObj->tags;
+               StringList *traverse = createDeviceObj->tags;
 
                    strcat(body, ",\"tags\":[");
 
                    while(traverse != NULL) {
                        strcat(body, "\"");
-                       strcat(body, traverse->id);
+                       strcat(body, traverse->data);
                        strcat(body, "\"");
 
                        traverse = traverse->next;

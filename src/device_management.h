@@ -29,7 +29,7 @@ typedef struct _DeviceCreationObj {
     char *gateway_id;
     char *device_name;
 
-    IdList *tags;
+    StringList *tags;
 
     char *latitude;
     char *longitude;

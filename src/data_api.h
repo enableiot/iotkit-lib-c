@@ -28,8 +28,8 @@
 typedef struct _RetrieveData {
     long fromMillis;
     long toMillis;
-    IdList *deviceList;
-    IdList *componentId;
+    StringList *deviceList;
+    StringList *componentId;
 } RetrieveData;
 
 #endif

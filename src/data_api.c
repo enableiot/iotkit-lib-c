@@ -122,16 +122,16 @@ RetrieveData *createRetrieveDataObject(long fromMillis, long toMillis) {
 }
 
 RetrieveData *addDeviceId(RetrieveData *retrieveObj, char *id) {
-    IdList *addId;
+    StringList *addId;
 
-    addId = (IdList *)malloc(sizeof(IdList));
-    addId->id = id;
+    addId = (StringList *)malloc(sizeof(StringList));
+    addId->data = id;
     addId->next = NULL;
 
     if(!retrieveObj->deviceList) {
         retrieveObj->deviceList = addId;
     } else {
-        IdList *traverseId = retrieveObj->deviceList;
+        StringList *traverseId = retrieveObj->deviceList;
 
         while(traverseId->next) {
             traverseId = traverseId->next;
@@ -144,18 +144,18 @@ RetrieveData *addDeviceId(RetrieveData *retrieveObj, char *id) {
 
 RetrieveData *addSensorId(RetrieveData *retrieveObj, char *sensorName) {
     char *cid = NULL;
-    IdList *addId;
+    StringList *addId;
 
     cid = getSensorComponentId(sensorName);
 
-    addId = (IdList *)malloc(sizeof(IdList));
-    addId->id = cid;
+    addId = (StringList *)malloc(sizeof(StringList));
+    addId->data = cid;
     addId->next = NULL;
 
     if(!retrieveObj->componentId) {
         retrieveObj->componentId = addId;
     } else {
-        IdList *traverseId = retrieveObj->componentId;
+        StringList *traverseId = retrieveObj->componentId;
 
         while(traverseId->next) {
             traverseId = traverseId->next;
@@ -172,7 +172,7 @@ bool retrieveData(RetrieveData *retrieveObj, long *httpResponseCode, char **resp
     char body[BODY_SIZE_MED];
     char fromTimeInMillis[BODY_SIZE_MIN];
     char toTimeInMillis[BODY_SIZE_MIN];
-    IdList *traverse = NULL;
+    StringList *traverse = NULL;
 
     if(!retrieveObj->deviceList) {
         fprintf(stderr, "retrieveData::Device ID cannot be NULL");
@@ -201,7 +201,7 @@ bool retrieveData(RetrieveData *retrieveObj, long *httpResponseCode, char **resp
         traverse = retrieveObj->deviceList;
         while(traverse != NULL) {
             strcat(body, "\"");
-            strcat(body, traverse->id);
+            strcat(body, traverse->data);
             strcat(body, "\"");
 
             traverse = traverse->next;
@@ -218,7 +218,7 @@ bool retrieveData(RetrieveData *retrieveObj, long *httpResponseCode, char **resp
         traverse = retrieveObj->componentId;
         while(traverse != NULL) {
             strcat(body, "{\"id\":\"");
-            strcat(body, traverse->id);
+            strcat(body, traverse->data);
             strcat(body, "\",\"op\":\"none\"}");
 
             traverse = traverse->next;
