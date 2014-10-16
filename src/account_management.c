@@ -152,6 +152,42 @@ bool getUserAssociatedWithAccount(long *httpResponseCode, char **response) {
 
     return false;
 }
+
+bool addAnUserToAccount(char *account_id, char * user_id, bool isAdmin, long *httpResponseCode, char **response) {
+// TODO: to be verified
+    struct curl_slist *headers = NULL;
+    char *url;
+    char body[BODY_SIZE_MIN];
+    KeyValueParams *urlParams = NULL;
+
+    urlParams = (KeyValueParams *)malloc(sizeof(KeyValueParams));
+    urlParams->name = "user_id";
+    urlParams->value = user_id;
+    urlParams->next = NULL;
+
+    if(prepareUrl(&url, configurations.base_url, configurations.add_an_user_to_account, urlParams)) {
+
+        appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
+        appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
+
+        if(isAdmin) {
+            sprintf(body, "{\"accounts\":{\"%s\":\"%s\"}}", account_id, "admin");
+        } else {
+            sprintf(body, "{\"accounts\":{\"%s\":\"%s\"}}", account_id, "user");
+        }
+
+        #if DEBUG
+            printf("Prepared BODY is %s\n", body);
+        #endif
+
+        doHttpPut(url, headers, body, httpResponseCode, response);
+
+        return true;
+    }
+
+    return false;
+}
+
 /*
 UpdateUserAccount *createUpdateUserAccountObject() {
     UpdateUserAccount *newObject = (UpdateUserAccount *)malloc(sizeof(UpdateUserAccount));

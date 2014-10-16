@@ -72,6 +72,7 @@ typedef struct _Configurations {
     char *renew_account_activation;
     char *update_an_account_name;
     char *delete_an_account_name;
+    char *add_an_user_to_account;
     char *get_user_associated_with_account;
     char *update_user_associated_with_account;
 

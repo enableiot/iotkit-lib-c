@@ -125,6 +125,22 @@ bool testGetUserAssociatedWithAccount() {
 
     return false;
 }
+
+bool testAddAnUserToAccount() {
+    char *response = NULL;
+    long httpResponseCode;
+
+    addAnUserToAccount("5cf1f891-b388-4795-8abc-b604ded6b163", "53fe452fd6e2061551153a88", false, &httpResponseCode, &response);
+
+    printf("Response Received :%s\n", response);
+
+    if(httpResponseCode == 200) {
+        return true;
+    }
+
+    return false;
+}
+
 /*
 bool testUpdateUserAssociatedWithAccount() {
     UpdateUserAccount *userData = NULL;
