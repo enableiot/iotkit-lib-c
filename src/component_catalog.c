@@ -275,7 +275,7 @@ bool updateAnComponentCatalog(ComponentCatalog *cmpCatalogObject, char *cmp_id, 
                 strcat(body, ",");
             }
 
-            *strcat(body, "\"dataType\":\"");
+            strcat(body, "\"dataType\":\"");
             strcat(body, cmpCatalogObject->datatype);
             strcat(body, "\"");
 
