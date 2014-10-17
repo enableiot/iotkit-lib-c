@@ -127,6 +127,18 @@ typedef struct _KeyValueParams {
     struct KeyValueParams *next;
 } KeyValueParams;
 
+typedef struct _AttributeFilter {
+    char *filterName;
+    StringList *filterValues;
+
+    struct AttributeFilter * next;
+} AttributeFilter;
+
+typedef struct _AttributeFilterList {
+    AttributeFilter * filterData;
+    struct AttributeFilterList *next;
+} AttributeFilterList;
+
 
 Configurations configurations;
 SensorComp *sensorsList;

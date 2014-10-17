@@ -25,18 +25,6 @@
 
 #include "iotkit.h"
 
-typedef struct _AttributeFilter {
-    char *filterName;
-    StringList *filterValues;
-
-    struct AttributeFilter * next;
-} AttributeFilter;
-
-typedef struct _AttributeFilterList {
-    AttributeFilter * filterData;
-    struct AttributeFilterList *next;
-} AttributeFilterList;
-
 typedef struct _AdvancedDataInquiry {
 
     char *msgType;
