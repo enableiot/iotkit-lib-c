@@ -189,6 +189,13 @@ void parseConfiguration(char *config_file_path) {
             }
             configurations.advanced_data_inquiry = strdup(child1->valuestring);
 
+            child1 = cJSON_GetObjectItem(jitem, "aggregated_report_interface");
+            if (!isJsonString(child1)) {
+                fprintf(stderr,"Invalid JSON format for json property %s\n", child1->string);
+                return;
+            }
+            configurations.aggregated_report_interface = strdup(child1->valuestring);
+
             child1 = cJSON_GetObjectItem(jitem, "authorization");
             if (!isJsonObject(child1)) {
                 fprintf(stderr,"Invalid JSON format for json property %s\n", child1->string);
@@ -540,7 +547,8 @@ char *getDeviceAuthorizationToken() {
 
 //        testGetAccountInformation();
 //        testAddAnUserToAccount();
-        testAdvancedDataInquiry();
+//        testAdvancedDataInquiry();
+        testAggregatedReportInterface();
 //        testGetUserAssociatedWithAccount();
 //        testUpdateUserAssociatedWithAccount();
 

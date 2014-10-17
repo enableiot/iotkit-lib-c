@@ -69,6 +69,9 @@ typedef struct _Configurations {
     // advanced data inquiry
     char *advanced_data_inquiry;
 
+    // aggregated report interface
+    char *aggregated_report_interface;
+
     // account management
     char *create_an_account;
     char *get_account_information;
