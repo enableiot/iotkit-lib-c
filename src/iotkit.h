@@ -65,6 +65,10 @@ typedef struct _Configurations {
     char *data_account_id;
     char *data_account_name;
     char *device_id;
+
+    // advanced data inquiry
+    char *advanced_data_inquiry;
+
     // account management
     char *create_an_account;
     char *get_account_information;

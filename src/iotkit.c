@@ -182,6 +182,12 @@ void parseConfiguration(char *config_file_path) {
             }
             configurations.update_user_associated_with_account = strdup(child2->valuestring);
 
+            child1 = cJSON_GetObjectItem(jitem, "advanced_data_inquiry");
+            if (!isJsonString(child1)) {
+                fprintf(stderr,"Invalid JSON format for json property %s\n", child1->string);
+                return;
+            }
+            configurations.advanced_data_inquiry = strdup(child1->valuestring);
 
             child1 = cJSON_GetObjectItem(jitem, "authorization");
             if (!isJsonObject(child1)) {
@@ -532,8 +538,9 @@ char *getDeviceAuthorizationToken() {
 
         iotkit_init();
 
-        testGetAccountInformation();
+//        testGetAccountInformation();
 //        testAddAnUserToAccount();
+        testAdvancedDataInquiry();
 //        testGetUserAssociatedWithAccount();
 //        testUpdateUserAssociatedWithAccount();
 

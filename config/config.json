@@ -21,6 +21,7 @@
             "get_user_associated_with_account" : "/v1/api/accounts/{data_account_id}/users",
             "update_user_associated_with_account" : "/v1/api/accounts/{data_account_id}/users/{user_account_id}"
         },
+        "advanced_data_inquiry" : "/v1/api/accounts/{data_account_id}/data/search/advanced",
         "authorization": {
             "new_auth_token" : "/v1/api/auth/token",
             "auth_token_info" : "/v1/api/auth/tokeninfo",
