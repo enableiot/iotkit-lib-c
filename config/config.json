@@ -29,7 +29,8 @@
             "me_info" : "/v1/ui/auth/me"
         },
         "alert_management": {
-            "create_new_alert" : "/v1/api/alerts"
+            "create_new_alert" : "/v1/api/alerts",
+            "get_list_of_alerts" : "/v1/api/accounts/{data_account_id}/alerts"
         },
         "device_management": {
             "list_all_devices": "/v1/api/accounts/{data_account_id}/devices",

@@ -127,6 +127,13 @@ void parseConfiguration(char *config_file_path) {
             }
             configurations.create_new_alert = strdup(child2->valuestring);
 
+            child2 = cJSON_GetObjectItem(child1, "get_list_of_alerts");
+            if (!isJsonString(child2)) {
+                fprintf(stderr,"Invalid JSON format for json property %s\n", child2->string);
+                return;
+            }
+            configurations.get_list_of_alerts = strdup(child2->valuestring);
+
 
             child1 = cJSON_GetObjectItem(jitem, "account_management");
             if (!isJsonObject(child1)) {
@@ -564,7 +571,8 @@ char *getDeviceAuthorizationToken() {
 //        testAddAnUserToAccount();
 //        testAdvancedDataInquiry();
 //        testAggregatedReportInterface();
-        testCreateNewAlert();
+//        testCreateNewAlert();
+        testGetListOfAlerts();
 //        testGetUserAssociatedWithAccount();
 //        testUpdateUserAssociatedWithAccount();
 

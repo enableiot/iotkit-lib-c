@@ -500,3 +500,19 @@ bool createNewAlert(CreateNewAlert *createNewAlertObj, long *httpResponseCode, c
 
     return false;
 }
+
+bool getListOfAlerts(long *httpResponseCode, char **response) {
+    struct curl_slist *headers = NULL;
+    char *url;
+
+    appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
+
+    if(prepareUrl(&url, configurations.base_url, configurations.get_list_of_alerts, NULL)) {
+
+        doHttpGet(url, headers, httpResponseCode, response);
+
+        return true;
+    }
+
+    return false;
+}
