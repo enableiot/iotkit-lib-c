@@ -561,3 +561,32 @@ bool resetAlert(char *alertId, long *httpResponseCode, char **response) {
 
     return false;
 }
+
+bool updateAlertStatus(char *alertId, char *status_name, long *httpResponseCode, char **response) {
+    struct curl_slist *headers = NULL;
+    char *url;
+    KeyValueParams *urlParams = NULL, *urlParams1 = NULL;
+
+    urlParams = (KeyValueParams *)malloc(sizeof(KeyValueParams));
+    urlParams1 = (KeyValueParams *)malloc(sizeof(KeyValueParams));
+
+    urlParams->name = "alert_id";
+    urlParams->value = strdup(alertId);
+    urlParams1->name = "status_name";
+    urlParams1->value = strdup(status_name);
+
+    urlParams1->next = NULL;
+    urlParams->next = urlParams1;
+
+    if(prepareUrl(&url, configurations.base_url, configurations.update_alert_status, urlParams)) {
+
+        appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
+        appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
+
+        doHttpPut(url, headers, NULL, httpResponseCode, response);
+
+        return true;
+    }
+
+    return false;
+}

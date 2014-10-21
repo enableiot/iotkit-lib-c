@@ -96,6 +96,7 @@ typedef struct _Configurations {
     char *get_list_of_alerts;
     char *get_alert_information;
     char *reset_alert;
+    char *update_alert_status;
 
     // component catalogs
     char *list_components;

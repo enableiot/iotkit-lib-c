@@ -114,3 +114,18 @@ bool testResetAlert() {
 
     return false;
 }
+
+bool testUpdateAlertStatus() {
+    char *response = NULL;
+    long httpResponseCode;
+
+    updateAlertStatus("75", "Open", &httpResponseCode, &response);
+
+    printf("Response Received :%s\n", response);
+
+    if(httpResponseCode == 200) {
+        return true;
+    }
+
+    return false;
+}
