@@ -129,3 +129,18 @@ bool testUpdateAlertStatus() {
 
     return false;
 }
+
+bool testAddCommentToAlert() {
+    char *response = NULL;
+    long httpResponseCode;
+
+    addCommentToAlert("75", "pradyp7@gmail.com", 45972979284L, "Machinery arrival", &httpResponseCode, &response);
+
+    printf("Response Received :%s\n", response);
+
+    if(httpResponseCode == 200) {
+        return true;
+    }
+
+    return false;
+}

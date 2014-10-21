@@ -590,3 +590,37 @@ bool updateAlertStatus(char *alertId, char *status_name, long *httpResponseCode,
 
     return false;
 }
+
+bool addCommentToAlert(char *alertId, char *user, long timestamp, char *comment, long *httpResponseCode, char **response) {
+    struct curl_slist *headers = NULL;
+    char *url;
+    char body[BODY_SIZE_MIN];
+    KeyValueParams *urlParams = NULL;
+
+    urlParams = (KeyValueParams *)malloc(sizeof(KeyValueParams));
+    urlParams->name = "alert_id";
+    urlParams->value = strdup(alertId);
+    urlParams->next = NULL;
+
+    if(!user || !comment) {
+        fprintf(stderr, "addCommentToAlert::Mandatory parameters cannot be NULL");
+        return false;
+    }
+
+    if(prepareUrl(&url, configurations.base_url, configurations.add_comment_to_alert, urlParams)) {
+        appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
+        appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
+
+        sprintf(body, "[{\"user\":\"%s\",\"timestamp\":%ld,\"text\":\"%s\"}]", user, timestamp, comment);
+
+        #if DEBUG
+            printf("Prepared BODY is %s\n", body);
+        #endif
+
+        doHttpPost(url, headers, body, httpResponseCode, response);
+
+        return true;
+    }
+
+    return false;
+}
