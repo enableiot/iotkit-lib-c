@@ -181,3 +181,13 @@ bool testListAllTagsForDevices() {
 
     return true;
 }
+
+bool testListAllAttributesForDevices() {
+    char *response = NULL;
+    long httpResponseCode;
+
+    listAllAttributesForDevices(&httpResponseCode, &response);
+    printf("Response Received :%s\n", response);
+
+    return true;
+}

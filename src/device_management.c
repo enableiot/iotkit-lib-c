@@ -816,3 +816,19 @@ bool listAllTagsForDevices(long *httpResponseCode, char **response) {
 
     return false;
 }
+
+bool listAllAttributesForDevices(long *httpResponseCode, char **response) {
+    struct curl_slist *headers = NULL;
+    char *url;
+
+    appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
+    appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
+
+    if(prepareUrl(&url, configurations.base_url, configurations.list_all_attributes_for_devices, NULL)){
+        doHttpGet(url, headers, httpResponseCode, response);
+
+        return true;
+    }
+
+    return false;
+}
