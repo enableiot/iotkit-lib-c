@@ -30,3 +30,14 @@ bool testGetListOfInvitation() {
 
     return true;
 }
+
+bool testGetInvitationListSendToSpecificUser() {
+    char *response = NULL;
+    long httpResponseCode;
+
+    getInvitationListSendToSpecificUser("pradeepx.chenthati@intel.com", &httpResponseCode, &response);
+
+    printf("Response Received :%s\n", response);
+
+    return true;
+}

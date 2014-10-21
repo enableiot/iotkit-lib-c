@@ -37,3 +37,26 @@ bool getListOfInvitation(long *httpResponseCode, char **response) {
 
     return false;
 }
+
+bool getInvitationListSendToSpecificUser(char *email_id, long *httpResponseCode, char **response) {
+    struct curl_slist *headers = NULL;
+    char *url;
+    KeyValueParams *urlParams = NULL;
+
+    urlParams = (KeyValueParams *)malloc(sizeof(KeyValueParams));
+    urlParams->name = "email_id";
+    urlParams->value = strdup(email_id);
+    urlParams->next = NULL;
+
+    appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
+    appendHttpHeader(&headers, HEADER_AUTHORIZATION, getDeviceAuthorizationToken());
+
+    if(prepareUrl(&url, configurations.base_url, configurations.get_invitation_list_send_to_specific_user, urlParams)) {
+
+        doHttpGet(url, headers, httpResponseCode, response);
+
+        return true;
+    }
+
+    return false;
+}

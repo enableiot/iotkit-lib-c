@@ -408,6 +408,13 @@ void parseConfiguration(char *config_file_path) {
             }
             configurations.get_list_of_invitation = strdup(child2->valuestring);
 
+            child2 = cJSON_GetObjectItem(child1, "get_invitation_list_send_to_specific_user");
+            if (!isJsonString(child2)) {
+                fprintf(stderr,"Invalid JSON format for json property %s\n", child2->string);
+                return;
+            }
+            configurations.get_invitation_list_send_to_specific_user = strdup(child2->valuestring);
+
 
             child1 = cJSON_GetObjectItem(jitem, "data");
             if (!isJsonObject(child1)) {
@@ -665,7 +672,8 @@ char *getDeviceAuthorizationToken() {
 //        testListAllTagsForDevices();
 //        testListAllAttributesForDevices();
 
-        testGetListOfInvitation();
+//        testGetListOfInvitation();
+        testGetInvitationListSendToSpecificUser();
 //        testCreateAnComponentCatalog();
 //        testUpdateAnComponentCatalog();
 
