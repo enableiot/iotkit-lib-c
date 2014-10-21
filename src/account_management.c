@@ -162,7 +162,7 @@ bool addAnUserToAccount(char *account_id, char * user_id, bool isAdmin, long *ht
 
     urlParams = (KeyValueParams *)malloc(sizeof(KeyValueParams));
     urlParams->name = "user_id";
-    urlParams->value = user_id;
+    urlParams->value = strdup(user_id);
     urlParams->next = NULL;
 
     if(prepareUrl(&url, configurations.base_url, configurations.add_an_user_to_account, urlParams)) {
