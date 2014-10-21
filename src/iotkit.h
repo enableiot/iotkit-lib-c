@@ -119,6 +119,9 @@ typedef struct _Configurations {
     char *list_all_tags_for_devices;
     char *list_all_attributes_for_devices;
 
+    // invitation management
+    char *get_list_of_invitation;
+
     // data api
     char *submit_data;
     char *retrieve_data;

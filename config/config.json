@@ -49,6 +49,9 @@
             "list_all_tags_for_devices" : "/v1/api/accounts/{data_account_id}/devices/tags",
             "list_all_attributes_for_devices" : "/v1/api/accounts/{data_account_id}/devices/attributes"
         },
+        "invitation_management": {
+            "get_list_of_invitation" : "/v1/api/accounts/{data_account_id}/invites"
+        },
         "data": {
             "submit_data": "/v1/api/data/{device_id}",
             "retrieve_data": "/v1/api/accounts/{data_account_id}/data/search"

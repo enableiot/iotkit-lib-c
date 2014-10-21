@@ -1,0 +1,39 @@
+/*
+ * Invitation Management API module to communicate with IoT Cloud via REST APIs
+ * Copyright (c) 2014, Intel Corporation.
+ *
+ * This program is free software; you can redistribute it and/or modify it
+ * under the terms and conditions of the GNU Lesser General Public License,
+ * version 2.1, as published by the Free Software Foundation.
+ *
+ * This program is distributed in the hope it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE.  See the GNU Lesser General Public License for
+ * more details.
+ */
+
+/**
+ * @file invitation_management.c
+ * @brief Implementation of Invitation Management API
+ *
+ * Provides features for communication with IoT Cloud server
+ */
+
+#include "iotkit.h"
+
+bool getListOfInvitation(long *httpResponseCode, char **response) {
+    struct curl_slist *headers = NULL;
+    char *url;
+
+    appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
+    appendHttpHeader(&headers, HEADER_AUTHORIZATION, getDeviceAuthorizationToken());
+
+    if(prepareUrl(&url, configurations.base_url, configurations.get_list_of_invitation, NULL)) {
+
+        doHttpGet(url, headers, httpResponseCode, response);
+
+        return true;
+    }
+
+    return false;
+}

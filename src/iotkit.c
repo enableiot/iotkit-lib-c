@@ -395,6 +395,20 @@ void parseConfiguration(char *config_file_path) {
             configurations.list_all_attributes_for_devices = strdup(child2->valuestring);
 
 
+            child1 = cJSON_GetObjectItem(jitem, "invitation_management");
+            if (!isJsonObject(child1)) {
+                fprintf(stderr,"Invalid JSON format for json property %s\n", child1->string);
+                return;
+            }
+
+            child2 = cJSON_GetObjectItem(child1, "get_list_of_invitation");
+            if (!isJsonString(child2)) {
+                fprintf(stderr,"Invalid JSON format for json property %s\n", child2->string);
+                return;
+            }
+            configurations.get_list_of_invitation = strdup(child2->valuestring);
+
+
             child1 = cJSON_GetObjectItem(jitem, "data");
             if (!isJsonObject(child1)) {
                 fprintf(stderr,"Invalid JSON format for json property %s\n", child1->string);
@@ -649,8 +663,9 @@ char *getDeviceAuthorizationToken() {
 //        testSensorRegistrationStatus();
 //        testGetSensorId();
 //        testListAllTagsForDevices();
-        testListAllAttributesForDevices();
+//        testListAllAttributesForDevices();
 
+        testGetListOfInvitation();
 //        testCreateAnComponentCatalog();
 //        testUpdateAnComponentCatalog();
 
