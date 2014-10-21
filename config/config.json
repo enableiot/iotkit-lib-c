@@ -45,7 +45,8 @@
             "activate_a_device": "/v1/api/accounts/{data_account_id}/devices/{device_id}/activation",
             "delete_a_device": "/v1/api/accounts/{data_account_id}/devices/{other_device_id}",
             "add_a_component": "/v1/api/accounts/{data_account_id}/devices/{device_id}/components",
-            "delete_a_component": "/v1/api/accounts/{data_account_id}/devices/{device_id}/components/{cid}"
+            "delete_a_component": "/v1/api/accounts/{data_account_id}/devices/{device_id}/components/{cid}",
+            "list_all_tags_for_devices" : "/v1/api/accounts/{data_account_id}/devices/tags"
         },
         "data": {
             "submit_data": "/v1/api/data/{device_id}",

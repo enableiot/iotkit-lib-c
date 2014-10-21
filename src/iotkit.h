@@ -116,6 +116,7 @@ typedef struct _Configurations {
     char *add_a_component;
     char *delete_a_component;
     char *deviceToken;
+    char *list_all_tags_for_devices;
 
     // data api
     char *submit_data;

@@ -171,3 +171,13 @@ bool testGetSensorId() {
 
     return true;
 }
+
+bool testListAllTagsForDevices() {
+    char *response = NULL;
+    long httpResponseCode;
+
+    listAllTagsForDevices(&httpResponseCode, &response);
+    printf("Response Received :%s\n", response);
+
+    return true;
+}

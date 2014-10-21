@@ -380,6 +380,14 @@ void parseConfiguration(char *config_file_path) {
             }
             configurations.delete_a_component = strdup(child2->valuestring);
 
+            child2 = cJSON_GetObjectItem(child1, "list_all_tags_for_devices");
+            if (!isJsonString(child2)) {
+                fprintf(stderr,"Invalid JSON format for json property %s\n", child2->string);
+                return;
+            }
+            configurations.list_all_tags_for_devices = strdup(child2->valuestring);
+
+
             child1 = cJSON_GetObjectItem(jitem, "data");
             if (!isJsonObject(child1)) {
                 fprintf(stderr,"Invalid JSON format for json property %s\n", child1->string);
@@ -604,7 +612,7 @@ char *getDeviceAuthorizationToken() {
 //        testGetAlertInformation();
 //        testResetAlert();
 //        testUpdateAlertStatus();
-        testAddCommentToAlert();
+//        testAddCommentToAlert();
 //        testGetUserAssociatedWithAccount();
 //        testUpdateUserAssociatedWithAccount();
 
@@ -633,6 +641,7 @@ char *getDeviceAuthorizationToken() {
 //        testAddComponent();
 //        testSensorRegistrationStatus();
 //        testGetSensorId();
+        testListAllTagsForDevices();
 
 //        testCreateAnComponentCatalog();
 //        testUpdateAnComponentCatalog();
