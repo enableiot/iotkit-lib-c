@@ -88,3 +88,26 @@ bool createInvitation(char *email, long *httpResponseCode, char **response) {
 
     return false;
 }
+
+bool deleteInvitation(char *email_id, long *httpResponseCode, char **response) {
+    struct curl_slist *headers = NULL;
+    char *url;
+    KeyValueParams *urlParams = NULL;
+
+    urlParams = (KeyValueParams *)malloc(sizeof(KeyValueParams));
+    urlParams->name = "email_id";
+    urlParams->value = strdup(email_id);
+    urlParams->next = NULL;
+
+    if(prepareUrl(&url, configurations.base_url, configurations.delete_invitations, urlParams)) {
+
+        appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
+        appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
+
+        doHttpDelete(url, headers, httpResponseCode, response);
+
+        return true;
+    }
+
+    return false;
+}

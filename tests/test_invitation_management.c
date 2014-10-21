@@ -52,3 +52,14 @@ bool testCreateInvitation() {
 
     return true;
 }
+
+bool testDeleteInvitation() {
+    char *response = NULL;
+    long httpResponseCode;
+
+    deleteInvitation("xxxxx@xxx.com", &httpResponseCode, &response);
+
+    printf("Response Received :%s\n", response);
+
+    return true;
+}

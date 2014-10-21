@@ -422,6 +422,13 @@ void parseConfiguration(char *config_file_path) {
             }
             configurations.create_invitation = strdup(child2->valuestring);
 
+            child2 = cJSON_GetObjectItem(child1, "delete_invitations");
+            if (!isJsonString(child2)) {
+                fprintf(stderr,"Invalid JSON format for json property %s\n", child2->string);
+                return;
+            }
+            configurations.delete_invitations = strdup(child2->valuestring);
+
 
             child1 = cJSON_GetObjectItem(jitem, "data");
             if (!isJsonObject(child1)) {
@@ -681,7 +688,8 @@ char *getDeviceAuthorizationToken() {
 
 //        testGetListOfInvitation();
 //        testGetInvitationListSendToSpecificUser();
-        testCreateInvitation();
+//        testCreateInvitation();
+        testDeleteInvitation();
 //        testCreateAnComponentCatalog();
 //        testUpdateAnComponentCatalog();
 
