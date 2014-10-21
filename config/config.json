@@ -30,7 +30,8 @@
         },
         "alert_management": {
             "create_new_alert" : "/v1/api/alerts",
-            "get_list_of_alerts" : "/v1/api/accounts/{data_account_id}/alerts"
+            "get_list_of_alerts" : "/v1/api/accounts/{data_account_id}/alerts",
+            "get_alert_information" : "/v1/api/accounts/{data_account_id}/alerts/{alert_id}"
         },
         "device_management": {
             "list_all_devices": "/v1/api/accounts/{data_account_id}/devices",

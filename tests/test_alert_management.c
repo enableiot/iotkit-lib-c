@@ -84,3 +84,18 @@ bool testGetListOfAlerts() {
 
     return false;
 }
+
+bool testGetAlertInformation() {
+    char *response = NULL;
+    long httpResponseCode;
+
+    getAlertInformation("75", &httpResponseCode, &response);
+
+    printf("Response Received :%s\n", response);
+
+    if(httpResponseCode == 200) {
+        return true;
+    }
+
+    return false;
+}

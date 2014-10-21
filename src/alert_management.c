@@ -516,3 +516,26 @@ bool getListOfAlerts(long *httpResponseCode, char **response) {
 
     return false;
 }
+
+bool getAlertInformation(char *alertId, long *httpResponseCode, char **response) {
+    struct curl_slist *headers = NULL;
+    char *url;
+    KeyValueParams *urlParams = NULL;
+
+    urlParams = (KeyValueParams *)malloc(sizeof(KeyValueParams));
+    urlParams->name = "alert_id";
+    urlParams->value = strdup(alertId);
+    urlParams->next = NULL;
+
+    appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
+
+    if(prepareUrl(&url, configurations.base_url, configurations.get_alert_information, urlParams)) {
+
+        doHttpGet(url, headers, httpResponseCode, response);
+
+        return true;
+    }
+
+    return false;
+}
+
