@@ -51,7 +51,8 @@
         },
         "invitation_management": {
             "get_list_of_invitation" : "/v1/api/accounts/{data_account_id}/invites",
-            "get_invitation_list_send_to_specific_user" : "/v1/api/invites/{email_id}"
+            "get_invitation_list_send_to_specific_user" : "/v1/api/invites/{email_id}",
+            "create_invitation" : "/v1/api/accounts/{data_account_id}/invites"
         },
         "data": {
             "submit_data": "/v1/api/data/{device_id}",

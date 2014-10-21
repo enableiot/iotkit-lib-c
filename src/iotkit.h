@@ -122,6 +122,7 @@ typedef struct _Configurations {
     // invitation management
     char *get_list_of_invitation;
     char *get_invitation_list_send_to_specific_user;
+    char *create_invitation;
 
     // data api
     char *submit_data;

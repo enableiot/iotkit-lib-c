@@ -60,3 +60,31 @@ bool getInvitationListSendToSpecificUser(char *email_id, long *httpResponseCode,
 
     return false;
 }
+
+bool createInvitation(char *email, long *httpResponseCode, char **response) {
+    struct curl_slist *headers = NULL;
+    char *url;
+    char body[BODY_SIZE_MIN];
+
+    if(!email) {
+        fprintf(stderr, "createInvitation::email cannot be NULL");
+        return false;
+    }
+
+    if(prepareUrl(&url, configurations.base_url, configurations.create_invitation, NULL)) {
+        appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
+        appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
+
+        sprintf(body, "{\"email\":\"%s\"}", email);
+
+        #if DEBUG
+            printf("Prepared BODY is %s\n", body);
+        #endif
+
+        doHttpPost(url, headers, body, httpResponseCode, response);
+
+        return true;
+    }
+
+    return false;
+}
