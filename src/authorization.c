@@ -81,7 +81,7 @@ bool validateAuthorizationToken(long *httpResponseCode, char **response) {
 }
 
 
-
+// Deprecated API
 bool getAuthorizationTokenMeInfo(long *httpResponseCode, char **response) {
     struct curl_slist *headers = NULL;
     char *url;
