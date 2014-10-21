@@ -405,7 +405,7 @@ bool deleteADevice(char *device_id, long *httpResponseCode, char **response) {
         appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
         appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
 
-        doHttpDelete(url, headers, httpResponseCode);
+        doHttpDelete(url, headers, httpResponseCode, response);
 
         return true;
     }
@@ -784,7 +784,7 @@ bool deleteComponent(char *sensor_name, long *httpResponseCode, char **response)
         appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
         appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
 
-        doHttpDelete(url, headers, httpResponseCode);
+        doHttpDelete(url, headers, httpResponseCode, response);
 
         if(httpResponseCode == 204) {
             // delete successful, perform cleanup
