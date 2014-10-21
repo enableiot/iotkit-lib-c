@@ -28,6 +28,9 @@
             "auth_token_info" : "/v1/api/auth/tokeninfo",
             "me_info" : "/v1/ui/auth/me"
         },
+        "alert_management": {
+            "create_new_alert" : "/v1/api/alerts"
+        },
         "device_management": {
             "list_all_devices": "/v1/api/accounts/{data_account_id}/devices",
             "get_device_info": "/v1/api/accounts/{data_account_id}/devices/{other_device_id}",

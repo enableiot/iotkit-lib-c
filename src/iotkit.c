@@ -113,6 +113,21 @@ void parseConfiguration(char *config_file_path) {
                 fprintf(stderr,"Invalid JSON format for json property %s\n", jitem->string);
                 return;
             }
+
+            child1 = cJSON_GetObjectItem(jitem, "alert_management");
+            if (!isJsonObject(child1)) {
+                fprintf(stderr,"Invalid JSON format for json property %s\n", child1->string);
+                return;
+            }
+
+            child2 = cJSON_GetObjectItem(child1, "create_new_alert");
+            if (!isJsonString(child2)) {
+                fprintf(stderr,"Invalid JSON format for json property %s\n", child2->string);
+                return;
+            }
+            configurations.create_new_alert = strdup(child2->valuestring);
+
+
             child1 = cJSON_GetObjectItem(jitem, "account_management");
             if (!isJsonObject(child1)) {
                 fprintf(stderr,"Invalid JSON format for json property %s\n", child1->string);
@@ -548,7 +563,8 @@ char *getDeviceAuthorizationToken() {
 //        testGetAccountInformation();
 //        testAddAnUserToAccount();
 //        testAdvancedDataInquiry();
-        testAggregatedReportInterface();
+//        testAggregatedReportInterface();
+        testCreateNewAlert();
 //        testGetUserAssociatedWithAccount();
 //        testUpdateUserAssociatedWithAccount();
 
@@ -570,7 +586,7 @@ char *getDeviceAuthorizationToken() {
 
 //        testCreateADevice();
 //        testUpdateADevice();
-//        testActivateADevice("hvPgWC6q");
+//        testActivateADevice("CEUztvgI");
 
 //        testDeviceActivationStatus();
 

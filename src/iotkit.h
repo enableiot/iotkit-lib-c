@@ -91,6 +91,8 @@ typedef struct _Configurations {
     char *auth_token_info;
     char *me_info;
 
+    // alert management
+    char *create_new_alert;
     // component catalogs
     char *list_components;
     char *get_component_details;
