@@ -125,3 +125,18 @@ bool testGetOneRuleInformation() {
 
     return false;
 }
+
+bool testCreateARuleAsDraft() {
+    char *response = NULL;
+    long httpResponseCode;
+
+    createARuleAsDraft("mahatest", &httpResponseCode, &response);
+
+    printf("Response Received :%s\n", response);
+
+    if(httpResponseCode == 200) {
+        return true;
+    }
+
+    return false;
+}

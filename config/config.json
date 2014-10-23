@@ -70,7 +70,8 @@
             "create_a_rule" : "/v1/api/accounts/{data_account_id}/rules",
             "update_a_rule" : "/v1/api/accounts/{data_account_id}/rules/{rule_id}",
             "get_list_of_rules" : "/v1/api/accounts/{data_account_id}/rules",
-            "get_one_rule_info" : "/v1/api/accounts/{data_account_id}/rules/{rule_id}"
+            "get_one_rule_info" : "/v1/api/accounts/{data_account_id}/rules/{rule_id}",
+            "create_a_rule_as_draft" : "/v1/api/accounts/{data_account_id}/rules/draft"
         }
     }
 }

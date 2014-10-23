@@ -540,3 +540,27 @@ bool getOneRuleInformation(char *rule_id, long *httpResponseCode, char **respons
 
     return false;
 }
+
+bool createARuleAsDraft(char *rule_name, long *httpResponseCode, char **response) {
+    struct curl_slist *headers = NULL;
+    char *url;
+    char body[BODY_SIZE_MIN];
+
+    if(!rule_name) {
+        fprintf(stderr, "createAnRule::Rule Name parameter is mandatory and cannot be NULL");
+        return false;
+    }
+
+    if(prepareUrl(&url, configurations.base_url, configurations.create_a_rule_as_draft, NULL)) {
+        appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
+        appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
+
+        sprintf(body, "{\"name\":\"%s\"}", rule_name);
+
+        doHttpPut(url, headers, body, httpResponseCode, response);
+
+        return true;
+    }
+
+    return false;
+}
