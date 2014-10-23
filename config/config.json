@@ -65,6 +65,9 @@
             "create_an_cmp_catalog": "/v1/api/accounts/{data_account_id}/cmpcatalog",
             "update_an_cmp_catalog": "/v1/api/accounts/{data_account_id}/cmpcatalog/{cmp_catalog_id}",
             "component": "/v1/api/cmpcatalog/{componentId}"
+        },
+        "rule_management": {
+            "create_a_rule" : "/v1/api/accounts/{data_account_id}/rules"
         }
     }
 }

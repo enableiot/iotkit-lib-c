@@ -128,6 +128,9 @@ typedef struct _Configurations {
     // data api
     char *submit_data;
     char *retrieve_data;
+
+    // rule management
+    char *create_a_rule;
 } Configurations;
 
 
