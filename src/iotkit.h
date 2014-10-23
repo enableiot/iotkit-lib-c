@@ -131,6 +131,7 @@ typedef struct _Configurations {
 
     // rule management
     char *create_a_rule;
+    char *update_a_rule;
 } Configurations;
 
 

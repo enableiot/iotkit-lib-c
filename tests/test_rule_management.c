@@ -57,3 +57,41 @@ bool testCreateAnRule() {
 
     return true;
 }
+
+bool testUpdateAnRule() {
+    char *response = NULL;
+    long httpResponseCode;
+
+    CreateRule *createRuleObj = createRuleObject();
+    CreateRuleActions *createRuleActionObj = createRuleActionObject();
+    CreateRuleConditionValues *createRuleConditionValuesObj = createRuleConditionValuesObject();
+
+    setRuleName(createRuleObj, "Test Rule 1");
+    setRuleDescription(createRuleObj, "This is a test rule 1");
+    setRulePriority(createRuleObj, "Medium");
+    setRuleType(createRuleObj, "Regular");
+    setRuleStatus(createRuleObj, "Active");
+    setRuleResetType(createRuleObj, "Automatic");
+
+    setRuleActionObjType(createRuleActionObj, "mail");
+    addRuleActionObjTarget(createRuleActionObj, "pradeep.chenthati@aricent.com");
+    addRuleActionObjTarget(createRuleActionObj, "pradeepx.chenthati@intel.com");
+
+    setRuleActions(createRuleObj, createRuleActionObj);
+    addRulePopulationId(createRuleObj, "685.1.1.1");
+
+    addConditionComponent(createRuleConditionValuesObj, "dataType", "Number");
+    addConditionComponent(createRuleConditionValuesObj, "name", "Temp.01.1");
+    setConditionType(createRuleConditionValuesObj, "basic");
+    addConditionValues(createRuleConditionValuesObj, "26");
+    setConditionOperator(createRuleConditionValuesObj, ">");
+
+    setRuleConditionOp(createRuleObj, "OR");
+    addRuleConditionValues(createRuleObj, createRuleConditionValuesObj);
+
+    updateAnRule(createRuleObj, "65424", &httpResponseCode, &response);
+
+    printf("Response Received :%s\n", response);
+
+    return true;
+}

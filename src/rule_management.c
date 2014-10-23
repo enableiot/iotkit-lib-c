@@ -257,21 +257,10 @@ CreateRule *addRuleConditionValues(CreateRule *createRuleObj, CreateRuleConditio
     return createRuleObj;
 }
 
-bool createAnRule(CreateRule *createRuleObj, long *httpResponseCode, char **response) {
-    struct curl_slist *headers = NULL;
-    char *url;
-    char body[BODY_SIZE_MAX];
+char *createRuleHttpRequestBody(CreateRule *createRuleObj) {
+    char *body = (char *)malloc(sizeof(char) *BODY_SIZE_MAX);
 
-    if(!createRuleObj) {
-        fprintf(stderr, "createAnRule::Mandatory parameters cannot be NULL");
-        return false;
-    }
-
-    if(prepareUrl(&url, configurations.base_url, configurations.create_a_rule, NULL)) {
-        appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
-        appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
-
-        strcpy(body, "{");
+    strcpy(body, "{");
         if(createRuleObj->name) {
             strcat(body, "\"name\":\"");
             strcat(body, createRuleObj->name);
@@ -457,7 +446,56 @@ bool createAnRule(CreateRule *createRuleObj, long *httpResponseCode, char **resp
             printf("Prepared BODY is %s\n", body);
         #endif
 
+    return body;
+}
+
+bool createAnRule(CreateRule *createRuleObj, long *httpResponseCode, char **response) {
+    struct curl_slist *headers = NULL;
+    char *url;
+    char *body = NULL;
+
+    if(!createRuleObj) {
+        fprintf(stderr, "createAnRule::Mandatory parameters cannot be NULL");
+        return false;
+    }
+
+    if(prepareUrl(&url, configurations.base_url, configurations.create_a_rule, NULL)) {
+        appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
+        appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
+
+        body = createRuleHttpRequestBody(createRuleObj);
+
         doHttpPost(url, headers, body, httpResponseCode, response);
+
+        return true;
+    }
+
+    return false;
+}
+
+bool updateAnRule(CreateRule *createRuleObj, char *rule_id, long *httpResponseCode, char **response) {
+    struct curl_slist *headers = NULL;
+    char *url;
+    char *body = NULL;
+    KeyValueParams *urlParams = NULL;
+
+    urlParams = (KeyValueParams *)malloc(sizeof(KeyValueParams));
+    urlParams->name = "rule_id";
+    urlParams->value = strdup(rule_id);
+    urlParams->next = NULL;
+
+    if(!createRuleObj) {
+        fprintf(stderr, "createAnRule::Mandatory parameters cannot be NULL");
+        return false;
+    }
+
+    if(prepareUrl(&url, configurations.base_url, configurations.update_a_rule, urlParams)) {
+        appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
+        appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
+
+        body = createRuleHttpRequestBody(createRuleObj);
+
+        doHttpPut(url, headers, body, httpResponseCode, response);
 
         return true;
     }

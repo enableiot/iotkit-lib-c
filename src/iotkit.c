@@ -464,6 +464,13 @@ void parseConfiguration(char *config_file_path) {
             }
             configurations.create_a_rule = strdup(child2->valuestring);
 
+            child2 = cJSON_GetObjectItem(child1, "update_a_rule");
+            if (!isJsonString(child2)) {
+                fprintf(stderr,"Invalid JSON format for json property %s\n", child2->string);
+                return;
+            }
+            configurations.update_a_rule = strdup(child2->valuestring);
+
 
             cJSON_Delete(json);
         }
@@ -710,7 +717,8 @@ char *getDeviceAuthorizationToken() {
 
 //        testRetrieveData();
 
-        testCreateAnRule();
+//        testCreateAnRule();
+        testUpdateAnRule();
 
         iotkit_cleanup();
     }

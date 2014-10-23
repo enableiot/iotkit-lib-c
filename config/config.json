@@ -67,7 +67,8 @@
             "component": "/v1/api/cmpcatalog/{componentId}"
         },
         "rule_management": {
-            "create_a_rule" : "/v1/api/accounts/{data_account_id}/rules"
+            "create_a_rule" : "/v1/api/accounts/{data_account_id}/rules",
+            "update_a_rule" : "/v1/api/accounts/{data_account_id}/rules/{rule_id}"
         }
     }
 }
