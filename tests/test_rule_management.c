@@ -95,3 +95,18 @@ bool testUpdateAnRule() {
 
     return true;
 }
+
+bool testGetListOfRules() {
+    char *response = NULL;
+    long httpResponseCode;
+
+    getListOfRules(&httpResponseCode, &response);
+
+    printf("Response Received :%s\n", response);
+
+    if(httpResponseCode == 200) {
+        return true;
+    }
+
+    return false;
+}

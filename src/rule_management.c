@@ -502,3 +502,19 @@ bool updateAnRule(CreateRule *createRuleObj, char *rule_id, long *httpResponseCo
 
     return false;
 }
+
+bool getListOfRules(long *httpResponseCode, char **response) {
+    struct curl_slist *headers = NULL;
+    char *url;
+
+    appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
+    appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
+
+    if(prepareUrl(&url, configurations.base_url, configurations.get_list_of_rules, NULL)){
+        doHttpGet(url, headers, httpResponseCode, response);
+
+        return true;
+    }
+
+    return false;
+}
