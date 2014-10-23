@@ -133,6 +133,7 @@ typedef struct _Configurations {
     char *create_a_rule;
     char *update_a_rule;
     char *get_list_of_rules;
+    char *get_one_rule_info;
 } Configurations;
 
 

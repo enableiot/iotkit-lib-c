@@ -110,3 +110,18 @@ bool testGetListOfRules() {
 
     return false;
 }
+
+bool testGetOneRuleInformation() {
+    char *response = NULL;
+    long httpResponseCode;
+
+    getOneRuleInformation("65436", &httpResponseCode, &response);
+
+    printf("Response Received :%s\n", response);
+
+    if(httpResponseCode == 200) {
+        return true;
+    }
+
+    return false;
+}

@@ -518,3 +518,25 @@ bool getListOfRules(long *httpResponseCode, char **response) {
 
     return false;
 }
+
+bool getOneRuleInformation(char *rule_id, long *httpResponseCode, char **response) {
+    struct curl_slist *headers = NULL;
+    char *url;
+    KeyValueParams *urlParams = NULL;
+
+    urlParams = (KeyValueParams *)malloc(sizeof(KeyValueParams));
+    urlParams->name = "rule_id";
+    urlParams->value = strdup(rule_id);
+    urlParams->next = NULL;
+
+    appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
+    appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
+
+    if(prepareUrl(&url, configurations.base_url, configurations.get_one_rule_info, urlParams)){
+        doHttpGet(url, headers, httpResponseCode, response);
+
+        return true;
+    }
+
+    return false;
+}
