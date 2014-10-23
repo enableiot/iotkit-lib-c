@@ -140,3 +140,18 @@ bool testCreateARuleAsDraft() {
 
     return false;
 }
+
+bool testUpdateStatusOfARule() {
+    char *response = NULL;
+    long httpResponseCode;
+
+    updateStatusOfARule("65436", "On-hold", &httpResponseCode, &response);
+
+    printf("Response Received :%s\n", response);
+
+    if(httpResponseCode == 200) {
+        return true;
+    }
+
+    return false;
+}
