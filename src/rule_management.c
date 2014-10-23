@@ -594,3 +594,26 @@ bool updateStatusOfARule(char *rule_id, char *rule_status, long *httpResponseCod
 
     return false;
 }
+
+bool deleteADraftRule(char *rule_id, long *httpResponseCode, char **response) {
+    struct curl_slist *headers = NULL;
+    char *url;
+    KeyValueParams *urlParams = NULL;
+
+    urlParams = (KeyValueParams *)malloc(sizeof(KeyValueParams));
+    urlParams->name = "rule_id";
+    urlParams->value = strdup(rule_id);
+    urlParams->next = NULL;
+
+    if(prepareUrl(&url, configurations.base_url, configurations.delete_a_draft_rule, urlParams)) {
+
+        appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
+        appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
+
+        doHttpDelete(url, headers, httpResponseCode, response);
+
+        return true;
+    }
+
+    return false;
+}

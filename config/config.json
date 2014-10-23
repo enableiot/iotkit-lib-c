@@ -72,7 +72,8 @@
             "get_list_of_rules" : "/v1/api/accounts/{data_account_id}/rules",
             "get_one_rule_info" : "/v1/api/accounts/{data_account_id}/rules/{rule_id}",
             "create_a_rule_as_draft" : "/v1/api/accounts/{data_account_id}/rules/draft",
-            "update_status_of_a_rule" : "/v1/api/accounts/{data_account_id}/rules/{rule_id}/status"
+            "update_status_of_a_rule" : "/v1/api/accounts/{data_account_id}/rules/{rule_id}/status",
+            "delete_a_draft_rule" : "/v1/api/accounts/{data_account_id}/rules/draft/{rule_id}"
         }
     }
 }

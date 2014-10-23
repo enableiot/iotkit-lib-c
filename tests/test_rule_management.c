@@ -155,3 +155,19 @@ bool testUpdateStatusOfARule() {
 
     return false;
 }
+
+bool testDeleteADraftRule() {
+    char *response = NULL;
+    long httpResponseCode;
+
+    // pass external ID
+    deleteADraftRule("c9804532a9b391976347c601db1e55b283e5873b", &httpResponseCode, &response);
+
+    printf("Response Received :%s\n", response);
+
+    if(httpResponseCode == 200) {
+        return true;
+    }
+
+    return false;
+}
