@@ -39,7 +39,7 @@ typedef struct _CreateRuleConditionValues {
     KeyValueParams *component;
     char *type;
     StringList *values;
-    char *operator;
+    char *opname; // operator
 } CreateRuleConditionValues;
 
 typedef struct _CreateRuleConditionValuesList {
@@ -62,7 +62,7 @@ typedef struct _CreateRule {
     char *population_attributes;
 
     //conditions
-    char *operator;
+    char *opname; // operator
     CreateRuleConditionValuesList *values;
 } CreateRule;
 

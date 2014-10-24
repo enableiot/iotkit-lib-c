@@ -42,7 +42,7 @@ CreateRule *createRuleObject() {
     newObject->population_attributes = NULL;
 
     //conditions
-    newObject->operator = NULL;
+    newObject->opname = NULL;
     newObject->values = NULL;
 
     return newObject;
@@ -176,7 +176,7 @@ CreateRuleConditionValues *createRuleConditionValuesObject() {
     newObject->component = NULL;
     newObject->type = NULL;
     newObject->values = NULL;
-    newObject->operator = NULL;
+    newObject->opname = NULL;
 
     return newObject;
 }
@@ -226,14 +226,14 @@ CreateRuleConditionValues *addConditionValues(CreateRuleConditionValues *createR
     return createRuleConditionValuesObj;
 }
 
-CreateRuleConditionValues *setConditionOperator(CreateRuleConditionValues *createRuleConditionValuesObj, char *operator) {
-    createRuleConditionValuesObj->operator = strdup(operator);
+CreateRuleConditionValues *setConditionOperator(CreateRuleConditionValues *createRuleConditionValuesObj, char *opname) {
+    createRuleConditionValuesObj->opname = strdup(opname);
 
     return createRuleConditionValuesObj;
 }
 
-CreateRule *setRuleConditionOp(CreateRule *createRuleObj, char *operator) {
-    createRuleObj->operator = strdup(operator);
+CreateRule *setRuleConditionOp(CreateRule *createRuleObj, char *opname) {
+    createRuleObj->opname = strdup(opname);
 
     return createRuleObj;
 }
@@ -368,9 +368,9 @@ char *createRuleHttpRequestBody(CreateRule *createRuleObj) {
         strcat(body, "}");
 
         strcat(body, ",\"conditions\":{");
-        if(createRuleObj->operator) {
+        if(createRuleObj->opname) {
             strcat(body, "\"operator\":\"");
-            strcat(body, createRuleObj->operator);
+            strcat(body, createRuleObj->opname);
             strcat(body, "\"");
         }
 
@@ -422,9 +422,9 @@ char *createRuleHttpRequestBody(CreateRule *createRuleObj) {
                     strcat(body, "]");
                 }
 
-                if(conditionValue->operator) {
+                if(conditionValue->opname) {
                     strcat(body, ",\"operator\":\"");
-                    strcat(body, conditionValue->operator);
+                    strcat(body, conditionValue->opname);
                     strcat(body, "\"");
                 }
 
