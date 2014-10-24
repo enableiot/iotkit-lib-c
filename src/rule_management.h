@@ -31,7 +31,7 @@ typedef struct _CreateRuleActions {
 
 typedef struct _CreateRuleActionsList {
     CreateRuleActions *data;
-    struct CreateRuleActionsList *next;
+    struct _CreateRuleActionsList *next;
 } CreateRuleActionsList;
 
 
@@ -44,7 +44,7 @@ typedef struct _CreateRuleConditionValues {
 
 typedef struct _CreateRuleConditionValuesList {
     CreateRuleConditionValues *data;
-    struct CreateRuleConditionValuesList *next;
+    struct _CreateRuleConditionValuesList *next;
 } CreateRuleConditionValuesList;
 
 typedef struct _CreateRule {

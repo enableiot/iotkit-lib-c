@@ -53,7 +53,7 @@ typedef struct _SensorComp {
     char *name;
     char *type;
 
-    struct SensorComp *next;
+    struct _SensorComp *next;
 } SensorComp;
 
 
@@ -145,26 +145,26 @@ typedef struct _Configurations {
 typedef struct _StringList {
     char *data;
 
-    struct StringList *next;
+    struct _StringList *next;
 } StringList;
 
 typedef struct _KeyValueParams {
     char *name;
     char *value;
 
-    struct KeyValueParams *next;
+    struct _KeyValueParams *next;
 } KeyValueParams;
 
 typedef struct _AttributeFilter {
     char *filterName;
     StringList *filterValues;
 
-    struct AttributeFilter * next;
+    struct _AttributeFilter * next;
 } AttributeFilter;
 
 typedef struct _AttributeFilterList {
     AttributeFilter * filterData;
-    struct AttributeFilterList *next;
+    struct _AttributeFilterList *next;
 } AttributeFilterList;
 
 

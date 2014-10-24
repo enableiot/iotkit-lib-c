@@ -46,7 +46,7 @@ typedef struct _CreateNewAlertDataConditionCmps {
 
 typedef struct _CreateNewAlertDataConditionCmpsList {
     CreateNewAlertDataConditionCmps *component;
-    struct CreateNewAlertDataConditionCmpsList *next;
+    struct _CreateNewAlertDataConditionCmpsList *next;
 } CreateNewAlertDataConditionCmpsList;
 
 typedef struct _CreateNewAlertDataConditions {
@@ -60,7 +60,7 @@ typedef struct _CreateNewAlertDataConditions {
 
 typedef struct _CreateNewAlertDataConditionsList {
     CreateNewAlertDataConditions *condition;
-    struct CreateNewAlertDataConditionsList *next;
+    struct _CreateNewAlertDataConditionsList *next;
 } CreateNewAlertDataConditionsList;
 
 typedef struct _CreateNewAlertData {
@@ -85,7 +85,7 @@ typedef struct _CreateNewAlertData {
 
 typedef struct _CreateNewAlertDataList {
     CreateNewAlertData *data;
-    struct CreateNewAlertDataList *next;
+    struct _CreateNewAlertDataList *next;
 } CreateNewAlertDataList;
 
 typedef struct _CreateNewAlert {
