@@ -507,6 +507,20 @@ void parseConfiguration(char *config_file_path) {
             configurations.delete_a_draft_rule = strdup(child2->valuestring);
 
 
+            child1 = cJSON_GetObjectItem(jitem, "user_management");
+            if (!isJsonObject(child1)) {
+                fprintf(stderr,"Invalid JSON format for json property %s\n", child1->string);
+                return;
+            }
+
+            child2 = cJSON_GetObjectItem(child1, "create_a_user");
+            if (!isJsonString(child2)) {
+                fprintf(stderr,"Invalid JSON format for json property %s\n", child2->string);
+                return;
+            }
+            configurations.create_a_user = strdup(child2->valuestring);
+
+
             cJSON_Delete(json);
         }
 
@@ -758,7 +772,9 @@ char *getDeviceAuthorizationToken() {
 //        testGetOneRuleInformation();
 //        testCreateARuleAsDraft();
 //        testUpdateStatusOfARule();
-        testDeleteADraftRule();
+//        testDeleteADraftRule();
+
+        testCreateAnUser();
 
         iotkit_cleanup();
     }
