@@ -110,6 +110,25 @@ bool testAcceptTermsAndConditions() {
     return false;
 }
 
+bool testDeleteAUser() {
+    char *response = NULL;
+    long httpResponseCode;
+
+// pass user ID explicitly
+//    deleteAUser("544c093c676e33cf6a779070", &httpResponseCode, &response);
+
+// or pass NULL to consider own user ID
+    deleteAUser(NULL, &httpResponseCode, &response);
+
+    printf("Response Received :%s\n", response);
+
+    if(httpResponseCode == 204) {
+        return true;
+    }
+
+    return false;
+}
+
 bool testRequestChangePassword() {
     char *response = NULL;
     long httpResponseCode;

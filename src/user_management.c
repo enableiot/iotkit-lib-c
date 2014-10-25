@@ -167,6 +167,33 @@ bool acceptTermsAndConditions(char *userId, bool accept, long *httpResponseCode,
     return false;
 }
 
+bool deleteAUser(char *userId, long *httpResponseCode, char **response) {
+    struct curl_slist *headers = NULL;
+    char *url;
+    KeyValueParams *urlParams = NULL;
+
+    urlParams = (KeyValueParams *)malloc(sizeof(KeyValueParams));
+    urlParams->name = "user_id";
+    if(userId) {
+        urlParams->value = strdup(userId);
+    } else {
+        urlParams->value = strdup(configurations.user_account_id);
+    }
+    urlParams->next = NULL;
+
+    if(prepareUrl(&url, configurations.base_url, configurations.delete_a_user, urlParams)) {
+
+        appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
+        appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
+
+        doHttpDelete(url, headers, httpResponseCode, response);
+
+        return true;
+    }
+
+    return false;
+}
+
 bool requestChangePassword(char *emailAddress, long *httpResponseCode, char **response) {
     struct curl_slist *headers = NULL;
     char *url;
