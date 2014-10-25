@@ -1,0 +1,8 @@
+{
+  "name" : "iotkit",
+  "main" : "./iotkit.node",
+  "engines": {
+    "node": ">= 1.0.x"
+  },
+  "license": "MIT"
+}
