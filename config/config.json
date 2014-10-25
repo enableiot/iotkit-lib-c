@@ -76,7 +76,8 @@
             "delete_a_draft_rule" : "/v1/api/accounts/{data_account_id}/rules/draft/{rule_id}"
         },
         "user_management": {
-            "create_a_user" : "/v1/api/users"
+            "create_a_user" : "/v1/api/users",
+            "get_user_information" : "/v1/api/users/{user_id}"
         }
     }
 }

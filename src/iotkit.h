@@ -140,6 +140,7 @@ typedef struct _Configurations {
 
     // user management
     char *create_a_user;
+    char *get_user_information;
 } Configurations;
 
 

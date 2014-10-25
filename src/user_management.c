@@ -48,3 +48,29 @@ bool createAnUser(char *emailAddress, char *password, long *httpResponseCode, ch
 
     return false;
 }
+
+bool getUserInformation(char *userId, long *httpResponseCode, char **response) {
+    struct curl_slist *headers = NULL;
+    char *url;
+    KeyValueParams *urlParams = NULL;
+
+    urlParams = (KeyValueParams *)malloc(sizeof(KeyValueParams));
+    urlParams->name = "user_id";
+    if(userId) {
+        urlParams->value = strdup(userId);
+    } else {
+        urlParams->value = strdup(configurations.user_account_id);
+    }
+    urlParams->next = NULL;
+
+    appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
+    appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
+
+    if(prepareUrl(&url, configurations.base_url, configurations.get_user_information, urlParams)) {
+        doHttpGet(url, headers, httpResponseCode, response);
+
+        return true;
+    }
+
+    return false;
+}
