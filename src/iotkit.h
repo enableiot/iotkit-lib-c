@@ -143,6 +143,7 @@ typedef struct _Configurations {
     char *get_user_information;
     char *accept_terms_and_conditions;
     char *request_change_password;
+    char *change_password;
 } Configurations;
 
 

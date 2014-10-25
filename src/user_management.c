@@ -168,3 +168,37 @@ bool updateForgotPassword(char *token, char *new_password, long *httpResponseCod
 
     return false;
 }
+
+bool changePassword(char *emailAddress, char *current_password, char *new_password, long *httpResponseCode, char **response) {
+    struct curl_slist *headers = NULL;
+    char *url;
+    char body[BODY_SIZE_MIN];
+    KeyValueParams *urlParams = NULL;
+
+    urlParams = (KeyValueParams *)malloc(sizeof(KeyValueParams));
+    urlParams->name = "email_id";
+    urlParams->value = strdup(emailAddress);
+    urlParams->next = NULL;
+
+    if(!emailAddress || !current_password || !new_password) {
+        fprintf(stderr, "changePassword::Mandatory parameters cannot be NULL");
+        return false;
+    }
+
+    if(prepareUrl(&url, configurations.base_url, configurations.change_password, urlParams)) {
+        appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
+        appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
+
+        sprintf(body, "{\"currentpwd\":\"%s\",\"password\":\"%s\"}", current_password, new_password);
+
+        #if DEBUG
+            printf("Prepared BODY is %s\n", body);
+        #endif
+
+        doHttpPut(url, headers, body, httpResponseCode, response);
+
+        return true;
+    }
+
+    return false;
+}

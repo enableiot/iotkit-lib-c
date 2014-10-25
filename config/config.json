@@ -79,7 +79,8 @@
             "create_a_user" : "/v1/api/users",
             "get_user_information" : "/v1/api/users/{user_id}",
             "accept_terms_and_conditions" : "/v1/api/users/{user_id}",
-            "request_change_password" : "/v1/api/users/forgot_password"
+            "request_change_password" : "/v1/api/users/forgot_password",
+            "change_password" : "/v1/api/users/{email_id}/change_password"
         }
     }
 }
