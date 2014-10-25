@@ -527,6 +527,13 @@ void parseConfiguration(char *config_file_path) {
             }
             configurations.get_user_information = strdup(child2->valuestring);
 
+            child2 = cJSON_GetObjectItem(child1, "update_user_attributes");
+            if (!isJsonString(child2)) {
+                fprintf(stderr,"Invalid JSON format for json property %s\n", child2->string);
+                return;
+            }
+            configurations.update_user_attributes = strdup(child2->valuestring);
+
             child2 = cJSON_GetObjectItem(child1, "accept_terms_and_conditions");
             if (!isJsonString(child2)) {
                 fprintf(stderr,"Invalid JSON format for json property %s\n", child2->string);
@@ -807,7 +814,9 @@ char *getDeviceAuthorizationToken() {
 //        testAcceptTermsAndConditions();
 //        testRequestChangePassword();
 //        testUpdateForgotPassword();
-        testChangePassword();
+//        testChangePassword();
+        testUpdateUserAttributes();
+
 
         iotkit_cleanup();
     }

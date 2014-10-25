@@ -75,6 +75,60 @@ bool getUserInformation(char *userId, long *httpResponseCode, char **response) {
     return false;
 }
 
+bool updateUserAttributes(char *userId, KeyValueParams *attributes, long *httpResponseCode, char **response) {
+    struct curl_slist *headers = NULL;
+    char *url;
+    char body[BODY_SIZE_MED];
+    KeyValueParams *urlParams = NULL;
+
+    if(!attributes) {
+        fprintf(stderr, "updateUserAttributes::Parameter attribute list cannot be NULL");
+        return false;
+    }
+
+    urlParams = (KeyValueParams *)malloc(sizeof(KeyValueParams));
+    urlParams->name = "user_id";
+    if(userId) {
+        urlParams->value = strdup(userId);
+    } else {
+        urlParams->value = strdup(configurations.user_account_id);
+    }
+    urlParams->next = NULL;
+
+    if(prepareUrl(&url, configurations.base_url, configurations.update_user_attributes, urlParams)) {
+        KeyValueParams *traverse = attributes;
+
+        appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
+        appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
+
+        strcpy(body, "{\"attributes\":{");
+        while(traverse != NULL) {
+            strcat(body, "\"");
+            strcat(body, traverse->name);
+            strcat(body, "\":\"");
+            strcat(body, traverse->value);
+            strcat(body, "\"");
+
+            traverse = traverse->next;
+
+            if(traverse) {
+                strcat(body, ",");
+            }
+        }
+        strcat(body, "}}");
+
+        #if DEBUG
+            printf("Prepared BODY is %s\n", body);
+        #endif
+
+        doHttpPut(url, headers, body, httpResponseCode, response);
+
+        return true;
+    }
+
+    return false;
+}
+
 bool acceptTermsAndConditions(char *userId, bool accept, long *httpResponseCode, char **response) {
     struct curl_slist *headers = NULL;
     char *url;

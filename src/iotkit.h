@@ -141,6 +141,7 @@ typedef struct _Configurations {
     // user management
     char *create_a_user;
     char *get_user_information;
+    char *update_user_attributes;
     char *accept_terms_and_conditions;
     char *request_change_password;
     char *change_password;

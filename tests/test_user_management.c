@@ -54,6 +54,43 @@ bool testGetUserInformation() {
     return false;
 }
 
+bool testUpdateUserAttributes() {
+    char *response = NULL;
+    long httpResponseCode;
+    KeyValueParams *attributesList = NULL, *attribute1 = NULL, *attribute2 = NULL, *attribute3 = NULL;
+
+    attribute3 = (KeyValueParams *)malloc(sizeof(KeyValueParams));
+    attribute3->name = strdup("new");
+    attribute3->value = strdup("next_string_value");
+    attribute3->next = NULL;
+
+    attribute2 = (KeyValueParams *)malloc(sizeof(KeyValueParams));
+    attribute2->name = strdup("another_attribute");
+    attribute2->value = strdup("another_value");
+    attribute2->next = attribute3;
+
+    attribute1 = (KeyValueParams *)malloc(sizeof(KeyValueParams));
+    attribute1->name = strdup("phone");
+    attribute1->value = strdup("123456789");
+    attribute1->next = attribute2;
+
+    attributesList = attribute1;
+
+// pass user ID explicitly
+//    getUserInformation("544c093c676e33cf6a779070", &httpResponseCode, &response);
+
+// or pass NULL to consider own user ID
+    updateUserAttributes(NULL, attributesList, &httpResponseCode, &response);
+
+    printf("Response Received :%s\n", response);
+
+    if(httpResponseCode == 200) {
+        return true;
+    }
+
+    return false;
+}
+
 bool testAcceptTermsAndConditions() {
     char *response = NULL;
     long httpResponseCode;
