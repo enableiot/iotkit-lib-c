@@ -53,3 +53,22 @@ bool testGetUserInformation() {
 
     return false;
 }
+
+bool testAcceptTermsAndConditions() {
+    char *response = NULL;
+    long httpResponseCode;
+
+// pass user ID explicitly
+//    getUserInformation("544c093c676e33cf6a779070", &httpResponseCode, &response);
+
+// or pass NULL to consider own user ID
+    acceptTermsAndConditions(NULL, true, &httpResponseCode, &response);
+
+    printf("Response Received :%s\n", response);
+
+    if(httpResponseCode == 200) {
+        return true;
+    }
+
+    return false;
+}

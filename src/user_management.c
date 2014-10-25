@@ -74,3 +74,41 @@ bool getUserInformation(char *userId, long *httpResponseCode, char **response) {
 
     return false;
 }
+
+bool acceptTermsAndConditions(char *userId, bool accept, long *httpResponseCode, char **response) {
+    struct curl_slist *headers = NULL;
+    char *url;
+    char body[BODY_SIZE_MIN];
+    KeyValueParams *urlParams = NULL;
+
+    urlParams = (KeyValueParams *)malloc(sizeof(KeyValueParams));
+    urlParams->name = "user_id";
+    if(userId) {
+        urlParams->value = strdup(userId);
+    } else {
+        urlParams->value = strdup(configurations.user_account_id);
+    }
+    urlParams->next = NULL;
+
+    if(prepareUrl(&url, configurations.base_url, configurations.accept_terms_and_conditions, urlParams)) {
+
+        appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
+        appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
+
+        if(accept == true) {
+            sprintf(body, "{\"termsAndConditions\":true}");
+        } else {
+            sprintf(body, "{\"termsAndConditions\":false}");
+        }
+
+        #if DEBUG
+            printf("Prepared BODY is %s\n", body);
+        #endif
+
+        doHttpPut(url, headers, body, httpResponseCode, response);
+
+        return true;
+    }
+
+    return false;
+}

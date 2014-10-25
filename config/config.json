@@ -77,7 +77,8 @@
         },
         "user_management": {
             "create_a_user" : "/v1/api/users",
-            "get_user_information" : "/v1/api/users/{user_id}"
+            "get_user_information" : "/v1/api/users/{user_id}",
+            "accept_terms_and_conditions" : "/v1/api/users/{user_id}"
         }
     }
 }

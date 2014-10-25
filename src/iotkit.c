@@ -527,6 +527,13 @@ void parseConfiguration(char *config_file_path) {
             }
             configurations.get_user_information = strdup(child2->valuestring);
 
+            child2 = cJSON_GetObjectItem(child1, "accept_terms_and_conditions");
+            if (!isJsonString(child2)) {
+                fprintf(stderr,"Invalid JSON format for json property %s\n", child2->string);
+                return;
+            }
+            configurations.accept_terms_and_conditions = strdup(child2->valuestring);
+
 
             cJSON_Delete(json);
         }
@@ -782,7 +789,8 @@ char *getDeviceAuthorizationToken() {
 //        testDeleteADraftRule();
 
 //        testCreateAnUser();
-        testGetUserInformation();
+//        testGetUserInformation();
+        testAcceptTermsAndConditions();
 
         iotkit_cleanup();
     }
