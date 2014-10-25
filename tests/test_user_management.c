@@ -72,3 +72,33 @@ bool testAcceptTermsAndConditions() {
 
     return false;
 }
+
+bool testRequestChangePassword() {
+    char *response = NULL;
+    long httpResponseCode;
+
+    requestChangePassword("pradeep.chenthati@aricent.com", &httpResponseCode, &response);
+
+    printf("Response Received :%s\n", response);
+
+    if(httpResponseCode == 200) {
+        return true;
+    }
+
+    return false;
+}
+
+bool testUpdateForgotPassword() {
+    char *response = NULL;
+    long httpResponseCode;
+
+    updateForgotPassword("YM93XKO1lbIrBHek", "Password2", &httpResponseCode, &response);
+
+    printf("Response Received :%s\n", response);
+
+    if(httpResponseCode == 200) {
+        return true;
+    }
+
+    return false;
+}
