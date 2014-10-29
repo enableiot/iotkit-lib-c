@@ -22,6 +22,10 @@
 #ifndef __DATA_H
 #define __DATA_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "iotkit.h"
 #include <sys/time.h>
 
@@ -31,5 +35,9 @@ typedef struct _RetrieveData {
     StringList *deviceList;
     StringList *componentId;
 } RetrieveData;
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

@@ -22,6 +22,10 @@
 #ifndef __ALERT_MANAGEMENT_H
 #define __ALERT_MANAGEMENT_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "iotkit.h"
 
 typedef struct _ConditionCmpsValuePoints{
@@ -93,5 +97,9 @@ typedef struct _CreateNewAlert {
 
     CreateNewAlertDataList *dataList;
 } CreateNewAlert;
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

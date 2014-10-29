@@ -22,6 +22,10 @@
 #ifndef __RULE_MANAGEMENT_H
 #define __RULE_MANAGEMENT_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "iotkit.h"
 
 typedef struct _CreateRuleActions {
@@ -65,5 +69,9 @@ typedef struct _CreateRule {
     char *opname; // operator
     CreateRuleConditionValuesList *values;
 } CreateRule;
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

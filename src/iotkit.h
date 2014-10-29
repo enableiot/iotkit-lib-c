@@ -22,6 +22,10 @@
 #ifndef __IOTKIT_H
 #define __IOTKIT_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <stdlib.h>
 #include <stdbool.h>
 #include "../lib/cJSON/cJSON.h"
@@ -183,5 +187,10 @@ SensorComp *sensorsList;
 void parseConfiguration(char *config_file_path);
 bool prepareUrl(char **full_url, char *url_prepend, char *url_append, KeyValueParams *urlParams);
 char *getConfigAuthorizationToken();
+char * hello();
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

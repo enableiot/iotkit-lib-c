@@ -22,6 +22,11 @@
 #ifndef __COMPONENT_CATALOG_H
 #define __COMPONENT_CATALOG_H
 
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "iotkit.h"
 
 typedef struct _UpdateUserAccount {
@@ -32,5 +37,9 @@ typedef struct _UpdateUserAccount {
     bool termsAndConditions;
     bool verified;
 } UpdateUserAccount;
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

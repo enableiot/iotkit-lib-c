@@ -22,6 +22,10 @@
 #ifndef __COMPONENT_CATALOG_H
 #define __COMPONENT_CATALOG_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "iotkit.h"
 
 /** Actuator Command list
@@ -49,5 +53,9 @@ typedef struct _ComponentCatalog {
 
     ActuatorCommandParams *parameters;
 } ComponentCatalog;
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

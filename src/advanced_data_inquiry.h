@@ -23,6 +23,10 @@
 #ifndef __ADVANCED_DATA_INQUIRY_H
 #define __ADVANCED_DATA_INQUIRY_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "iotkit.h"
 
 typedef struct _AdvancedDataInquiry {
@@ -49,5 +53,9 @@ typedef struct _AdvancedDataInquiry {
 
 
 } AdvancedDataInquiry;
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

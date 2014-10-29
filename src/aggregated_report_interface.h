@@ -23,6 +23,10 @@
 #ifndef __AGGREGATED_REPORT_INTERFACE_H
 #define __AGGREGATED_REPORT_INTERFACE_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "iotkit.h"
 
 typedef struct _AggregatedReportInterface {
@@ -42,5 +46,9 @@ typedef struct _AggregatedReportInterface {
     KeyValueParams *sort;
     AttributeFilterList *filters;
 } AggregatedReportInterface;
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

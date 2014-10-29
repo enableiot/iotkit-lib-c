@@ -22,6 +22,10 @@
 #ifndef __REST_H
 #define __REST_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <stdbool.h>
 #include <curl/curl.h>
 
@@ -30,5 +34,9 @@ struct putData {
   char *data;
   size_t len;
 };
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

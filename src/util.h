@@ -22,6 +22,10 @@
 #ifndef __CJSON_UTIL_H
 #define __CJSON_UTIL_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include <stdio.h>
 #include <stdbool.h>
 #include "../lib/cJSON/cJSON.h"
@@ -81,5 +85,9 @@ static inline bool isJsonArray(cJSON *item) {
     }
     return true;
 }
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif

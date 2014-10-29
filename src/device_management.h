@@ -22,6 +22,10 @@
 #ifndef __DEVICE_MANAGEMENT_H
 #define __DEVICE_MANAGEMENT_H
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #include "iotkit.h"
 
 typedef struct _DeviceCreationObj {
@@ -37,5 +41,9 @@ typedef struct _DeviceCreationObj {
 
     KeyValueParams *attributes;
 } DeviceCreationObj;
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
