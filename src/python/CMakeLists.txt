@@ -4,12 +4,16 @@ INCLUDE_DIRECTORIES(${PYTHON_INCLUDE_PATH})
 include_directories(
   ${CMAKE_CURRENT_SOURCE_DIR}/..
   ${PYTHON_INCLUDE_DIRS}
+  ${STAGING_DIR_TARGET}/usr/include/c++/
 )
+include_directories (${STAGING_DIR_TARGET}/usr/include/c++/)
 
 set_source_files_properties (python-iotkit.i PROPERTIES CPLUSPLUS ON)
 set_source_files_properties (python-iotkit.i PROPERTIES SWIG_FLAGS "-I${CMAKE_BINARY_DIR}/src")
 swig_add_module (python-iotkit python python-iotkit.i ${iotkit_LIB_SRCS})
 swig_link_libraries (python-iotkit ${PYTHON_LIBRARIES})
+
+set (CMAKE_C_FLAGS -DSWIGPYTHON=${SWIG_FOUND})
 
 if (DOXYGEN_FOUND)
   foreach (_file ${DOCCLASSES})
@@ -26,7 +30,6 @@ endif ()
 
 set_target_properties (${SWIG_MODULE_python-iotkit_REAL_NAME} PROPERTIES
   OUTPUT_NAME _iotkit
-  COMPILE_FLAGS "${CMAKE_C_FLAGS} -DSWIGPYTHON=${SWIG_FOUND}"
 )
 
 # Essentially do seperate_arguments but with "." instead of " "

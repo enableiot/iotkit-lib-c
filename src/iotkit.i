@@ -1,4 +1,4 @@
-%module jsiotkit_iotkit
+%module iotkit
 
 %include "account_management.h"
 %{
@@ -53,4 +53,9 @@
 %include "util.h"
 %{
     #include "util.h"
+%}
+
+%include "../lib/cJSON/cJSON.h"
+%{
+    #include "../lib/cJSON/cJSON.h"
 %}
