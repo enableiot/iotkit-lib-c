@@ -23,6 +23,7 @@ set_source_files_properties (iotkitjs.i PROPERTIES CPLUSPLUS ON)
 
 swig_add_module (iotkitjs javascript iotkitjs.i ${iotkit_LIB_SRCS})
 swig_link_libraries (iotkitjs ${NODE_LIBRARIES})
+swig_link_libraries (iotkitjs curl)
 
 if (DOXYGEN_FOUND)
   foreach (_file ${DOCFILES})
