@@ -59,3 +59,8 @@
 %{
     #include "../lib/cJSON/cJSON.h"
 %}
+
+%init %{
+    //Adding iotkit_init() to the module initialisation process
+    iotkit_init();
+%}
