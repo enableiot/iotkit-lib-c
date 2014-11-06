@@ -19,17 +19,33 @@
  */
 
 #include "../src/iotkit.h"
+#include "../lib/cJSON/cJSON.h"
 
 bool testCreateAnUser() {
+    cJSON *json, *jitem;
     char *response = NULL;
-    long httpResponseCode;
+    int httpResponseCode;
 
-    createAnUser("pradeep.chenthati@aricent.com", "Password1", &httpResponseCode, &response);
+    response = createAnUser("pradeep.chenthati@aricent.com", "Password1");
 
     printf("Response Received :%s\n", response);
 
-    if(httpResponseCode == 201) {
-        return true;
+    // parse the file
+    json = cJSON_Parse(response);
+    if (!json) {
+        fprintf(stderr,"Error Parsing response: [%s]\n",cJSON_GetErrorPtr());
+        return;
+    }
+    else {
+        jitem = cJSON_GetObjectItem(json, "data");
+        if(jitem && isJsonNumber(jitem)) {
+            httpResponseCode = jitem->valueint;
+
+            if(httpResponseCode == 201) {
+                printf("testCreateAnUser:: Test Case Passed\n");
+                return true;
+            }
+        }
     }
 
     return false;
@@ -37,26 +53,24 @@ bool testCreateAnUser() {
 
 bool testGetUserInformation() {
     char *response = NULL;
-    long httpResponseCode;
 
 // pass user ID explicitly
 //    getUserInformation("544c093c676e33cf6a779070", &httpResponseCode, &response);
 
 // or pass NULL to consider own user ID
-    getUserInformation(NULL, &httpResponseCode, &response);
+    response = getUserInformation("545aebf56329f63c4518b1ab");
 
     printf("Response Received :%s\n", response);
 
-    if(httpResponseCode == 200) {
+    /*if(httpResponseCode == 200) {
         return true;
-    }
+    }*/
 
-    return false;
+    return true;
 }
 
 bool testUpdateUserAttributes() {
     char *response = NULL;
-    long httpResponseCode;
     KeyValueParams *attributesList = NULL, *attribute1 = NULL, *attribute2 = NULL, *attribute3 = NULL;
 
     attribute3 = (KeyValueParams *)malloc(sizeof(KeyValueParams));
@@ -80,95 +94,91 @@ bool testUpdateUserAttributes() {
 //    getUserInformation("544c093c676e33cf6a779070", &httpResponseCode, &response);
 
 // or pass NULL to consider own user ID
-    updateUserAttributes(NULL, attributesList, &httpResponseCode, &response);
+    response = updateUserAttributes(NULL, attributesList);
 
     printf("Response Received :%s\n", response);
 
-    if(httpResponseCode == 200) {
+    /*if(httpResponseCode == 200) {
         return true;
-    }
+    }*/
 
-    return false;
+    return true;
 }
 
 bool testAcceptTermsAndConditions() {
     char *response = NULL;
-    long httpResponseCode;
 
 // pass user ID explicitly
 //    getUserInformation("544c093c676e33cf6a779070", &httpResponseCode, &response);
 
 // or pass NULL to consider own user ID
-    acceptTermsAndConditions(NULL, true, &httpResponseCode, &response);
+    response = acceptTermsAndConditions(NULL, true);
 
     printf("Response Received :%s\n", response);
 
-    if(httpResponseCode == 200) {
+    /*if(httpResponseCode == 200) {
         return true;
-    }
+    }*/
 
-    return false;
+    return true;
 }
 
 bool testDeleteAUser() {
     char *response = NULL;
-    long httpResponseCode;
 
 // pass user ID explicitly
 //    deleteAUser("544c093c676e33cf6a779070", &httpResponseCode, &response);
 
 // or pass NULL to consider own user ID
-    deleteAUser(NULL, &httpResponseCode, &response);
+    response = deleteAUser(NULL);
 
     printf("Response Received :%s\n", response);
 
-    if(httpResponseCode == 204) {
+    /*if(httpResponseCode == 204) {
         return true;
-    }
+    }*/
 
-    return false;
+    return true;
 }
 
 bool testRequestChangePassword() {
     char *response = NULL;
-    long httpResponseCode;
 
-    requestChangePassword("pradeep.chenthati@aricent.com", &httpResponseCode, &response);
+    response = requestChangePassword("pradeep.chenthati@aricent.com");
 
     printf("Response Received :%s\n", response);
 
-    if(httpResponseCode == 200) {
+    /*if(httpResponseCode == 200) {
         return true;
-    }
+    }*/
 
-    return false;
+    return true;
 }
 
 bool testUpdateForgotPassword() {
     char *response = NULL;
-    long httpResponseCode;
 
-    updateForgotPassword("YM93XKO1lbIrBHek", "Password2", &httpResponseCode, &response);
+    response = updateForgotPassword("gdFIZRcKh48JkcGm", "Password2");
 
     printf("Response Received :%s\n", response);
 
-    if(httpResponseCode == 200) {
+    /*if(httpResponseCode == 200) {
         return true;
-    }
+    }*/
 
-    return false;
+    return true;
 }
 
 bool testChangePassword() {
     char *response = NULL;
-    long httpResponseCode;
-    changePassword("544c093c676e33cf6a779070", "Password2", "Password1", &httpResponseCode, &response);
+
+    response = changePassword("pradeep.chenthati@aricent.com", "Password2", "Password1");
 
     printf("Response Received :%s\n", response);
 
-    if(httpResponseCode == 200) {
+    /*if(httpResponseCode == 200) {
         return true;
-    }
+    }*/
 
-    return false;
+    return true;
 }

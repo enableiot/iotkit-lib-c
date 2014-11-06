@@ -42,6 +42,19 @@ typedef struct _DeviceCreationObj {
     KeyValueParams *attributes;
 } DeviceCreationObj;
 
+char *validateDeviceToken();
+char *listAllDevices();
+char *getMyDeviceInfo();
+char *getOneDeviceInfo(char *device_id);
+char *createADevice(DeviceCreationObj *createDeviceObj);
+char *updateADevice(DeviceCreationObj *createDeviceObj);
+char *activateADevice(char *activation_code);
+char *deleteADevice(char *device_id);
+char *addComponent(char *cmp_name, char *cmp_type);
+char *deleteComponent(char *sensor_name);
+char *listAllTagsForDevices();
+char *listAllAttributesForDevices();
+
 #ifdef __cplusplus
 }
 #endif

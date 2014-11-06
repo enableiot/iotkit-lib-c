@@ -127,13 +127,13 @@ void storeAuthorizationToken(char * response) {
     char *validateToken = NULL;
     FILE *fp = NULL;
     cJSON *json, *jitem, *child;
-    long validateHttpResponseCode;
 
     if(response != NULL) {
         // parse the file
         json = cJSON_Parse(response);
         if (!json) {
             fprintf(stderr,"Error Parsing response: [%s]\n",cJSON_GetErrorPtr());
+            return;
         }
         else {
             if (!isJsonObject(json)) {
@@ -156,34 +156,40 @@ void storeAuthorizationToken(char * response) {
     }
 
     // retrieve the expiry info
-    validateAuthorizationToken(&validateHttpResponseCode, &validateToken);
+    validateToken = getUserJwtTokenInfo();
     if(validateToken != NULL) {
         // parse the file
         json = cJSON_Parse(validateToken);
         if (!json) {
             fprintf(stderr,"Error Parsing response: [%s]\n",cJSON_GetErrorPtr());
+            return;
         }
         else {
             if (!isJsonObject(json)) {
                 fprintf(stderr,"Ignoring invalid JSON response while token validation\n");
             }
 
-            jitem = cJSON_GetObjectItem(json, "payload");
-
-            if(!jitem) {
-                // token not found; means the call did not go through successfully
-                fprintf(stderr,"Could not retrieve payload from JSON response\n");
+            jitem = cJSON_GetObjectItem(json, "data");
+            if (!jitem || !isJsonObject(jitem)) {
+                fprintf(stderr,"Ignoring invalid JSON response while token validation\n");
             } else {
-                child = cJSON_GetObjectItem(jitem, "exp");
+                jitem = cJSON_GetObjectItem(jitem, "payload");
 
-                if(child) {
-                    expiry = strdup(child->valuestring);
-                }
+                if(!jitem) {
+                    // token not found; means the call did not go through successfully
+                    fprintf(stderr,"Could not retrieve payload from JSON response\n");
+                } else {
+                    child = cJSON_GetObjectItem(jitem, "exp");
 
-                child = cJSON_GetObjectItem(jitem, "sub");
+                    if(child) {
+                        expiry = strdup(child->valuestring);
+                    }
 
-                if(child) {
-                    user_account_id = strdup(child->valuestring);
+                    child = cJSON_GetObjectItem(jitem, "sub");
+
+                    if(child) {
+                        user_account_id = strdup(child->valuestring);
+                    }
                 }
             }
         }
@@ -240,52 +246,57 @@ void storeAuthorizationToken(char * response) {
 
 void storeDataAccountIdInfo() {
     cJSON *json, *jitem, *child;
-    long validateHttpResponseCode;
     char *response = NULL;
 
     // retrieve the expiry info
-    validateAuthorizationToken(&validateHttpResponseCode, &response);
+    response = getUserJwtTokenInfo();
     if(response != NULL) {
         // parse the file
         json = cJSON_Parse(response);
         if (!json) {
             fprintf(stderr,"Error Parsing response: [%s]\n",cJSON_GetErrorPtr());
+            return;
         }
         else {
             if (!isJsonObject(json)) {
                 fprintf(stderr,"Ignoring invalid JSON response while token validation\n");
             }
 
-            jitem = cJSON_GetObjectItem(json, "payload");
-
-            if(!jitem) {
-                // token not found; means the call did not go through successfully
-                fprintf(stderr,"Could not retrieve payload from JSON response\n");
+            jitem = cJSON_GetObjectItem(json, "data");
+            if (!jitem || !isJsonObject(jitem)) {
+                fprintf(stderr,"Ignoring invalid JSON response while token validation\n");
             } else {
-                child = cJSON_GetObjectItem(jitem, "accounts");
+                jitem = cJSON_GetObjectItem(jitem, "payload");
 
-                if(child && isJsonArray(child)) {
-                    if(cJSON_GetArraySize(child) > 0) {
-                        // we consider only the first account details
-                        cJSON *item = cJSON_GetArrayItem(child, 0);
+                if(!jitem) {
+                    // token not found; means the call did not go through successfully
+                    fprintf(stderr,"Could not retrieve payload from JSON response\n");
+                } else {
+                    child = cJSON_GetObjectItem(jitem, "accounts");
 
-                        if(item) {
-                            cJSON *accountId = cJSON_GetObjectItem(item, "id");
-                            cJSON *accountName = cJSON_GetObjectItem(item, "name");
+                    if(child && isJsonArray(child)) {
+                        if(cJSON_GetArraySize(child) > 0) {
+                            // we consider only the first account details
+                            cJSON *item = cJSON_GetArrayItem(child, 0);
 
-                            if(accountId && accountName) {
-                                storeDeviceCredentials(configurations.device_id, configurations.deviceToken, accountId->valuestring, accountName->valuestring);
+                            if(item) {
+                                cJSON *accountId = cJSON_GetObjectItem(item, "id");
+                                cJSON *accountName = cJSON_GetObjectItem(item, "name");
+
+                                if(accountId && accountName) {
+                                    storeDeviceCredentials(configurations.device_id, configurations.deviceToken, accountId->valuestring, accountName->valuestring);
+                                } else {
+                                    fprintf(stderr,"Could not retrieve accounts id and name from JSON response\n");
+                                }
                             } else {
-                                fprintf(stderr,"Could not retrieve accounts id and name from JSON response\n");
+                                fprintf(stderr,"Could not retrieve accounts item from JSON response\n");
                             }
                         } else {
-                            fprintf(stderr,"Could not retrieve accounts item from JSON response\n");
+                            fprintf(stderr,"account does not contain any values\n");
                         }
                     } else {
-                        fprintf(stderr,"account does not contain any values\n");
+                        fprintf(stderr,"Could not retrieve account from JSON response\n");
                     }
-                } else {
-                    fprintf(stderr,"Could not retrieve account from JSON response\n");
                 }
             }
         }

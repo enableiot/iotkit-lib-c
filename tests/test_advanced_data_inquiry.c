@@ -22,26 +22,26 @@
 
 bool testAdvancedDataInquiry() {
     char *response = NULL;
-    long httpResponseCode;
+
     AttributeFilter *devCompAttributeFilter1 = NULL, *devCompAttributeFilter2 = NULL;
     AttributeFilter *measurementAttributeFilter1 = NULL, *measurementAttributeFilter2 = NULL;
     AttributeFilter *valueFilter = NULL;
     AdvancedDataInquiry *advancedDataInquiryObj = createAdvancedDataInquiryObject();
 
-    addGatewayIds(advancedDataInquiryObj, "02-00-86-81-77-13");
+    addGatewayIds(advancedDataInquiryObj, "02-00-a7-81-77-ff");
     addGatewayIds(advancedDataInquiryObj, "02-00-86-81-77-14");
     addGatewayIds(advancedDataInquiryObj, "02-00-86-81-77-15");
 
-    addDeviceIds(advancedDataInquiryObj, "02-00-86-81-77-17");
+    addDeviceIds(advancedDataInquiryObj, "02-00-a7-81-77-ff");
     addDeviceIds(advancedDataInquiryObj, "02-00-86-81-77-18");
     addDeviceIds(advancedDataInquiryObj, "02-00-86-81-77-19");
 
-    addComponentIds(advancedDataInquiryObj, "garage1");
-    addComponentIds(advancedDataInquiryObj, "garage2");
+    addComponentIds(advancedDataInquiryObj, "madras7");
+    addComponentIds(advancedDataInquiryObj, "madras9");
     addComponentIds(advancedDataInquiryObj, "garage3");
 
     setStartTimestamp(advancedDataInquiryObj, 1391971083468L);
-    setEndTimestamp(advancedDataInquiryObj, 1413504889801L);
+    setEndTimestamp(advancedDataInquiryObj, 1415301870434);
 
     addReturnedMeasureAttributes(advancedDataInquiryObj, "attr_1");
     addReturnedMeasureAttributes(advancedDataInquiryObj, "attr_2");
@@ -89,13 +89,13 @@ bool testAdvancedDataInquiry() {
     addSortInfo(advancedDataInquiryObj, "sortField2", "DESC");
 
 
-    advancedDataInquiry(advancedDataInquiryObj, &httpResponseCode, &response);
+    response = advancedDataInquiry(advancedDataInquiryObj);
 
     printf("Response Received :%s\n", response);
 
-    if(httpResponseCode == 200) {
+    /*if(response->code == 200) {
         return true;
-    }
+    }*/
 
     return false;
 }

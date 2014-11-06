@@ -20,6 +20,11 @@
     #include "alert_management.h"
 %}
 
+%include "authorization.h"
+%{
+    #include "authorization.h"
+%}
+
 %include "component_catalog.h"
 %{
     #include "component_catalog.h"
@@ -35,9 +40,19 @@
     #include "device_management.h"
 %}
 
+%include "invitation_management.h"
+%{
+    #include "invitation_management.h"
+%}
+
 %include "rule_management.h"
 %{
     #include "rule_management.h"
+%}
+
+%include "user_management.h"
+%{
+    #include "user_management.h"
 %}
 
 %include "iotkit.h"

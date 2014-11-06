@@ -1,5 +1,5 @@
 /*
- * REST Library to support rest based SSL communication
+ * Authorization API module to communicate with IoT Cloud via REST APIs
  * Copyright (c) 2014, Intel Corporation.
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -13,33 +13,24 @@
  */
 
 /**
- * @file rest.h
- * @brief Header file of rest library
+ * @file authorization.c
+ * @brief Implementation of Authorization API
  *
- * Data Structures and function declarations
+ * Provides features for communication with IoT Cloud server
  */
 
-#ifndef __REST_H
-#define __REST_H
+#ifndef __AUTHORIZATION_H
+#define __AUTHORIZATION_H
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#include <stdbool.h>
-#include <curl/curl.h>
+#include "iotkit.h"
 
-
-struct putData {
-  char *data;
-  size_t len;
-};
-
-typedef struct _HttpResponse {
-    long code;
-    char *data;
-} HttpResponse;
-
+char *getUserJwtToken(char *username, char *password);
+char *getUserJwtTokenInfo();
+char *getAuthorizationTokenMeInfo();
 
 #ifdef __cplusplus
 }

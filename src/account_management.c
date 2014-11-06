@@ -21,14 +21,17 @@
 
 #include "account_management.h"
 
-bool createAnAccount(char *account_name, long *httpResponseCode, char **response) {
+char *createAnAccount(char *account_name) {
     struct curl_slist *headers = NULL;
     char *url;
     char body[BODY_SIZE_MIN];
+    HttpResponse *response = (HttpResponse *)malloc(sizeof(HttpResponse));
+    response->code = 0;
+    response->data = NULL;
 
     if(!account_name) {
         fprintf(stderr, "createAnAccount::Account name cannot be NULL");
-        return false;
+        return NULL;
     }
 
     if(prepareUrl(&url, configurations.base_url, configurations.create_an_account, NULL)) {
@@ -37,69 +40,86 @@ bool createAnAccount(char *account_name, long *httpResponseCode, char **response
 
         sprintf(body, "{\"name\":\"%s\"}", account_name);
 
-        doHttpPost(url, headers, body, httpResponseCode, response);
+        doHttpPost(url, headers, body, response);
 
-        return true;
+        if(response->data) {
+            storeAccountInfo(response->data);
+        }
+
+        return createHttpResponseJson(response);
     }
 
-    return false;
+    return NULL;
 }
 
-bool getAccountInformation(long *httpResponseCode, char **response) {
+char *getAccountInformation() {
     struct curl_slist *headers = NULL;
     char *url;
+    HttpResponse *response = (HttpResponse *)malloc(sizeof(HttpResponse));
+    response->code = 0;
+    response->data = NULL;
 
     appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
     appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
 
     if(prepareUrl(&url, configurations.base_url, configurations.get_account_information, NULL)){
-        doHttpGet(url, headers, httpResponseCode, response);
+        doHttpGet(url, headers, response);
 
-        return true;
+        return createHttpResponseJson(response);
     }
 
-    return false;
+    return NULL;
 }
 
-bool getAccountActivationCode(long *httpResponseCode, char **response) {
+char *getAccountActivationCode() {
     struct curl_slist *headers = NULL;
     char *url;
+    HttpResponse *response = (HttpResponse *)malloc(sizeof(HttpResponse));
+    response->code = 0;
+    response->data = NULL;
 
     appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
     appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
 
     if(prepareUrl(&url, configurations.base_url, configurations.get_account_activation_code, NULL)) {
 
-        doHttpGet(url, headers, httpResponseCode, response);
+        doHttpGet(url, headers, response);
 
-        return true;
+        return createHttpResponseJson(response);
     }
 
-    return false;
+    return NULL;
 }
 
 
-bool renewActivationCode(long *httpResponseCode, char **response) {
+char *renewActivationCode() {
     struct curl_slist *headers = NULL;
     char *url;
+    HttpResponse *response = (HttpResponse *)malloc(sizeof(HttpResponse));
+    response->code = 0;
+    response->data = NULL;
 
     if(prepareUrl(&url, configurations.base_url, configurations.renew_account_activation, NULL)) {
 
         appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
         appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
 
-        doHttpPut(url, headers, NULL, httpResponseCode, response);
+        doHttpPut(url, headers, NULL, response);
 
-        return true;
+        return createHttpResponseJson(response);
     }
 
-    return false;
+    return NULL;
 }
 
-bool updateAnAccount(char *account_name, long *httpResponseCode, char **response) {
+char *updateAnAccount(char *account_name) {
     struct curl_slist *headers = NULL;
     char *url;
     char body[BODY_SIZE_MIN];
+    HttpResponse *response = (HttpResponse *)malloc(sizeof(HttpResponse));
+    response->code = 0;
+    response->data = NULL;
+
     // TODO: json object needs to be sent for updation
     if(prepareUrl(&url, configurations.base_url, configurations.update_an_account_name, NULL)) {
 
@@ -108,57 +128,66 @@ bool updateAnAccount(char *account_name, long *httpResponseCode, char **response
 
         sprintf(body, "{\"name\":\"%s\"}", account_name);
 
-        doHttpPut(url, headers, body, httpResponseCode, response);
+        doHttpPut(url, headers, body, response);
 
-        return true;
+        return createHttpResponseJson(response);
     }
 
-    return false;
+    return NULL;
 }
 
-bool deleteAnAccount(long *httpResponseCode, char **response) {
+char *deleteAnAccount() {
     struct curl_slist *headers = NULL;
     char *url;
+    HttpResponse *response = (HttpResponse *)malloc(sizeof(HttpResponse));
+    response->code = 0;
+    response->data = NULL;
 
     if(prepareUrl(&url, configurations.base_url, configurations.delete_an_account_name, NULL)) {
 
         appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
         appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
 
-        doHttpDelete(url, headers, httpResponseCode, response);
+        doHttpDelete(url, headers, response);
 
-        if(httpResponseCode == 204) {
+        if(response->code == 204) {
             // delete successful, perform cleanup
         }
 
-        return true;
+        return createHttpResponseJson(response);
     }
 
-    return false;
+    return NULL;
 }
 
-bool getUserAssociatedWithAccount(long *httpResponseCode, char **response) {
+char *getUserAssociatedWithAccount() {
     struct curl_slist *headers = NULL;
     char *url;
+    HttpResponse *response = (HttpResponse *)malloc(sizeof(HttpResponse));
+    response->code = 0;
+    response->data = NULL;
 
     appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
 
     if(prepareUrl(&url, configurations.base_url, configurations.get_user_associated_with_account, NULL)) {
 
-        doHttpGet(url, headers, httpResponseCode, response);
+        doHttpGet(url, headers, response);
 
-        return true;
+        return createHttpResponseJson(response);
     }
 
-    return false;
+    return NULL;
 }
 
-bool addAnUserToAccount(char *account_id, char * user_id, bool isAdmin, long *httpResponseCode, char **response) {
+char *addAnUserToAccount(char *account_id, char * user_id, bool isAdmin) {
 // TODO: to be verified
     struct curl_slist *headers = NULL;
     char *url;
     char body[BODY_SIZE_MIN];
     KeyValueParams *urlParams = NULL;
+    HttpResponse *response = (HttpResponse *)malloc(sizeof(HttpResponse));
+    response->code = 0;
+    response->data = NULL;
 
     urlParams = (KeyValueParams *)malloc(sizeof(KeyValueParams));
     urlParams->name = "user_id";
@@ -180,12 +209,12 @@ bool addAnUserToAccount(char *account_id, char * user_id, bool isAdmin, long *ht
             printf("Prepared BODY is %s\n", body);
         #endif
 
-        doHttpPut(url, headers, body, httpResponseCode, response);
+        doHttpPut(url, headers, body, response);
 
-        return true;
+        return createHttpResponseJson(response);
     }
 
-    return false;
+    return NULL;
 }
 
 /*

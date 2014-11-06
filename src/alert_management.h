@@ -98,6 +98,13 @@ typedef struct _CreateNewAlert {
     CreateNewAlertDataList *dataList;
 } CreateNewAlert;
 
+char *createNewAlert(CreateNewAlert *createNewAlertObj);
+char *getListOfAlerts();
+char *getAlertInformation(char *alertId);
+char *resetAlert(char *alertId);
+char *updateAlertStatus(char *alertId, char *status_name);
+char *addCommentToAlert(char *alertId, char *user, long timestamp, char *comment);
+
 #ifdef __cplusplus
 }
 #endif

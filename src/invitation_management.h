@@ -1,5 +1,5 @@
 /*
- * REST Library to support rest based SSL communication
+ * Invitation Management API module to communicate with IoT Cloud via REST APIs
  * Copyright (c) 2014, Intel Corporation.
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -13,33 +13,24 @@
  */
 
 /**
- * @file rest.h
- * @brief Header file of rest library
+ * @file invitation_management.h
+ * @brief Implementation of Invitation Management API
  *
- * Data Structures and function declarations
+ * Provides features for communication with IoT Cloud server
  */
-
-#ifndef __REST_H
-#define __REST_H
+#ifndef __INVITATION_MANAGEMENT_H
+#define __INVITATION_MANAGEMENT_H
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#include <stdbool.h>
-#include <curl/curl.h>
+#include "iotkit.h"
 
-
-struct putData {
-  char *data;
-  size_t len;
-};
-
-typedef struct _HttpResponse {
-    long code;
-    char *data;
-} HttpResponse;
-
+char *getListOfInvitation();
+char *getInvitationListSendToSpecificUser(char *email_id);
+char *createInvitation(char *email);
+char *deleteInvitation(char *email_id);
 
 #ifdef __cplusplus
 }

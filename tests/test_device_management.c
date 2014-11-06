@@ -22,9 +22,8 @@
 
 bool testValidateDeviceToken() {
     char *response = NULL;
-    long httpResponseCode;
 
-    validateDeviceToken(&httpResponseCode, &response);
+    response = validateDeviceToken();
 
     printf("Response Received :%s\n", response);
 
@@ -33,9 +32,8 @@ bool testValidateDeviceToken() {
 
 bool testListAllDevices() {
     char *response = NULL;
-    long httpResponseCode;
 
-    listAllDevices(&httpResponseCode, &response);
+    response = listAllDevices();
 
     printf("Response Received :%s\n", response);
 
@@ -44,9 +42,8 @@ bool testListAllDevices() {
 
 bool testGetMyDeviceInfo() {
     char *response = NULL;
-    long httpResponseCode;
 
-    getMyDeviceInfo(&httpResponseCode, &response);
+    response = getMyDeviceInfo();
 
     printf("Response Received :%s\n", response);
 
@@ -55,9 +52,8 @@ bool testGetMyDeviceInfo() {
 
 bool testGetOneDeviceInfo() {
     char *response = NULL;
-    long httpResponseCode;
 
-    getOneDeviceInfo("02-00-86-81-77-cf", &httpResponseCode, &response);
+    response = getOneDeviceInfo("02-00-a7-81-77-ff");
 
     printf("Response Received :%s\n", response);
 
@@ -67,9 +63,8 @@ bool testGetOneDeviceInfo() {
 bool testCreateADevice() {
     DeviceCreationObj *createDeviceObj;
     char *response = NULL;
-    long httpResponseCode;
 
-    createDeviceObj = createDeviceCreationObject("02-00-86-81-77-ff", "02-00-86-81-77-ff", "maha36");
+    createDeviceObj = createDeviceCreationObject("02-00-a7-81-77-ff", "02-00-a7-81-77-ff", "anddre4");
     addLocInfo(createDeviceObj, "45.540164", "-122.926048", "55.0");
     addTagInfo(createDeviceObj, "USA");
     addTagInfo(createDeviceObj, "Oregon");
@@ -78,7 +73,7 @@ bool testCreateADevice() {
     addAttributesInfo(createDeviceObj, "platform", "x86");
     addAttributesInfo(createDeviceObj, "os", "Ubuntu");
 
-    createADevice(createDeviceObj, &httpResponseCode, &response);
+    response = createADevice(createDeviceObj);
     printf("Response Received :%s\n", response);
 
     return true;
@@ -87,9 +82,8 @@ bool testCreateADevice() {
 bool testUpdateADevice() {
     DeviceCreationObj *createDeviceObj;
     char *response = NULL;
-    long httpResponseCode;
 
-    createDeviceObj = createDeviceCreationObject(NULL, "02-00-86-81-88-ff", "maha37");
+    createDeviceObj = createDeviceCreationObject(NULL, "02-00-a7-81-77-ff", "anddre4");
     addLocInfo(createDeviceObj, "55.540164", "-112.926048", "25.0");
     addTagInfo(createDeviceObj, "United States of America");
     addTagInfo(createDeviceObj, "Oregon State");
@@ -98,7 +92,7 @@ bool testUpdateADevice() {
     addAttributesInfo(createDeviceObj, "platform", "x86");
     addAttributesInfo(createDeviceObj, "os", "Ubuntu 14.04");
 
-    updateADevice(createDeviceObj, &httpResponseCode, &response);
+    response = updateADevice(createDeviceObj);
     printf("Response Received :%s\n", response);
 
     return true;
@@ -106,9 +100,8 @@ bool testUpdateADevice() {
 
 bool testActivateADevice(char *authCode) {
     char *response = NULL;
-    long httpResponseCode;
 
-    activateADevice(authCode, &httpResponseCode, &response);
+    response = activateADevice(authCode);
     printf("Response Received :%s\n", response);
 
     return true;
@@ -116,9 +109,8 @@ bool testActivateADevice(char *authCode) {
 
 bool testDeleteADevice() {
     char *response = NULL;
-    long httpResponseCode;
 
-    deleteADevice("02-00-86-81-77-cf", &httpResponseCode, &response);
+    response = deleteADevice("02-00-a7-81-77-f1");
     printf("Response Received :%s\n", response);
 
     return true;
@@ -126,9 +118,8 @@ bool testDeleteADevice() {
 
 bool testAddComponent() {
     char *response = NULL;
-    long httpResponseCode;
 
-    addComponent("madras7", "temperature.v1.0", &httpResponseCode, &response);
+    response = addComponent("madras9", "temperature.v1.0");
     printf("Response Received :%s\n", response);
 
     return true;
@@ -136,9 +127,8 @@ bool testAddComponent() {
 
 bool testDeleteComponent() {
     char *response = NULL;
-    long httpResponseCode;
 
-    deleteComponent("madras7", &httpResponseCode, &response);
+    response = deleteComponent("madras7");
     printf("Response Received :%s\n", response);
 
     return true;
@@ -174,9 +164,8 @@ bool testGetSensorId() {
 
 bool testListAllTagsForDevices() {
     char *response = NULL;
-    long httpResponseCode;
 
-    listAllTagsForDevices(&httpResponseCode, &response);
+    response = listAllTagsForDevices();
     printf("Response Received :%s\n", response);
 
     return true;
@@ -184,9 +173,8 @@ bool testListAllTagsForDevices() {
 
 bool testListAllAttributesForDevices() {
     char *response = NULL;
-    long httpResponseCode;
 
-    listAllAttributesForDevices(&httpResponseCode, &response);
+    response = listAllAttributesForDevices();
     printf("Response Received :%s\n", response);
 
     return true;

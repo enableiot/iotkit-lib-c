@@ -22,7 +22,6 @@
 
 bool testCreateAnRule() {
     char *response = NULL;
-    long httpResponseCode;
 
     CreateRule *createRuleObj = createRuleObject();
     CreateRuleActions *createRuleActionObj = createRuleActionObject();
@@ -51,7 +50,7 @@ bool testCreateAnRule() {
     setRuleConditionOp(createRuleObj, "OR");
     addRuleConditionValues(createRuleObj, createRuleConditionValuesObj);
 
-    createAnRule(createRuleObj, &httpResponseCode, &response);
+    response = createAnRule(createRuleObj);
 
     printf("Response Received :%s\n", response);
 
@@ -60,7 +59,6 @@ bool testCreateAnRule() {
 
 bool testUpdateAnRule() {
     char *response = NULL;
-    long httpResponseCode;
 
     CreateRule *createRuleObj = createRuleObject();
     CreateRuleActions *createRuleActionObj = createRuleActionObject();
@@ -89,7 +87,7 @@ bool testUpdateAnRule() {
     setRuleConditionOp(createRuleObj, "OR");
     addRuleConditionValues(createRuleObj, createRuleConditionValuesObj);
 
-    updateAnRule(createRuleObj, "65424", &httpResponseCode, &response);
+    response = updateAnRule(createRuleObj, "82957");
 
     printf("Response Received :%s\n", response);
 
@@ -98,76 +96,67 @@ bool testUpdateAnRule() {
 
 bool testGetListOfRules() {
     char *response = NULL;
-    long httpResponseCode;
 
-    getListOfRules(&httpResponseCode, &response);
+    response = getListOfRules();
 
     printf("Response Received :%s\n", response);
 
-    if(httpResponseCode == 200) {
-        return true;
-    }
-
-    return false;
+    return true;
 }
 
 bool testGetOneRuleInformation() {
     char *response = NULL;
-    long httpResponseCode;
 
-    getOneRuleInformation("65436", &httpResponseCode, &response);
+    response = getOneRuleInformation("82957");
 
     printf("Response Received :%s\n", response);
 
-    if(httpResponseCode == 200) {
+    /*if(httpResponseCode == 200) {
         return true;
-    }
+    }*/
 
-    return false;
+    return true;
 }
 
 bool testCreateARuleAsDraft() {
     char *response = NULL;
-    long httpResponseCode;
 
-    createARuleAsDraft("mahatest", &httpResponseCode, &response);
+    response = createARuleAsDraft("mahatest");
 
     printf("Response Received :%s\n", response);
 
-    if(httpResponseCode == 200) {
+    /*if(httpResponseCode == 200) {
         return true;
-    }
+    }*/
 
-    return false;
+    return true;
 }
 
 bool testUpdateStatusOfARule() {
     char *response = NULL;
-    long httpResponseCode;
 
-    updateStatusOfARule("65436", "On-hold", &httpResponseCode, &response);
+    response = updateStatusOfARule("82957", "Archived");
 
     printf("Response Received :%s\n", response);
 
-    if(httpResponseCode == 200) {
+    /*if(httpResponseCode == 200) {
         return true;
-    }
+    }*/
 
-    return false;
+    return true;
 }
 
 bool testDeleteADraftRule() {
     char *response = NULL;
-    long httpResponseCode;
 
     // pass external ID
-    deleteADraftRule("c9804532a9b391976347c601db1e55b283e5873b", &httpResponseCode, &response);
+    response = deleteADraftRule("0ca2381578bcdfe5a5794cea7ea98b071f6a6d38");
 
     printf("Response Received :%s\n", response);
 
-    if(httpResponseCode == 200) {
+    /*if(httpResponseCode == 200) {
         return true;
-    }
+    }*/
 
-    return false;
+    return true;
 }

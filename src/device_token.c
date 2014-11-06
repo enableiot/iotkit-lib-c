@@ -101,8 +101,10 @@ void parseDeviceToken() {
 
             if (isJsonString(jitem)) {
                 configurations.data_account_id = strdup(jitem->valuestring);
+                printf("Data Account ID is %s\n", configurations.data_account_id);
             } else {
                 configurations.data_account_id = NULL;
+                puts("Data Account ID is NULL");
             }
 
             jitem = cJSON_GetObjectItem(json, "data_account_name");
@@ -199,12 +201,13 @@ void storeDeviceID(char *response) {
 
     if(response != NULL) {
         char *out;
-        cJSON *json, *jitem, *child;
+        cJSON *json, *jitem;
 
         // parse the file
         json = cJSON_Parse(response);
         if (!json) {
             fprintf(stderr,"Error Parsing response: [%s]\n",cJSON_GetErrorPtr());
+            return;
         }
         else {
             #if DEBUG
@@ -249,13 +252,14 @@ void storeDeviceID(char *response) {
 void storeDeviceToken(char *response) {
     if(response != NULL) {
         char *out;
-        cJSON *json, *jitem, *child;
+        cJSON *json, *jitem;
         char *deviceToken = NULL, *accountId = NULL;
 
         // parse the file
         json = cJSON_Parse(response);
         if (!json) {
             fprintf(stderr,"Error Parsing response: [%s]\n",cJSON_GetErrorPtr());
+            return;
         }
         else {
             #if DEBUG
@@ -291,6 +295,47 @@ void storeDeviceToken(char *response) {
             storeDeviceCredentials(configurations.device_id, deviceToken, configurations.data_account_id, configurations.data_account_name);
 
             return true;
+        }
+    }
+}
+
+void storeAccountInfo(char *response) {
+    if(response != NULL) {
+        char *out;
+        cJSON *json, *jitem;
+        char *accountName = NULL, *accountId = NULL;
+
+        // parse the file
+        json = cJSON_Parse(response);
+        if (!json) {
+            fprintf(stderr,"Error Parsing response: [%s]\n",cJSON_GetErrorPtr());
+            return;
+        }
+        else {
+            #if DEBUG
+                out = cJSON_Print(json, 2);
+                printf("%s\n", out);
+                free(out);
+            #endif
+
+            if (!isJsonObject(json)) {
+                fprintf(stderr,"Invalid JSON response\n");
+                return false;
+            }
+
+            jitem = cJSON_GetObjectItem(json, "name");
+
+            if(jitem) {
+                accountName = strdup(jitem->valuestring);
+            }
+
+            jitem = cJSON_GetObjectItem(json, "id");
+
+            if(jitem) {
+                accountId = strdup(jitem->valuestring);
+            }
+
+            storeDeviceCredentials(configurations.device_id, configurations.deviceToken, accountId, accountName);
         }
     }
 }

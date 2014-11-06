@@ -22,7 +22,6 @@
 
 bool testAggregatedReportInterface() {
     char *response = NULL;
-    long httpResponseCode;
     AttributeFilter *valueFilter = NULL;
     AggregatedReportInterface *aggregatedReportInterfaceObj = createAggregatedReportInterface();
 
@@ -30,9 +29,9 @@ bool testAggregatedReportInterface() {
     setReportStartTimestamp(aggregatedReportInterfaceObj, 1391971083468L);
     setReportEndTimestamp(aggregatedReportInterfaceObj, 1413504889801L);
 
-    addAggregationMethods(aggregatedReportInterfaceObj, "aggr1");
-    addAggregationMethods(aggregatedReportInterfaceObj, "aggr2");
-    addAggregationMethods(aggregatedReportInterfaceObj, "aggr3");
+    addAggregationMethods(aggregatedReportInterfaceObj, "average");
+    addAggregationMethods(aggregatedReportInterfaceObj, "min");
+    addAggregationMethods(aggregatedReportInterfaceObj, "max");
 
     addDimensions(aggregatedReportInterfaceObj, "dimen1");
     addDimensions(aggregatedReportInterfaceObj, "dimen2");
@@ -67,13 +66,13 @@ bool testAggregatedReportInterface() {
     addFilters(aggregatedReportInterfaceObj, valueFilter);
 
 
-    aggregatedReportInterface(aggregatedReportInterfaceObj, &httpResponseCode, &response);
+    response = aggregatedReportInterface(aggregatedReportInterfaceObj);
 
     printf("Response Received :%s\n", response);
 
-    if(httpResponseCode == 200) {
+    /*if(response->code == 200) {
         return true;
-    }
+    }*/
 
     return false;
 }

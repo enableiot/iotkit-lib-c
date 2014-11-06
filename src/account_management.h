@@ -38,6 +38,17 @@ typedef struct _UpdateUserAccount {
     bool verified;
 } UpdateUserAccount;
 
+
+char *createAnAccount(char *account_name);
+char *getAccountInformation();
+char *getAccountActivationCode();
+char *renewActivationCode();
+char *updateAnAccount(char *account_name);
+char *deleteAnAccount();
+char *getUserAssociatedWithAccount();
+char *addAnUserToAccount(char *account_id, char * user_id, bool isAdmin);
+
+
 #ifdef __cplusplus
 }
 #endif

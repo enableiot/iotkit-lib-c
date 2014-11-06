@@ -54,6 +54,11 @@ typedef struct _ComponentCatalog {
     ActuatorCommandParams *parameters;
 } ComponentCatalog;
 
+char *listAllComponentCatalogs();
+char *getComponentCatalogDetails(char *cmp_id);
+char *createAnComponentCatalog(ComponentCatalog *cmpCatalogObject);
+char *updateAnComponentCatalog(ComponentCatalog *cmpCatalogObject, char *cmp_id);
+
 #ifdef __cplusplus
 }
 #endif

@@ -70,6 +70,14 @@ typedef struct _CreateRule {
     CreateRuleConditionValuesList *values;
 } CreateRule;
 
+char *createAnRule(CreateRule *createRuleObj);
+char *updateAnRule(CreateRule *createRuleObj, char *rule_id);
+char *getListOfRules();
+char *getOneRuleInformation(char *rule_id);
+char *createARuleAsDraft(char *rule_name);
+char *updateStatusOfARule(char *rule_id, char *rule_status);
+char *deleteADraftRule(char *rule_id);
+
 #ifdef __cplusplus
 }
 #endif

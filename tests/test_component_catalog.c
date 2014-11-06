@@ -22,9 +22,8 @@
 
 bool testListAllComponentCatalogs() {
     char *response = NULL;
-    long httpResponseCode;
 
-    listAllComponentCatalogs(&httpResponseCode, &response);
+    response = listAllComponentCatalogs();
 
     printf("Response Received :%s\n", response);
 
@@ -33,9 +32,8 @@ bool testListAllComponentCatalogs() {
 
 bool testGetComponentCatalogDetails() {
     char *response = NULL;
-    long httpResponseCode;
 
-    getComponentCatalogDetails("actua13.v1.0", &httpResponseCode, &response);
+    response = getComponentCatalogDetails("temperature.v1.0");
 
     printf("Response Received :%s\n", response);
 
@@ -44,7 +42,6 @@ bool testGetComponentCatalogDetails() {
 
 bool testCreateAnComponentCatalog() {
     char *response = NULL;
-    long httpResponseCode;
 
     ComponentCatalog *cmpObject = createComponentCatalogObject("actua13", "1.0", "actuator", "Number", "float", "Degrees Celsius", "timeSeries");
     addMinValue(cmpObject, -150.0f);
@@ -55,7 +52,7 @@ bool testCreateAnComponentCatalog() {
     addCommandParams(cmpObject, "my2", "1,2");
     addCommandParams(cmpObject, "my3", "5,6,7");
 
-    createAnComponentCatalog(cmpObject, &httpResponseCode, &response);
+    response = createAnComponentCatalog(cmpObject);
     printf("Response Received :%s\n", response);
 
     return true;
@@ -63,7 +60,6 @@ bool testCreateAnComponentCatalog() {
 
 bool testUpdateAnComponentCatalog() {
     char *response = NULL;
-    long httpResponseCode;
 
     ComponentCatalog *cmpObject = createComponentCatalogObject(NULL, NULL, "actuator", "Number", "integer", "Degrees Celsius2", "timeSeries");
     addMinValue(cmpObject, -150.0f);
@@ -73,7 +69,7 @@ bool testUpdateAnComponentCatalog() {
     addCommandParams(cmpObject, "my12", "1-5");
     addCommandParams(cmpObject, "my22", "5-10");
 
-    updateAnComponentCatalog(cmpObject, "actua13.v1.0", &httpResponseCode, &response);
+    response = updateAnComponentCatalog(cmpObject, "actua13.v1.0");
     printf("Response Received :%s\n", response);
 
     return true;

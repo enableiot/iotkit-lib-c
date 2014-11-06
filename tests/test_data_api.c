@@ -22,9 +22,8 @@
 
 bool testSubmitData() {
     char *response = NULL;
-    long httpResponseCode;
 
-    submitData("madras7", "26.15", "45.540164", "-122.926048", "124.3", &httpResponseCode, &response);
+    response = submitData("madras9", "26.15", "45.540164", "-122.926048", "124.3");
     printf("Response Received :%s\n", response);
 
     return true;
@@ -33,15 +32,14 @@ bool testSubmitData() {
 bool testRetrieveData() {
     RetrieveData *retrieveObj;
     char *response = NULL;
-    long httpResponseCode;
 
-    retrieveObj = createRetrieveDataObject(1410387088000, 1412198993108);
-    addDeviceId(retrieveObj, "02-00-86-81-77-cf");
+    retrieveObj = createRetrieveDataObject(1410387088000, 1415301870434);
+    addDeviceId(retrieveObj, "02-00-a7-81-77-ff");
     addDeviceId(retrieveObj, "c0-3f-d5-60-d0-74");
     addSensorId(retrieveObj, "madras7");
     addSensorId(retrieveObj, "madras9");
 
-    retrieveData(retrieveObj, &httpResponseCode, &response);
+    response = retrieveData(retrieveObj);
     printf("Response Received :%s\n", response);
 
     return true;

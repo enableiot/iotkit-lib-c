@@ -19,16 +19,19 @@
  * Provides features for communication with IoT Cloud server
  */
 
-#include "iotkit.h"
+#include "user_management.h"
 
-bool createAnUser(char *emailAddress, char *password, long *httpResponseCode, char **response) {
+char *createAnUser(char *emailAddress, char *password) {
     struct curl_slist *headers = NULL;
     char *url;
     char body[BODY_SIZE_MIN];
+    HttpResponse *response = (HttpResponse *)malloc(sizeof(HttpResponse));
+    response->code = 0;
+    response->data = NULL;
 
     if(!emailAddress || !password) {
         fprintf(stderr, "createAnUser::Mandatory parameters cannot be NULL");
-        return false;
+        return NULL;
     }
 
     if(prepareUrl(&url, configurations.base_url, configurations.create_a_user, NULL)) {
@@ -41,18 +44,21 @@ bool createAnUser(char *emailAddress, char *password, long *httpResponseCode, ch
             printf("Prepared BODY is %s\n", body);
         #endif
 
-        doHttpPost(url, headers, body, httpResponseCode, response);
+        doHttpPost(url, headers, body, response);
 
-        return true;
+        return createHttpResponseJson(response);
     }
 
-    return false;
+    return NULL;
 }
 
-bool getUserInformation(char *userId, long *httpResponseCode, char **response) {
+char *getUserInformation(char *userId) {
     struct curl_slist *headers = NULL;
     char *url;
     KeyValueParams *urlParams = NULL;
+    HttpResponse *response = (HttpResponse *)malloc(sizeof(HttpResponse));
+    response->code = 0;
+    response->data = NULL;
 
     urlParams = (KeyValueParams *)malloc(sizeof(KeyValueParams));
     urlParams->name = "user_id";
@@ -67,23 +73,26 @@ bool getUserInformation(char *userId, long *httpResponseCode, char **response) {
     appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
 
     if(prepareUrl(&url, configurations.base_url, configurations.get_user_information, urlParams)) {
-        doHttpGet(url, headers, httpResponseCode, response);
+        doHttpGet(url, headers, response);
 
-        return true;
+        return createHttpResponseJson(response);
     }
 
-    return false;
+    return NULL;
 }
 
-bool updateUserAttributes(char *userId, KeyValueParams *attributes, long *httpResponseCode, char **response) {
+char *updateUserAttributes(char *userId, KeyValueParams *attributes) {
     struct curl_slist *headers = NULL;
     char *url;
     char body[BODY_SIZE_MED];
     KeyValueParams *urlParams = NULL;
+    HttpResponse *response = (HttpResponse *)malloc(sizeof(HttpResponse));
+    response->code = 0;
+    response->data = NULL;
 
     if(!attributes) {
         fprintf(stderr, "updateUserAttributes::Parameter attribute list cannot be NULL");
-        return false;
+        return NULL;
     }
 
     urlParams = (KeyValueParams *)malloc(sizeof(KeyValueParams));
@@ -101,7 +110,13 @@ bool updateUserAttributes(char *userId, KeyValueParams *attributes, long *httpRe
         appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
         appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
 
-        strcpy(body, "{\"attributes\":{");
+        strcpy(body, "{\"id\":\"");
+        if(userId) {
+            strcat(body, userId);
+        } else {
+            strcat(body, configurations.user_account_id);
+        }
+        strcat(body, "\",\"attributes\":{");
         while(traverse != NULL) {
             strcat(body, "\"");
             strcat(body, traverse->name);
@@ -121,19 +136,22 @@ bool updateUserAttributes(char *userId, KeyValueParams *attributes, long *httpRe
             printf("Prepared BODY is %s\n", body);
         #endif
 
-        doHttpPut(url, headers, body, httpResponseCode, response);
+        doHttpPut(url, headers, body, response);
 
-        return true;
+        return createHttpResponseJson(response);
     }
 
-    return false;
+    return NULL;
 }
 
-bool acceptTermsAndConditions(char *userId, bool accept, long *httpResponseCode, char **response) {
+char *acceptTermsAndConditions(char *userId, bool accept) {
     struct curl_slist *headers = NULL;
     char *url;
     char body[BODY_SIZE_MIN];
     KeyValueParams *urlParams = NULL;
+    HttpResponse *response = (HttpResponse *)malloc(sizeof(HttpResponse));
+    response->code = 0;
+    response->data = NULL;
 
     urlParams = (KeyValueParams *)malloc(sizeof(KeyValueParams));
     urlParams->name = "user_id";
@@ -149,28 +167,40 @@ bool acceptTermsAndConditions(char *userId, bool accept, long *httpResponseCode,
         appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
         appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
 
-        if(accept == true) {
-            sprintf(body, "{\"termsAndConditions\":true}");
+        strcpy(body, "{\"id\":\"");
+        if(userId) {
+            strcat(body, userId);
         } else {
-            sprintf(body, "{\"termsAndConditions\":false}");
+            strcat(body, configurations.user_account_id);
         }
+        strcat(body, "\",\"termsAndConditions\":");
+
+        if(accept == true) {
+            strcat(body, "true");
+        } else {
+            strcat(body, "false");
+        }
+        strcat(body, "}");
 
         #if DEBUG
             printf("Prepared BODY is %s\n", body);
         #endif
 
-        doHttpPut(url, headers, body, httpResponseCode, response);
+        doHttpPut(url, headers, body, response);
 
-        return true;
+        return createHttpResponseJson(response);
     }
 
-    return false;
+    return NULL;
 }
 
-bool deleteAUser(char *userId, long *httpResponseCode, char **response) {
+char *deleteAUser(char *userId) {
     struct curl_slist *headers = NULL;
     char *url;
     KeyValueParams *urlParams = NULL;
+    HttpResponse *response = (HttpResponse *)malloc(sizeof(HttpResponse));
+    response->code = 0;
+    response->data = NULL;
 
     urlParams = (KeyValueParams *)malloc(sizeof(KeyValueParams));
     urlParams->name = "user_id";
@@ -186,18 +216,21 @@ bool deleteAUser(char *userId, long *httpResponseCode, char **response) {
         appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
         appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
 
-        doHttpDelete(url, headers, httpResponseCode, response);
+        doHttpDelete(url, headers, response);
 
-        return true;
+        return createHttpResponseJson(response);
     }
 
-    return false;
+    return NULL;
 }
 
-bool requestChangePassword(char *emailAddress, long *httpResponseCode, char **response) {
+char *requestChangePassword(char *emailAddress) {
     struct curl_slist *headers = NULL;
     char *url;
     char body[BODY_SIZE_MIN];
+    HttpResponse *response = (HttpResponse *)malloc(sizeof(HttpResponse));
+    response->code = 0;
+    response->data = NULL;
 
     if(!emailAddress) {
         fprintf(stderr, "requestChangePassword::Parameter email address cannot be NULL");
@@ -214,22 +247,25 @@ bool requestChangePassword(char *emailAddress, long *httpResponseCode, char **re
             printf("Prepared BODY is %s\n", body);
         #endif
 
-        doHttpPost(url, headers, body, httpResponseCode, response);
+        doHttpPost(url, headers, body, response);
 
-        return true;
+        return createHttpResponseJson(response);
     }
 
-    return false;
+    return NULL;
 }
 
-bool updateForgotPassword(char *token, char *new_password, long *httpResponseCode, char **response) {
+char *updateForgotPassword(char *token, char *new_password) {
     struct curl_slist *headers = NULL;
     char *url;
     char body[BODY_SIZE_MIN];
+    HttpResponse *response = (HttpResponse *)malloc(sizeof(HttpResponse));
+    response->code = 0;
+    response->data = NULL;
 
     if(!token || !new_password) {
         fprintf(stderr, "updateForgotPassword::Mandatory parameters cannot be NULL");
-        return false;
+        return NULL;
     }
 
     if(prepareUrl(&url, configurations.base_url, configurations.request_change_password, NULL)) {
@@ -242,19 +278,22 @@ bool updateForgotPassword(char *token, char *new_password, long *httpResponseCod
             printf("Prepared BODY is %s\n", body);
         #endif
 
-        doHttpPut(url, headers, body, httpResponseCode, response);
+        doHttpPut(url, headers, body, response);
 
-        return true;
+        return createHttpResponseJson(response);
     }
 
-    return false;
+    return NULL;
 }
 
-bool changePassword(char *emailAddress, char *current_password, char *new_password, long *httpResponseCode, char **response) {
+char *changePassword(char *emailAddress, char *current_password, char *new_password) {
     struct curl_slist *headers = NULL;
     char *url;
     char body[BODY_SIZE_MIN];
     KeyValueParams *urlParams = NULL;
+    HttpResponse *response = (HttpResponse *)malloc(sizeof(HttpResponse));
+    response->code = 0;
+    response->data = NULL;
 
     urlParams = (KeyValueParams *)malloc(sizeof(KeyValueParams));
     urlParams->name = "email_id";
@@ -263,7 +302,7 @@ bool changePassword(char *emailAddress, char *current_password, char *new_passwo
 
     if(!emailAddress || !current_password || !new_password) {
         fprintf(stderr, "changePassword::Mandatory parameters cannot be NULL");
-        return false;
+        return NULL;
     }
 
     if(prepareUrl(&url, configurations.base_url, configurations.change_password, urlParams)) {
@@ -276,10 +315,10 @@ bool changePassword(char *emailAddress, char *current_password, char *new_passwo
             printf("Prepared BODY is %s\n", body);
         #endif
 
-        doHttpPut(url, headers, body, httpResponseCode, response);
+        doHttpPut(url, headers, body, response);
 
-        return true;
+        return createHttpResponseJson(response);
     }
 
-    return false;
+    return NULL;
 }

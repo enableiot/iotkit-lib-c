@@ -1,5 +1,5 @@
 /*
- * Data API module to communicate with IoT Cloud via REST APIs
+ * User Management module to communicate with IoT Cloud via REST APIs
  * Copyright (c) 2014, Intel Corporation.
  *
  * This program is free software; you can redistribute it and/or modify it
@@ -13,31 +13,29 @@
  */
 
 /**
- * @file data_api.h
- * @brief Implementation of Data Submit & Retrieval API
+ * @file user_management.h
+ * @brief Implementation of User Management
  *
  * Provides features for communication with IoT Cloud server
  */
 
-#ifndef __DATA_H
-#define __DATA_H
+#ifndef __RULE_MANAGEMENT_H
+#define __RULE_MANAGEMENT_H
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 #include "iotkit.h"
-#include <sys/time.h>
 
-typedef struct _RetrieveData {
-    long fromMillis;
-    long toMillis;
-    StringList *deviceList;
-    StringList *componentId;
-} RetrieveData;
-
-char *submitData(char *cname, char *value, char *latitude, char *longitude, char *height);
-char *retrieveData(RetrieveData *retrieveObj);
+char *createAnUser(char *emailAddress, char *password);
+char *getUserInformation(char *userId);
+char *updateUserAttributes(char *userId, KeyValueParams *attributes);
+char *acceptTermsAndConditions(char *userId, bool accept);
+char *deleteAUser(char *userId);
+char *requestChangePassword(char *emailAddress);
+char *updateForgotPassword(char *token, char *new_password);
+char *changePassword(char *emailAddress, char *current_password, char *new_password);
 
 #ifdef __cplusplus
 }

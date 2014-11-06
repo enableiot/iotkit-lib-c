@@ -284,12 +284,15 @@ AdvancedDataInquiry *addSortInfo(AdvancedDataInquiry *advancedDataInquiryObject,
     return advancedDataInquiryObject;
 }
 
-bool advancedDataInquiry(AdvancedDataInquiry *advancedDataInquiryObject, long *httpResponseCode, char **response) {
+char *advancedDataInquiry(AdvancedDataInquiry *advancedDataInquiryObject) {
 
     struct curl_slist *headers = NULL;
     char *url;
     char body[BODY_SIZE_MED];
     StringList *traverse = NULL;
+    HttpResponse *response = (HttpResponse *)malloc(sizeof(HttpResponse));
+    response->code = 0;
+    response->data = NULL;
 
     if(prepareUrl(&url, configurations.base_url, configurations.advanced_data_inquiry, NULL)) {
         appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
@@ -539,10 +542,10 @@ bool advancedDataInquiry(AdvancedDataInquiry *advancedDataInquiryObject, long *h
             printf("Prepared BODY is %s\n", body);
         #endif
 
-        doHttpPost(url, headers, body, httpResponseCode, response);
+        doHttpPost(url, headers, body, response);
 
-        return true;
+        return createHttpResponseJson(response);
     }
 
-    return false;
+    return NULL;
 }

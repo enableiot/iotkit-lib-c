@@ -751,6 +751,36 @@ char *getDeviceAuthorizationToken() {
     return authorization;
 }
 
+char *createHttpResponseJson(HttpResponse *response) {
+    cJSON *root = NULL;
+    char *out = NULL;
+    cJSON *data = NULL;
+
+    root=cJSON_CreateObject();
+
+    if(!response) {
+        return cJSON_PrintUnformatted(root);
+    }
+
+    cJSON_AddItemToObject(root, "code", cJSON_CreateNumber(response->code));
+
+    if(response->data) {
+        data = cJSON_Parse(response->data);
+
+        if(data) {
+            cJSON_AddItemToObject(root, "data", data);
+        } else {
+            cJSON_AddItemToObject(root, "data", cJSON_CreateString(response->data));
+        }
+    } else {
+            cJSON_AddNullToObject(root, "data");
+    }
+
+    out = cJSON_PrintUnformatted(root);
+
+    return out;
+}
+
 #if DEBUG
 
     void main() {
@@ -758,10 +788,13 @@ char *getDeviceAuthorizationToken() {
 
         iotkit_init();
 
+//        testCreateAnAccount();
 //        testGetAccountInformation();
+//        testGetAccountActivationCode();
+//        testRenewAccountActivationCode();
 //        testAddAnUserToAccount();
 //        testAdvancedDataInquiry();
-//        testAggregatedReportInterface();
+        testAggregatedReportInterface();
 //        testCreateNewAlert();
 //        testGetListOfAlerts();
 //        testGetAlertInformation();
@@ -771,29 +804,34 @@ char *getDeviceAuthorizationToken() {
 //        testGetUserAssociatedWithAccount();
 //        testUpdateUserAssociatedWithAccount();
 
-//        testGetNewAuthorizationToken();
-//        testValidateAuthorizationToken();
+//        testGetUserJwtToken();
+//        testGetUserJwtTokenInfo();
 //        testGetAuthorizationTokenMeInfo();
 
 //        testListAllComponentCatalogs();
 //        testGetComponentCatalogDetails();
+//        testCreateAnComponentCatalog();
+//        testUpdateAnComponentCatalog();
 
 //        testSubmitData();
+//        testRetrieveData();
 
 //        testValidateDeviceToken();
+
+
+//        testCreateADevice();
+//        testUpdateADevice();
+//        testActivateADevice("fD7mioIz");
 //        testListAllDevices();
 //        testGetMyDeviceInfo();
 //        testGetOneDeviceInfo();
 //        testDeleteADevice();
 //        testDeleteComponent();
 
-//        testCreateADevice();
-//        testUpdateADevice();
-//        testActivateADevice("CEUztvgI");
-
 //        testDeviceActivationStatus();
 
 //        testAddComponent();
+//        testDeleteComponent();
 //        testSensorRegistrationStatus();
 //        testGetSensorId();
 //        testListAllTagsForDevices();
@@ -803,8 +841,7 @@ char *getDeviceAuthorizationToken() {
 //        testGetInvitationListSendToSpecificUser();
 //        testCreateInvitation();
 //        testDeleteInvitation();
-//        testCreateAnComponentCatalog();
-//        testUpdateAnComponentCatalog();
+
 
 //        testRetrieveData();
 
@@ -816,11 +853,18 @@ char *getDeviceAuthorizationToken() {
 //        testUpdateStatusOfARule();
 //        testDeleteADraftRule();
 
+//        testRequestChangePassword();
+//        testUpdateForgotPassword();
+//        testChangePassword();
+
 //        testCreateAnUser();
 //        testGetUserInformation();
 //        testUpdateUserAttributes();
 //        testAcceptTermsAndConditions();
-        testDeleteAUser();
+//        testDeleteAUser();
+//        char *response = getNewAuthorizationToken("pradeep.chenthati@aricent.com", "Password1");
+//        HttpResponse * response = getAccountInformation();
+//        printf("Response is :::::::::::::::::::::: %s\n", response);
 //        testRequestChangePassword();
 //        testUpdateForgotPassword();
 //        testChangePassword();

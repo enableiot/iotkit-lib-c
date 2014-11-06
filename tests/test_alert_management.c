@@ -22,7 +22,6 @@
 
 bool testCreateNewAlert() {
     char *response = NULL;
-    long httpResponseCode;
     CreateNewAlert *createNewAlertObj = NULL;
     CreateNewAlertData *createNewAlertDataObj = NULL;
     CreateNewAlertDataConditions *createNewAlertDataConditionsObj = NULL;
@@ -59,88 +58,83 @@ bool testCreateNewAlert() {
 
     cna_addComponents(createNewAlertDataConditionsObj, createNewAlertDataConditionCmpsObj);
 
-    createNewAlert(createNewAlertObj, &httpResponseCode, &response);
+    response = createNewAlert(createNewAlertObj);
 
     printf("Response Received :%s\n", response);
 
-    if(httpResponseCode == 201) {
+    /*if(response->code == 201) {
         return true;
-    }
+    }*/
 
     return false;
 }
 
 bool testGetListOfAlerts() {
     char *response = NULL;
-    long httpResponseCode;
 
-    getListOfAlerts(&httpResponseCode, &response);
+    response = getListOfAlerts();
 
     printf("Response Received :%s\n", response);
 
-    if(httpResponseCode == 200) {
+    /*if(response->code == 200) {
         return true;
-    }
+    }*/
 
     return false;
 }
 
 bool testGetAlertInformation() {
     char *response = NULL;
-    long httpResponseCode;
 
-    getAlertInformation("75", &httpResponseCode, &response);
+    response = getAlertInformation("75");
 
     printf("Response Received :%s\n", response);
 
-    if(httpResponseCode == 200) {
+    /*if(response->code == 200) {
         return true;
-    }
+    }*/
 
     return false;
 }
 
 bool testResetAlert() {
     char *response = NULL;
-    long httpResponseCode;
 
-    resetAlert("75", &httpResponseCode, &response);
+    response = resetAlert("75");
 
     printf("Response Received :%s\n", response);
 
-    if(httpResponseCode == 200) {
+    /*if(response->code == 200) {
         return true;
-    }
+    }*/
 
     return false;
 }
 
 bool testUpdateAlertStatus() {
     char *response = NULL;
-    long httpResponseCode;
 
-    updateAlertStatus("75", "Open", &httpResponseCode, &response);
+    response = updateAlertStatus("75", "Open");
 
     printf("Response Received :%s\n", response);
 
-    if(httpResponseCode == 200) {
+    /*if(response->code == 200) {
         return true;
-    }
+    }*/
 
     return false;
 }
 
 bool testAddCommentToAlert() {
     char *response = NULL;
-    long httpResponseCode;
 
-    addCommentToAlert("75", "pradyp7@gmail.com", 45972979284L, "Machinery arrival", &httpResponseCode, &response);
+    response = addCommentToAlert("75", "pradyp7@gmail.com", 45972979284L, "Machinery arrival");
 
     printf("Response Received :%s\n", response);
 
-    if(httpResponseCode == 200) {
+    /*if(response->code == 200) {
         return true;
-    }
+    }*/
 
     return false;
 }

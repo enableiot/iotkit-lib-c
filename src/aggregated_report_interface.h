@@ -47,6 +47,8 @@ typedef struct _AggregatedReportInterface {
     AttributeFilterList *filters;
 } AggregatedReportInterface;
 
+char *aggregatedReportInterface(AggregatedReportInterface *aggregatedReportInterfaceObject);
+
 #ifdef __cplusplus
 }
 #endif

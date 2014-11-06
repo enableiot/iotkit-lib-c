@@ -22,9 +22,8 @@
 
 bool testGetListOfInvitation() {
     char *response = NULL;
-    long httpResponseCode;
 
-    getListOfInvitation(&httpResponseCode, &response);
+    response = getListOfInvitation();
 
     printf("Response Received :%s\n", response);
 
@@ -33,9 +32,8 @@ bool testGetListOfInvitation() {
 
 bool testGetInvitationListSendToSpecificUser() {
     char *response = NULL;
-    long httpResponseCode;
 
-    getInvitationListSendToSpecificUser("xxxxx@xxx.com", &httpResponseCode, &response);
+    response = getInvitationListSendToSpecificUser("pradyp7@gmail.com");
 
     printf("Response Received :%s\n", response);
 
@@ -44,9 +42,8 @@ bool testGetInvitationListSendToSpecificUser() {
 
 bool testCreateInvitation() {
     char *response = NULL;
-    long httpResponseCode;
 
-    createInvitation("xxxxx@xxx.com", &httpResponseCode, &response);
+    response = createInvitation("pradyp7@gmail.com");
 
     printf("Response Received :%s\n", response);
 
@@ -55,9 +52,8 @@ bool testCreateInvitation() {
 
 bool testDeleteInvitation() {
     char *response = NULL;
-    long httpResponseCode;
 
-    deleteInvitation("xxxxx@xxx.com", &httpResponseCode, &response);
+    response = deleteInvitation("pradyp7@gmail.com");
 
     printf("Response Received :%s\n", response);
 

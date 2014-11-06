@@ -274,12 +274,15 @@ AggregatedReportInterface *addFilters(AggregatedReportInterface *aggregatedRepor
 }
 
 
-bool aggregatedReportInterface(AggregatedReportInterface *aggregatedReportInterfaceObject, long *httpResponseCode, char **response) {
+char *aggregatedReportInterface(AggregatedReportInterface *aggregatedReportInterfaceObject) {
 
     struct curl_slist *headers = NULL;
     char *url;
     char body[BODY_SIZE_MED];
     StringList *traverse = NULL;
+    HttpResponse *response = (HttpResponse *)malloc(sizeof(HttpResponse));
+    response->code = 0;
+    response->data = NULL;
 
     if(prepareUrl(&url, configurations.base_url, configurations.aggregated_report_interface, NULL)) {
         appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
@@ -491,10 +494,10 @@ bool aggregatedReportInterface(AggregatedReportInterface *aggregatedReportInterf
             printf("Prepared BODY is %s\n", body);
         #endif
 
-        doHttpPost(url, headers, body, httpResponseCode, response);
+        doHttpPost(url, headers, body, response);
 
-        return true;
+        return createHttpResponseJson(response);
     }
 
-    return false;
+    return NULL;
 }

@@ -20,22 +20,25 @@
  */
 
 
-#include "iotkit.h"
+#include "authorization.h"
 
 
-bool getNewAuthorizationToken(char *username, char *password, long *httpResponseCode, char **response) {
+char *getUserJwtToken(char *username, char *password) {
     struct curl_slist *headers = NULL;
     char *url;
     char body[BODY_SIZE_MIN];
+    HttpResponse *response = (HttpResponse *)malloc(sizeof(HttpResponse));
+    response->code = 0;
+    response->data = NULL;
 
     if(!username) {
         fprintf(stderr, "Username cannot be NULL");
-        return false;
+        return NULL;
     }
 
     if(!password) {
         fprintf(stderr, "Password cannot be NULL");
-        return false;
+        return NULL;
     }
 
 
@@ -45,56 +48,62 @@ bool getNewAuthorizationToken(char *username, char *password, long *httpResponse
 
         appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
 
-        doHttpPost(url, headers, body, httpResponseCode, response);
+        doHttpPost(url, headers, body, response);
 
-        if(response) {
-            storeAuthorizationToken(*response);
+        if(response->data) {
+            storeAuthorizationToken(response->data);
 
             // if data account is already created using web portal
-            if(!configurations.data_account_id) {
+            if(configurations.data_account_id) {
                 storeDataAccountIdInfo();
             }
         }
 
-        return true;
+        return createHttpResponseJson(response);
     }
 
-    return false;
+    return NULL;
 }
 
 
-bool validateAuthorizationToken(long *httpResponseCode, char **response) {
+char *getUserJwtTokenInfo() {
     struct curl_slist *headers = NULL;
     char *url;
+    HttpResponse *response = (HttpResponse *)malloc(sizeof(HttpResponse));
+    response->code = 0;
+    response->data = NULL;
 
     appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
     appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
 
     if(prepareUrl(&url, configurations.base_url, configurations.auth_token_info, NULL)) {
 
-        doHttpGet(url, headers, httpResponseCode, response);
+        doHttpGet(url, headers, response);
 
-        return true;
+        return createHttpResponseJson(response);
     }
 
-    return false;
+    return NULL;
 }
 
 
 // Deprecated API
-bool getAuthorizationTokenMeInfo(long *httpResponseCode, char **response) {
+char *getAuthorizationTokenMeInfo() {
     struct curl_slist *headers = NULL;
     char *url;
+    HttpResponse *response = (HttpResponse *)malloc(sizeof(HttpResponse));
+    response->code = 0;
+    response->data = NULL;
 
     appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
     appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
 
     if(prepareUrl(&url, configurations.base_url, configurations.me_info, NULL)) {
 
-        doHttpGet(url, headers, httpResponseCode, response);
+        doHttpGet(url, headers, response);
 
-        return true;
+        return createHttpResponseJson(response);
     }
 
-    return false;
+    return NULL;
 }

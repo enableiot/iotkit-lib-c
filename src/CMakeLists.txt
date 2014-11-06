@@ -21,20 +21,24 @@ set (iotkit_LIB_SRCS
   ${PROJECT_SOURCE_DIR}/src/invitation_management.c
   ${PROJECT_SOURCE_DIR}/src/net_uuid.c
   ${PROJECT_SOURCE_DIR}/src/rule_management.c
+  ${PROJECT_SOURCE_DIR}/src/user_management.c
   ${PROJECT_SOURCE_DIR}/lib/cJSON/cJSON.c
 )
 
-set (mraa_LIB_GLOB_HEADERS
+set (iotkit_LIB_GLOB_HEADERS
   ${PROJECT_SOURCE_DIR}/src/iotkit.h
   ${PROJECT_SOURCE_DIR}/src/account_management.h
   ${PROJECT_SOURCE_DIR}/src/advanced_data_inquiry.h
   ${PROJECT_SOURCE_DIR}/src/aggregated_report_interface.h
   ${PROJECT_SOURCE_DIR}/src/alert_management.h
+  ${PROJECT_SOURCE_DIR}/src/authorization.h
   ${PROJECT_SOURCE_DIR}/src/component_catalog.h
   ${PROJECT_SOURCE_DIR}/src/data_api.h
   ${PROJECT_SOURCE_DIR}/src/device_management.h
+  ${PROJECT_SOURCE_DIR}/src/invitation_management.h
   ${PROJECT_SOURCE_DIR}/src/rest.h
   ${PROJECT_SOURCE_DIR}/src/rule_management.h
+  ${PROJECT_SOURCE_DIR}/src/user_management.h
   ${PROJECT_SOURCE_DIR}/src/util.h
   ${PROJECT_SOURCE_DIR}/lib/cJSON/cJSON.h
 )

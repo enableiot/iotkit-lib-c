@@ -268,11 +268,14 @@ CreateNewAlertDataConditionCmps *cnac_addValuePoints(CreateNewAlertDataCondition
     return createNewAlertDataConditionCmpsObj;
 }
 
-bool createNewAlert(CreateNewAlert *createNewAlertObj, long *httpResponseCode, char **response) {
+char *createNewAlert(CreateNewAlert *createNewAlertObj) {
     struct curl_slist *headers = NULL;
     char *url;
     char body[BODY_SIZE_MAX];
     StringList *traverse = NULL;
+    HttpResponse *response = (HttpResponse *)malloc(sizeof(HttpResponse));
+    response->code = 0;
+    response->data = NULL;
 
     if(prepareUrl(&url, configurations.base_url, configurations.create_new_alert, NULL)) {
         appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
@@ -493,34 +496,40 @@ bool createNewAlert(CreateNewAlert *createNewAlertObj, long *httpResponseCode, c
             printf("Prepared BODY is %s\n", body);
         #endif
 
-        doHttpPost(url, headers, body, httpResponseCode, response);
+        doHttpPost(url, headers, body, response);
 
-        return true;
+        return createHttpResponseJson(response);
     }
 
-    return false;
+    return NULL;
 }
 
-bool getListOfAlerts(long *httpResponseCode, char **response) {
+char *getListOfAlerts() {
     struct curl_slist *headers = NULL;
     char *url;
+    HttpResponse *response = (HttpResponse *)malloc(sizeof(HttpResponse));
+    response->code = 0;
+    response->data = NULL;
 
     appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
 
     if(prepareUrl(&url, configurations.base_url, configurations.get_list_of_alerts, NULL)) {
 
-        doHttpGet(url, headers, httpResponseCode, response);
+        doHttpGet(url, headers, response);
 
-        return true;
+        return createHttpResponseJson(response);
     }
 
-    return false;
+    return NULL;
 }
 
-bool getAlertInformation(char *alertId, long *httpResponseCode, char **response) {
+char *getAlertInformation(char *alertId) {
     struct curl_slist *headers = NULL;
     char *url;
     KeyValueParams *urlParams = NULL;
+    HttpResponse *response = (HttpResponse *)malloc(sizeof(HttpResponse));
+    response->code = 0;
+    response->data = NULL;
 
     urlParams = (KeyValueParams *)malloc(sizeof(KeyValueParams));
     urlParams->name = "alert_id";
@@ -531,18 +540,21 @@ bool getAlertInformation(char *alertId, long *httpResponseCode, char **response)
 
     if(prepareUrl(&url, configurations.base_url, configurations.get_alert_information, urlParams)) {
 
-        doHttpGet(url, headers, httpResponseCode, response);
+        doHttpGet(url, headers, response);
 
-        return true;
+        return createHttpResponseJson(response);
     }
 
-    return false;
+    return NULL;
 }
 
-bool resetAlert(char *alertId, long *httpResponseCode, char **response) {
+char *resetAlert(char *alertId) {
     struct curl_slist *headers = NULL;
     char *url;
     KeyValueParams *urlParams = NULL;
+    HttpResponse *response = (HttpResponse *)malloc(sizeof(HttpResponse));
+    response->code = 0;
+    response->data = NULL;
 
     urlParams = (KeyValueParams *)malloc(sizeof(KeyValueParams));
     urlParams->name = "alert_id";
@@ -554,18 +566,21 @@ bool resetAlert(char *alertId, long *httpResponseCode, char **response) {
         appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
         appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
 
-        doHttpPut(url, headers, NULL, httpResponseCode, response);
+        doHttpPut(url, headers, NULL, response);
 
-        return true;
+        return createHttpResponseJson(response);
     }
 
-    return false;
+    return NULL;
 }
 
-bool updateAlertStatus(char *alertId, char *status_name, long *httpResponseCode, char **response) {
+char *updateAlertStatus(char *alertId, char *status_name) {
     struct curl_slist *headers = NULL;
     char *url;
     KeyValueParams *urlParams = NULL, *urlParams1 = NULL;
+    HttpResponse *response = (HttpResponse *)malloc(sizeof(HttpResponse));
+    response->code = 0;
+    response->data = NULL;
 
     urlParams = (KeyValueParams *)malloc(sizeof(KeyValueParams));
     urlParams1 = (KeyValueParams *)malloc(sizeof(KeyValueParams));
@@ -583,19 +598,22 @@ bool updateAlertStatus(char *alertId, char *status_name, long *httpResponseCode,
         appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
         appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
 
-        doHttpPut(url, headers, NULL, httpResponseCode, response);
+        doHttpPut(url, headers, NULL, response);
 
-        return true;
+        return createHttpResponseJson(response);
     }
 
-    return false;
+    return NULL;
 }
 
-bool addCommentToAlert(char *alertId, char *user, long timestamp, char *comment, long *httpResponseCode, char **response) {
+char *addCommentToAlert(char *alertId, char *user, long timestamp, char *comment) {
     struct curl_slist *headers = NULL;
     char *url;
     char body[BODY_SIZE_MIN];
     KeyValueParams *urlParams = NULL;
+    HttpResponse *response = (HttpResponse *)malloc(sizeof(HttpResponse));
+    response->code = 0;
+    response->data = NULL;
 
     urlParams = (KeyValueParams *)malloc(sizeof(KeyValueParams));
     urlParams->name = "alert_id";
@@ -604,7 +622,7 @@ bool addCommentToAlert(char *alertId, char *user, long timestamp, char *comment,
 
     if(!user || !comment) {
         fprintf(stderr, "addCommentToAlert::Mandatory parameters cannot be NULL");
-        return false;
+        return NULL;
     }
 
     if(prepareUrl(&url, configurations.base_url, configurations.add_comment_to_alert, urlParams)) {
@@ -617,10 +635,10 @@ bool addCommentToAlert(char *alertId, char *user, long timestamp, char *comment,
             printf("Prepared BODY is %s\n", body);
         #endif
 
-        doHttpPost(url, headers, body, httpResponseCode, response);
+        doHttpPost(url, headers, body, response);
 
-        return true;
+        return createHttpResponseJson(response);
     }
 
-    return false;
+    return NULL;
 }

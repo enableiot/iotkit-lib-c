@@ -111,7 +111,7 @@ size_t static write_callback_func(void *buffer, size_t size, size_t nmemb, char 
     return write_length;
 }
 
-int doHttpGet(char *url, struct curl_slist *headers, long *httpResponseCode, char **response) {
+int doHttpGet(char *url, struct curl_slist *headers, HttpResponse *response) {
     CURL *curl;
     CURLcode res;
 
@@ -134,13 +134,13 @@ int doHttpGet(char *url, struct curl_slist *headers, long *httpResponseCode, cha
         curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_callback_func);
 
         /* pass the response to callback function */
-        curl_easy_setopt(curl, CURLOPT_WRITEDATA, response);
+        curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response->data);
 
         res = curl_easy_perform(curl);
 
-        if(httpResponseCode) {
-            *httpResponseCode = 0;
-            curl_easy_getinfo (curl, CURLINFO_RESPONSE_CODE, httpResponseCode);
+        if(response) {
+            response->code = 0;
+            curl_easy_getinfo (curl, CURLINFO_RESPONSE_CODE, &response->code);
         }
 
         if(res != CURLE_OK) {
@@ -158,7 +158,7 @@ int doHttpGet(char *url, struct curl_slist *headers, long *httpResponseCode, cha
 }
 
 
-int doHttpPut(char *url, struct curl_slist *headers, char *body, long *httpResponseCode, char **response) {
+int doHttpPut(char *url, struct curl_slist *headers, char *body, HttpResponse *response) {
     CURL *curl;
     CURLcode res;
 
@@ -187,13 +187,13 @@ int doHttpPut(char *url, struct curl_slist *headers, char *body, long *httpRespo
         curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_callback_func);
 
         /* pass the response to callback function */
-        curl_easy_setopt(curl, CURLOPT_WRITEDATA, response);
+        curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response->data);
 
         res = curl_easy_perform(curl);
 
-        if(httpResponseCode) {
-            *httpResponseCode = 0;
-            curl_easy_getinfo (curl, CURLINFO_RESPONSE_CODE, httpResponseCode);
+        if(response) {
+            response->code = 0;
+            curl_easy_getinfo (curl, CURLINFO_RESPONSE_CODE, &response->code);
         }
 
         if(res != CURLE_OK) {
@@ -210,7 +210,7 @@ int doHttpPut(char *url, struct curl_slist *headers, char *body, long *httpRespo
     return 0;
 }
 
-int doHttpPost(char *url, struct curl_slist *headers, char *body, long *httpResponseCode, char **response) {
+int doHttpPost(char *url, struct curl_slist *headers, char *body, HttpResponse *response) {
     CURL *curl;
     CURLcode res;
 
@@ -237,13 +237,13 @@ int doHttpPost(char *url, struct curl_slist *headers, char *body, long *httpResp
         curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_callback_func);
 
         /* pass the response to callback function */
-        curl_easy_setopt(curl, CURLOPT_WRITEDATA, response);
+        curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response->data);
 
         res = curl_easy_perform(curl);
 
-        if(httpResponseCode) {
-            *httpResponseCode = 0;
-            curl_easy_getinfo (curl, CURLINFO_RESPONSE_CODE, httpResponseCode);
+        if(response) {
+            response->code = 0;
+            curl_easy_getinfo (curl, CURLINFO_RESPONSE_CODE, &response->code);
         }
 
         if(res != CURLE_OK) {
@@ -260,7 +260,7 @@ int doHttpPost(char *url, struct curl_slist *headers, char *body, long *httpResp
     return 0;
 }
 
-int doHttpDelete(char *url, struct curl_slist *headers, long *httpResponseCode, char **response) {
+int doHttpDelete(char *url, struct curl_slist *headers, HttpResponse *response) {
     CURL *curl;
     CURLcode res;
 
@@ -286,13 +286,13 @@ int doHttpDelete(char *url, struct curl_slist *headers, long *httpResponseCode, 
         curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_callback_func);
 
         /* pass the response to callback function */
-        curl_easy_setopt(curl, CURLOPT_WRITEDATA, response);
+        curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response->data);
 
         res = curl_easy_perform(curl);
 
-        if(httpResponseCode) {
-            *httpResponseCode = 0;
-            curl_easy_getinfo (curl, CURLINFO_RESPONSE_CODE, httpResponseCode);
+        if(response) {
+            response->code = 0;
+            curl_easy_getinfo (curl, CURLINFO_RESPONSE_CODE, &response->code);
         }
 
         if(res != CURLE_OK) {

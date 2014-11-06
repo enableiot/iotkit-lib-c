@@ -54,6 +54,8 @@ typedef struct _AdvancedDataInquiry {
 
 } AdvancedDataInquiry;
 
+char *advancedDataInquiry(AdvancedDataInquiry *advancedDataInquiryObject);
+
 #ifdef __cplusplus
 }
 #endif
