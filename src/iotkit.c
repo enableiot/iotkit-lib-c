@@ -22,8 +22,13 @@
  */
 
 #include "iotkit.h"
+#include "version.h"
 
 static bool isInitialized = false;
+
+char *iotkit_get_version() {
+    return VERSION;
+}
 
 void iotkit_init() {
 

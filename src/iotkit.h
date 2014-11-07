@@ -191,6 +191,7 @@ bool prepareUrl(char **full_url, char *url_prepend, char *url_append, KeyValuePa
 char *getConfigAuthorizationToken();
 //char * hello();
 
+char *iotkit_get_version();
 void iotkit_init();
 
 #ifdef __cplusplus
