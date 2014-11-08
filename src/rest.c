@@ -130,7 +130,11 @@ int doHttpGet(char *url, struct curl_slist *headers, HttpResponse *response) {
         }
 
         /* display verbose */
-        curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
+        #if DEBUG
+            curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
+        #else
+            curl_easy_setopt(curl, CURLOPT_VERBOSE, 0L);
+        #endif
         /* incase of redirection, follow the new url */
         curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
 
@@ -177,7 +181,11 @@ int doHttpPut(char *url, struct curl_slist *headers, char *body, HttpResponse *r
         }
 
         /* display verbose */
-        curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
+        #if DEBUG
+            curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
+        #else
+            curl_easy_setopt(curl, CURLOPT_VERBOSE, 0L);
+        #endif
         /* incase of redirection, follow the new url */
         curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
 
@@ -229,7 +237,11 @@ int doHttpPost(char *url, struct curl_slist *headers, char *body, HttpResponse *
         }
 
         /* display verbose */
-        curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
+        #if DEBUG
+            curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
+        #else
+            curl_easy_setopt(curl, CURLOPT_VERBOSE, 0L);
+        #endif
         /* incase of redirection, follow the new url */
         curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
 
@@ -279,7 +291,11 @@ int doHttpDelete(char *url, struct curl_slist *headers, HttpResponse *response) 
         }
 
         /* display verbose */
-        curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
+        #if DEBUG
+            curl_easy_setopt(curl, CURLOPT_VERBOSE, 1L);
+        #else
+            curl_easy_setopt(curl, CURLOPT_VERBOSE, 0L);
+        #endif
 
         /* incase of redirection, follow the new url */
         curl_easy_setopt(curl, CURLOPT_FOLLOWLOCATION, 1L);
