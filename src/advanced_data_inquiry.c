@@ -438,10 +438,14 @@ char *advancedDataInquiry(AdvancedDataInquiry *advancedDataInquiryObject) {
             while(attributesList) {
                 AttributeFilter *attributes = attributesList->filterData;
 
-                printf("Attributes filter is %d\n", attributesList->filterData);
+                #if DEBUG
+                    printf("Attributes filter is %d\n", attributesList->filterData);
+                #endif
 
                 while(attributes) {
-                    printf("Attributes filter Name is %s\n", attributes->filterName);
+                    #if DEBUG
+                        printf("Attributes filter Name is %s\n", attributes->filterName);
+                    #endif
                     strcat(body, "\"");
                     strcat(body, attributes->filterName);
                     strcat(body, "\":[");

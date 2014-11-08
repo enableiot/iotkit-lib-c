@@ -35,7 +35,7 @@ extern "C" {
 #include "rest.h"
 
 #ifndef DEBUG
-   #define DEBUG 1
+   #define DEBUG 0
 #endif
 
 #define BODY_SIZE_MIN 1024

@@ -74,10 +74,14 @@ void parseAuthorizationToken() {
 
             if (isJsonString(jitem)) {
                 configurations.authorization_key = strdup(jitem->valuestring);
-                printf("Read authorization_key is %s\n", configurations.authorization_key);
+                #if DEBUG
+                    printf("Read authorization_key is %s\n", configurations.authorization_key);
+                #endif
             } else {
                 configurations.authorization_key = NULL;
-                puts("Read authorization_key is NULL");
+                #if DEBUG
+                    puts("Read authorization_key is NULL");
+                #endif
             }
 
             jitem = cJSON_GetObjectItem(json, "expiry");
@@ -88,10 +92,14 @@ void parseAuthorizationToken() {
 
             if (isJsonString(jitem)) {
                 configurations.authorization_key_expiry = strdup(jitem->valuestring);
-                printf("Read authorization_key expiry is %s\n", configurations.authorization_key_expiry);
+                #if DEBUG
+                    printf("Read authorization_key expiry is %s\n", configurations.authorization_key_expiry);
+                #endif
             } else {
                 configurations.authorization_key_expiry = NULL;
-                puts("Read authorization_key expiry is NULL");
+                #if DEBUG
+                    puts("Read authorization_key expiry is NULL");
+                #endif
             }
 
             jitem = cJSON_GetObjectItem(json, "user_account_id");
@@ -102,10 +110,14 @@ void parseAuthorizationToken() {
 
             if (isJsonString(jitem)) {
                 configurations.user_account_id = strdup(jitem->valuestring);
-                printf("Read user_account_id is %s\n", configurations.user_account_id);
+                #if DEBUG
+                    printf("Read user_account_id is %s\n", configurations.user_account_id);
+                #endif
             } else {
                 configurations.user_account_id = NULL;
-                puts("Read user_account_id is NULL");
+                #if DEBUG
+                    puts("Read user_account_id is NULL");
+                #endif
             }
 
             cJSON_Delete(json);

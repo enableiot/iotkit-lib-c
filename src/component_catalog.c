@@ -150,13 +150,13 @@ char *createAnComponentCatalog(ComponentCatalog *cmpCatalogObject) {
             cmpCatalogObject->type == NULL || cmpCatalogObject->datatype == NULL || \
             cmpCatalogObject->format == NULL || cmpCatalogObject->unit == NULL || \
             cmpCatalogObject->display == NULL) {
-        printf("Mandatory field missing to create component catalog\n");
+        fprintf(stderr, "Mandatory field missing to create component catalog\n");
 
         return NULL;
     }
 
     if(strcmp(cmpCatalogObject->type, "actuator") ==0 && cmpCatalogObject->parameters == NULL) {
-        printf("Command Parameters are mandatory for component catalog type \"actuator\"\n");
+        fprintf(stderr, "Command Parameters are mandatory for component catalog type \"actuator\"\n");
 
         return NULL;
     }
@@ -258,7 +258,7 @@ char *updateAnComponentCatalog(ComponentCatalog *cmpCatalogObject, char *cmp_id)
     response->data = NULL;
 
     if(strcmp(cmpCatalogObject->type, "actuator") ==0 && cmpCatalogObject->parameters == NULL) {
-        printf("Command Parameters are mandatory for component catalog type \"actuator\"\n");
+        fprintf(stderr, "Command Parameters are mandatory for component catalog type \"actuator\"\n");
 
         return NULL;
     }

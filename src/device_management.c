@@ -787,7 +787,9 @@ char *addComponent(char *cmp_name, char *cmp_type) {
 
         doHttpPost(url, headers, body, response);
 
-        printf("Received BODY is %s\n", response->data);
+        #if DEBUG
+            printf("Received Response is %s\n", response->data);
+        #endif
         if(response->data) {
             storeComponent(response->data);
         }

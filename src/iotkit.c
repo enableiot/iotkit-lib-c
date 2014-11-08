@@ -43,10 +43,14 @@ void iotkit_init() {
             fprintf(stderr, "Unable to initialize CURL %d\n", code);
         } else {
             isInitialized = true;
-            puts("Library initialized successfully");
+            #if DEBUG
+                puts("Library initialized successfully");
+            #endif
         }
     } else {
-        puts("Library is already initialized and doesn't need to be re-initialized");
+        #if DEBUG
+            puts("Library is already initialized and doesn't need to be re-initialized");
+        #endif
     }
 }
 
@@ -55,7 +59,9 @@ void iotkit_cleanup() {
         rest_cleanup();
         isInitialized = false;
     } else {
-        puts("Library is not initialized and doesn't need to cleanup resources");
+        #if DEBUG
+            puts("Library is not initialized and doesn't need to cleanup resources");
+        #endif
     }
 }
 
@@ -272,7 +278,9 @@ void parseConfiguration(char *config_file_path) {
                 return;
             }
             configurations.auth_token_info = strdup(child2->valuestring);
-            printf("Read auth_token_info is %s\n", configurations.auth_token_info);
+            #if DEBUG
+                printf("Read auth_token_info is %s\n", configurations.auth_token_info);
+            #endif
 
             child2 = cJSON_GetObjectItem(child1, "me_info");
             if (!isJsonString(child2)) {
@@ -280,7 +288,9 @@ void parseConfiguration(char *config_file_path) {
                 return;
             }
             configurations.me_info = strdup(child2->valuestring);
-            printf("Read me_info is %s\n", configurations.me_info);
+            #if DEBUG
+                printf("Read me_info is %s\n", configurations.me_info);
+            #endif
 
 
             child1 = cJSON_GetObjectItem(jitem, "cmpcatalog");
@@ -587,7 +597,7 @@ bool prepareUrl(char **full_url, char *url_prepend, char *url_append, KeyValuePa
     char *url_post = NULL;
 
     if(!url_prepend || !url_append) {
-        fprintf(stderr, "prepareUrl: Parameter cannot be NULL");
+        fprintf(stderr, "prepareUrl: Parameter cannot be NULL\n");
         return false;
     }
 
@@ -610,7 +620,7 @@ bool prepareUrl(char **full_url, char *url_prepend, char *url_append, KeyValuePa
             int url_post_size = 0;
 
             if(configurations.data_account_id == NULL){
-                puts("Data Account ID not Found");
+                fprintf(stderr, "Data Account ID not Found\n");
                 return false;
             }
 
@@ -631,7 +641,7 @@ bool prepareUrl(char **full_url, char *url_prepend, char *url_append, KeyValuePa
             int url_post_size = 0;
 
             if(configurations.device_id == NULL){
-                puts("Device ID not Found");
+                fprintf(stderr, "Device ID not Found\n");
                 return false;
             }
 
@@ -652,7 +662,7 @@ bool prepareUrl(char **full_url, char *url_prepend, char *url_append, KeyValuePa
             int url_post_size = 0;
 
             if(configurations.user_account_id == NULL){
-                puts("User Account ID not Found");
+                fprintf(stderr, "User Account ID not Found\n");
                 return false;
             }
 

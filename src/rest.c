@@ -109,7 +109,9 @@ size_t static write_callback_func(void *buffer, size_t size, size_t nmemb, char 
         write_length = strlen(*userp);
     }
 
-    printf("Values received :%s\n", *userp);
+    #if DEBUG
+        printf("Values received :%s\n", *userp);
+    #endif
     return write_length;
 }
 

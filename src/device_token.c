@@ -75,10 +75,14 @@ void parseDeviceToken() {
 
             if (isJsonString(jitem)) {
                 configurations.device_id = strdup(jitem->valuestring);
-                printf("Device ID %s\n", configurations.device_id);
+                #if DEBUG
+                    printf("Device ID %s\n", configurations.device_id);
+                #endif
             } else {
                 configurations.device_id = NULL;
-                puts("Device ID is NULL");
+                #if DEBUG
+                    puts("Device ID is NULL");
+                #endif
             }
 
             jitem = cJSON_GetObjectItem(json, "deviceToken");
@@ -89,10 +93,14 @@ void parseDeviceToken() {
 
             if (isJsonString(jitem)) {
                 configurations.deviceToken = strdup(jitem->valuestring);
-                printf("Device Token %s\n", configurations.deviceToken);
+                #if DEBUG
+                    printf("Device Token %s\n", configurations.deviceToken);
+                #endif
             } else {
                 configurations.deviceToken = NULL;
-                puts("Device Token is NULL");
+                #if DEBUG
+                    puts("Device Token is NULL");
+                #endif
             }
 
             jitem = cJSON_GetObjectItem(json, "data_account_id");
@@ -103,10 +111,14 @@ void parseDeviceToken() {
 
             if (isJsonString(jitem)) {
                 configurations.data_account_id = strdup(jitem->valuestring);
-                printf("Data Account ID is %s\n", configurations.data_account_id);
+                #if DEBUG
+                    printf("Data Account ID is %s\n", configurations.data_account_id);
+                #endif
             } else {
                 configurations.data_account_id = NULL;
-                puts("Data Account ID is NULL");
+                #if DEBUG
+                    puts("Data Account ID is NULL");
+                #endif
             }
 
             jitem = cJSON_GetObjectItem(json, "data_account_name");
@@ -240,7 +252,9 @@ void storeDeviceID(char *response) {
 
             jitem = cJSON_GetObjectItem(json, "deviceId");
 
-            printf("Created device for ID %s\n", jitem->valuestring);
+            #if DEBUG
+                printf("Created device for ID %s\n", jitem->valuestring);
+            #endif
 
             // overwrite device token if any present
             configurations.deviceToken = NULL;
