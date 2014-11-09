@@ -36,7 +36,7 @@ typedef struct _ActuatorCommandParams {
     char *name;
     char *value;
 
-    struct ActuatorCommandParams *next;
+    struct _ActuatorCommandParams *next;
 } ActuatorCommandParams;
 
 typedef struct _ComponentCatalog {
