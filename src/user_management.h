@@ -21,8 +21,8 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef __RULE_MANAGEMENT_H
-#define __RULE_MANAGEMENT_H
+#ifndef __USER_MANAGEMENT_H
+#define __USER_MANAGEMENT_H
 
 #ifdef __cplusplus
 extern "C" {
