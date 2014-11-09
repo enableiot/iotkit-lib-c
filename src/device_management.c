@@ -113,9 +113,9 @@ DeviceCreationObj *createDeviceCreationObject(char *device_id, char *gateway_id,
         return NULL;
     }
 
-    createDeviceObj->device_id = device_id;
-    createDeviceObj->gateway_id = gateway_id;
-    createDeviceObj->device_name = device_name;
+    createDeviceObj->device_id = strdup(device_id);
+    createDeviceObj->gateway_id = strdup(gateway_id);
+    createDeviceObj->device_name = strdup(device_name);
 
     createDeviceObj->tags = NULL;
 
@@ -131,11 +131,11 @@ DeviceCreationObj *createDeviceCreationObject(char *device_id, char *gateway_id,
 DeviceCreationObj *addLocInfo(DeviceCreationObj *createDeviceObj, char *latitude, char *longitude, char *height) {
 
     if(latitude && longitude) {
-        createDeviceObj->latitude = latitude;
-        createDeviceObj->longitude = longitude;
+        createDeviceObj->latitude = strdup(latitude);
+        createDeviceObj->longitude = strdup(longitude);
 
         if(height) {
-            createDeviceObj->height = height;
+            createDeviceObj->height = strdup(height);
         }
     }
 
@@ -146,7 +146,7 @@ DeviceCreationObj *addTagInfo(DeviceCreationObj *createDeviceObj, char *tagName)
     StringList *tagData;
 
     tagData = (StringList *)malloc(sizeof(StringList));
-    tagData->data = tagName;
+    tagData->data = strdup(tagName);
     tagData->next = NULL;
 
     if(!createDeviceObj->tags) {
@@ -167,8 +167,8 @@ DeviceCreationObj *addAttributesInfo(DeviceCreationObj *createDeviceObj, char *n
     KeyValueParams *keyValue;
 
     keyValue = (KeyValueParams *)malloc(sizeof(KeyValueParams));
-    keyValue->name = name;
-    keyValue->value = value;
+    keyValue->name = strdup(name);
+    keyValue->value = strdup(value);
     keyValue->next = NULL;
 
     if(!createDeviceObj->attributes) {
