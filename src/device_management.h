@@ -48,10 +48,21 @@ char *validateDeviceToken();
 char *listAllDevices();
 char *getMyDeviceInfo();
 char *getOneDeviceInfo(char *device_id);
+
+DeviceCreationObj *createDeviceCreationObject(char *device_id, char *gateway_id, char *device_name);
+DeviceCreationObj *addLocInfo(DeviceCreationObj *createDeviceObj, char *latitude, char *longitude, char *height);
+DeviceCreationObj *addTagInfo(DeviceCreationObj *createDeviceObj, char *tagName);
+DeviceCreationObj *addAttributesInfo(DeviceCreationObj *createDeviceObj, char *name, char *value);
+
 char *createADevice(DeviceCreationObj *createDeviceObj);
 char *updateADevice(DeviceCreationObj *createDeviceObj);
 char *activateADevice(char *activation_code);
 char *deleteADevice(char *device_id);
+
+bool isSensorRegistered(char *name);
+char *getSensorComponentId(char *name);
+bool isDeviceActivated();
+
 char *addComponent(char *cmp_name, char *cmp_type);
 char *deleteComponent(char *sensor_name);
 char *listAllTagsForDevices();
