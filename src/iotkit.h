@@ -194,6 +194,9 @@ char *getConfigAuthorizationToken();
 char *iotkit_get_version();
 void iotkit_init();
 
+KeyValueParams *createKeyValueParams(char *key, char *value);
+void addKeyValueParams(KeyValueParams *params, char *key, char *value);
+
 #ifdef __cplusplus
 }
 #endif

@@ -798,6 +798,42 @@ char *createHttpResponseJson(HttpResponse *response) {
     return out;
 }
 
+KeyValueParams *createKeyValueParams(char *key, char *value) {
+    KeyValueParams *newObject = NULL;
+
+    if(!key || !value) {
+        return newObject;
+    }
+
+    newObject = (KeyValueParams *)malloc(sizeof(KeyValueParams));
+    newObject->name = strdup(key);
+    newObject->value = strdup(value);
+    newObject->next = NULL;
+
+    return newObject;
+}
+
+void addKeyValueParams(KeyValueParams *params, char *key, char *value) {
+    KeyValueParams *newObject = NULL;
+    KeyValueParams *traverse = NULL;
+
+    if(!key || !value) {
+        return params;
+    }
+
+    newObject = (KeyValueParams *)malloc(sizeof(KeyValueParams));
+    newObject->name = strdup(key);
+    newObject->value = strdup(value);
+    newObject->next = NULL;
+
+    traverse = params;
+    while(traverse->next != NULL) {
+        traverse = traverse->next;
+    }
+
+    traverse->next = newObject;
+}
+
 #if DEBUG
 
     void main() {
