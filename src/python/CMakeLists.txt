@@ -12,6 +12,7 @@ set_source_files_properties (python-iotkit.i PROPERTIES CPLUSPLUS ON)
 set_source_files_properties (python-iotkit.i PROPERTIES SWIG_FLAGS "-I${CMAKE_BINARY_DIR}/src")
 swig_add_module (python-iotkit python python-iotkit.i ${iotkit_LIB_SRCS})
 swig_link_libraries (python-iotkit ${PYTHON_LIBRARIES})
+swig_link_libraries (python-iotkit curl)
 
 set (CMAKE_C_FLAGS -DSWIGPYTHON=${SWIG_FOUND})
 
