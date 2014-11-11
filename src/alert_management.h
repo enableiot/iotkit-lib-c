@@ -101,6 +101,34 @@ typedef struct _CreateNewAlert {
 } CreateNewAlert;
 
 char *createNewAlert(CreateNewAlert *createNewAlertObj);
+CreateNewAlert *cna_setMsgType(CreateNewAlert *createNewAlertObj, char *msgType);
+CreateNewAlertData *createNewAlertDataObject();
+CreateNewAlertData *cna_setAccountId(CreateNewAlertData *createNewAlertDataObj, char *accountId);
+CreateNewAlertData *cna_setAlertId(CreateNewAlertData *createNewAlertDataObj, int alertId);
+CreateNewAlertData *cna_setRuleId(CreateNewAlertData *createNewAlertDataObj, int ruleId);
+CreateNewAlertData *cna_setDeviceId(CreateNewAlertData *createNewAlertDataObj, char *deviceId);
+CreateNewAlertData *cna_setAlertStatus(CreateNewAlertData *createNewAlertDataObj, char *alertStatus);
+CreateNewAlertData *cna_setTimestamp(CreateNewAlertData *createNewAlertDataObj, long timestamp);
+CreateNewAlertData *cna_setResetTimestamp(CreateNewAlertData *createNewAlertDataObj, long resetTimestamp);
+CreateNewAlertData *cna_setResetType(CreateNewAlertData *createNewAlertDataObj, char *resetType);
+CreateNewAlertData *cna_setLastUpdateDate(CreateNewAlertData *createNewAlertDataObj, long lastUpdateDate);
+CreateNewAlertData *cna_setRuleName(CreateNewAlertData *createNewAlertDataObj, char *ruleName);
+CreateNewAlertData *cna_setRulePriority(CreateNewAlertData *createNewAlertDataObj, char *rulePriority);
+CreateNewAlertData *cna_setNaturalLangAlert(CreateNewAlertData *createNewAlertDataObj, char *naturalLangAlert);
+CreateNewAlertData *cna_setRuleExecutionTimestamp(CreateNewAlertData *createNewAlertDataObj, long ruleExecutionTimestamp);
+CreateNewAlert *addNewAlertDataObject(CreateNewAlert *createNewAlertObj, CreateNewAlertData *createNewAlertDataObj);
+CreateNewAlertDataConditions *createNewAlertDataConditionsObject();
+CreateNewAlertDataConditions *cna_setConditionSequence(CreateNewAlertDataConditions *createNewAlertDataConditionsObj, int conditionSequence);
+CreateNewAlertDataConditions *cna_setNaturalLanguageCondition(CreateNewAlertDataConditions *createNewAlertDataConditionsObj, char *naturalLangCondition);
+CreateNewAlertData *addNewAlertConditions(CreateNewAlertData *createNewAlertDataObj, CreateNewAlertDataConditions *conditionsObj);
+CreateNewAlertDataConditions *cna_addComponents(CreateNewAlertDataConditions *createNewAlertDataConditionsObj, CreateNewAlertDataConditionCmps *component);
+CreateNewAlertDataConditionCmps *createNewAlertDataConditionCmpsObject();
+CreateNewAlertDataConditionCmps *cnac_setComponentId(CreateNewAlertDataConditionCmps *createNewAlertDataConditionCmpsObj, char *cmpId);
+CreateNewAlertDataConditionCmps *cnac_setDataType(CreateNewAlertDataConditionCmps *createNewAlertDataConditionCmpsObj, char *cmdDataType);
+CreateNewAlertDataConditionCmps *cnac_setComponentName(CreateNewAlertDataConditionCmps *createNewAlertDataConditionCmpsObj, char *cmpName);
+CreateNewAlertDataConditionCmps *cnac_addValuePoints(CreateNewAlertDataConditionCmps *createNewAlertDataConditionCmpsObj, long timestamp, char *value);
+char *createNewAlert(CreateNewAlert *createNewAlertObj);
+
 char *getListOfAlerts();
 char *getAlertInformation(char *alertId);
 char *resetAlert(char *alertId);

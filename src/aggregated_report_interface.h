@@ -49,6 +49,22 @@ typedef struct _AggregatedReportInterface {
     AttributeFilterList *filters;
 } AggregatedReportInterface;
 
+AggregatedReportInterface *createAggregatedReportInterface();
+AggregatedReportInterface *setReportMessageType(AggregatedReportInterface *aggregatedReportInterfaceObject, char *msgType);
+AggregatedReportInterface *setReportStartTimestamp(AggregatedReportInterface *aggregatedReportInterfaceObject, long startTimestamp);
+AggregatedReportInterface *setReportEndTimestamp(AggregatedReportInterface *aggregatedReportInterfaceObject, long endTimestamp);
+AggregatedReportInterface *addAggregationMethods(AggregatedReportInterface *aggregatedReportInterfaceObject, char *aggregation);
+AggregatedReportInterface *addDimensions(AggregatedReportInterface *aggregatedReportInterfaceObject, char *dimension);
+AggregatedReportInterface *setOffset(AggregatedReportInterface *aggregatedReportInterfaceObject, int offset);
+AggregatedReportInterface *setLimit(AggregatedReportInterface *aggregatedReportInterfaceObject, int limit);
+AggregatedReportInterface *setReportCountOnly(AggregatedReportInterface *aggregatedReportInterfaceObject, bool countOnly);
+AggregatedReportInterface *setOutputType(AggregatedReportInterface *aggregatedReportInterfaceObject, char *outputType);
+AggregatedReportInterface *addReportDeviceIds(AggregatedReportInterface *aggregatedReportInterfaceObject, char *deviceId);
+AggregatedReportInterface *addReportGatewayIds(AggregatedReportInterface *aggregatedReportInterfaceObject, char *gatewayId);
+AggregatedReportInterface *addReportComponentIds(AggregatedReportInterface *aggregatedReportInterfaceObject, char *componentId);
+AggregatedReportInterface *addReportSortInfo(AggregatedReportInterface *aggregatedReportInterfaceObject, char *name, char *value);
+AggregatedReportInterface *addFilters(AggregatedReportInterface *aggregatedReportInterfaceObject, AttributeFilter *attributeFilter);
+
 char *aggregatedReportInterface(AggregatedReportInterface *aggregatedReportInterfaceObject);
 
 #ifdef __cplusplus

@@ -58,6 +58,13 @@ typedef struct _ComponentCatalog {
 
 char *listAllComponentCatalogs();
 char *getComponentCatalogDetails(char *cmp_id);
+ComponentCatalog *createComponentCatalogObject(char *cmp_name, char *cmp_version, char *cmp_type, char *cmp_datatype, \
+            char *cmp_format, char *cmp_unit, char *cmp_display);
+ComponentCatalog *addMinValue(ComponentCatalog *cmpCatalogObject, double cmp_minvalue);
+ComponentCatalog *addMaxValue(ComponentCatalog *cmpCatalogObject, double cmp_maxvalue);
+ComponentCatalog *addCommandString(ComponentCatalog *cmpCatalogObject, char *cmp_command);
+ComponentCatalog *addCommandParams(ComponentCatalog *cmpCatalogObject, char *cmd_name, char *cmd_value);
+
 char *createAnComponentCatalog(ComponentCatalog *cmpCatalogObject);
 char *updateAnComponentCatalog(ComponentCatalog *cmpCatalogObject, char *cmp_id);
 

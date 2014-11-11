@@ -72,6 +72,27 @@ typedef struct _CreateRule {
     CreateRuleConditionValuesList *values;
 } CreateRule;
 
+CreateRule *createRuleObject();
+CreateRule *setRuleName(CreateRule *createRuleObj, char *name);
+CreateRule *setRuleDescription(CreateRule *createRuleObj, char *description);
+CreateRule *setRulePriority(CreateRule *createRuleObj, char *priority);
+CreateRule *setRuleType(CreateRule *createRuleObj, char *type);
+CreateRule *setRuleStatus(CreateRule *createRuleObj, char *status);
+CreateRule *setRuleResetType(CreateRule *createRuleObj, char *resetType);
+CreateRuleActions *createRuleActionObject();
+CreateRuleActions *setRuleActionObjType(CreateRuleActions *createRuleActionObj, char *type);
+CreateRuleActions *addRuleActionObjTarget(CreateRuleActions *createRuleActionObj, char *target);
+CreateRule *setRuleActions(CreateRule *createRuleObj, CreateRuleActions *action);
+CreateRule *addRulePopulationId(CreateRule *createRuleObj, char *populationId);
+CreateRule *setRulePopulationAttributes(CreateRule *createRuleObj, char *attributes);
+CreateRuleConditionValues *createRuleConditionValuesObject();
+CreateRuleConditionValues *addConditionComponent(CreateRuleConditionValues *createRuleConditionValuesObj, char *keyName, char *keyValue);
+CreateRuleConditionValues *setConditionType(CreateRuleConditionValues *createRuleConditionValuesObj, char *type);
+CreateRuleConditionValues *addConditionValues(CreateRuleConditionValues *createRuleConditionValuesObj, char *value);
+CreateRuleConditionValues *setConditionOperator(CreateRuleConditionValues *createRuleConditionValuesObj, char *opname);
+CreateRule *setRuleConditionOp(CreateRule *createRuleObj, char *opname);
+CreateRule *addRuleConditionValues(CreateRule *createRuleObj, CreateRuleConditionValues *createRuleConditionValuesObj);
+
 char *createAnRule(CreateRule *createRuleObj);
 char *updateAnRule(CreateRule *createRuleObj, char *rule_id);
 char *getListOfRules();

@@ -39,6 +39,10 @@ typedef struct _RetrieveData {
 } RetrieveData;
 
 char *submitData(char *cname, char *value, char *latitude, char *longitude, char *height);
+
+RetrieveData *createRetrieveDataObject(long fromMillis, long toMillis);
+RetrieveData *addDeviceId(RetrieveData *retrieveObj, char *id);
+RetrieveData *addSensorId(RetrieveData *retrieveObj, char *sensorName);
 char *retrieveData(RetrieveData *retrieveObj);
 
 #ifdef __cplusplus

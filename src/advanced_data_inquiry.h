@@ -56,6 +56,24 @@ typedef struct _AdvancedDataInquiry {
 
 } AdvancedDataInquiry;
 
+AdvancedDataInquiry *createAdvancedDataInquiryObject();
+AdvancedDataInquiry *setMessageType(AdvancedDataInquiry *advancedDataInquiryObject, char *msgType);
+AdvancedDataInquiry *addGatewayIds(AdvancedDataInquiry *advancedDataInquiryObject, char *gatewayId);
+AdvancedDataInquiry *addDeviceIds(AdvancedDataInquiry *advancedDataInquiryObject, char *deviceId);
+AdvancedDataInquiry *addComponentIds(AdvancedDataInquiry *advancedDataInquiryObject, char *componentId);
+AdvancedDataInquiry *setStartTimestamp(AdvancedDataInquiry *advancedDataInquiryObject, long startTimestamp);
+AdvancedDataInquiry *setEndTimestamp(AdvancedDataInquiry *advancedDataInquiryObject, long endTimestamp);
+AdvancedDataInquiry *addReturnedMeasureAttributes(AdvancedDataInquiry *advancedDataInquiryObject, char *attribute);
+AdvancedDataInquiry *setShowMeasureLocation(AdvancedDataInquiry *advancedDataInquiryObject, bool measureLocation);
+AttributeFilter *createAttributeFilterObject(char *filterName);
+AttributeFilter *addAttributeFilterValues(AttributeFilter *attributeFilter, char *filterValue);
+AdvancedDataInquiry *addDevCompAttributeFilter(AdvancedDataInquiry *advancedDataInquiryObject, AttributeFilter *attributeFilter);
+AdvancedDataInquiry *addMeasurementAttributeFilter(AdvancedDataInquiry *advancedDataInquiryObject, AttributeFilter *attributeFilter);
+AdvancedDataInquiry *addValueFilter(AdvancedDataInquiry *advancedDataInquiryObject, AttributeFilter *attributeFilter);
+AdvancedDataInquiry *setComponentRowLimit(AdvancedDataInquiry *advancedDataInquiryObject, int componentRowLimit);
+AdvancedDataInquiry *setCountOnly(AdvancedDataInquiry *advancedDataInquiryObject, bool countOnly);
+AdvancedDataInquiry *addSortInfo(AdvancedDataInquiry *advancedDataInquiryObject, char *name, char *value);
+
 char *advancedDataInquiry(AdvancedDataInquiry *advancedDataInquiryObject);
 
 #ifdef __cplusplus
