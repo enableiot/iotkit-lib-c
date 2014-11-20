@@ -21,8 +21,25 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+/**
+ * @file invitation_management.c
+ *
+ * Provides API to handle Invitation Management
+ */
+
 #include "invitation_management.h"
 
+/**
+ * @defgroup invitationmanagement
+ * This is Invitation Management Module
+ *  @{
+ */
+
+/**
+ * REST API to list the invitations
+ *
+ * @return returns the result received from server, otherwise NULL
+ */
 char *getListOfInvitation() {
     struct curl_slist *headers = NULL;
     char *url;
@@ -43,6 +60,11 @@ char *getListOfInvitation() {
     return NULL;
 }
 
+/**
+ * REST API to list the invitations for a specific user
+ *
+ * @return returns the result received from server, otherwise NULL
+ */
 char *getInvitationListSendToSpecificUser(char *email_id) {
     struct curl_slist *headers = NULL;
     char *url;
@@ -69,6 +91,11 @@ char *getInvitationListSendToSpecificUser(char *email_id) {
     return NULL;
 }
 
+/**
+ * REST API to create an invitation
+ *
+ * @return returns the result received from server, otherwise NULL
+ */
 char *createInvitation(char *email) {
     struct curl_slist *headers = NULL;
     char *url;
@@ -100,6 +127,11 @@ char *createInvitation(char *email) {
     return NULL;
 }
 
+/**
+ * REST API to delete an invitation
+ *
+ * @return returns the result received from server, otherwise NULL
+ */
 char *deleteInvitation(char *email_id) {
     struct curl_slist *headers = NULL;
     char *url;
@@ -125,3 +157,5 @@ char *deleteInvitation(char *email_id) {
 
     return NULL;
 }
+
+/** @} */ // end of invitationmanagement

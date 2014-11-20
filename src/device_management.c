@@ -21,28 +21,25 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+/**
+ * @file device_management.c
+ *
+ * Provides API to handle Device Management
+ */
+
 #include "device_management.h"
 
-char *validateDeviceToken() {
-    struct curl_slist *headers = NULL;
-    char *url;
-    HttpResponse *response = (HttpResponse *)malloc(sizeof(HttpResponse));
-    response->code = 0;
-    response->data = NULL;
+/**
+ * @defgroup devicemanagement
+ * This is Device Management Module
+ *  @{
+ */
 
-    appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
-    appendHttpHeader(&headers, HEADER_AUTHORIZATION, getDeviceAuthorizationToken());
-
-    if(prepareUrl(&url, configurations.base_url, configurations.auth_token_info, NULL)) {
-
-        doHttpGet(url, headers, response);
-
-        return createHttpResponseJson(response);
-    }
-
-    return NULL;
-}
-
+/**
+ * REST API to list all the devices under the account
+ *
+ * @return returns the result received from server, otherwise NULL
+ */
 char *listAllDevices() {
     struct curl_slist *headers = NULL;
     char *url;
@@ -62,6 +59,11 @@ char *listAllDevices() {
     return NULL;
 }
 
+/**
+ * REST API to get own device info. For another device please use getOneDeviceInfo()
+ *
+ * @return returns the result received from server, otherwise NULL
+ */
 char *getMyDeviceInfo() {
     struct curl_slist *headers = NULL;
     char *url;
@@ -81,6 +83,12 @@ char *getMyDeviceInfo() {
     return NULL;
 }
 
+/**
+ * REST API to get a specific device info. For own device please use getMyDeviceInfo()
+ *
+ * @param device_id specifies the device ID
+ * @return returns the result received from server, otherwise NULL
+ */
 char *getOneDeviceInfo(char *device_id) {
     struct curl_slist *headers = NULL;
     char *url;
@@ -106,6 +114,14 @@ char *getOneDeviceInfo(char *device_id) {
     return NULL;
 }
 
+/**
+ * Creates an data object to be used to generate JSON Body during createADevice() REST call
+ *
+ * @param device_id specifies the device ID
+ * @param gateway_id specifies the gateway ID
+ * @param device_name specifies the device name
+ * @return returns the created object if memory is available, otherwise NULL
+ */
 DeviceCreationObj *createDeviceCreationObject(char *device_id, char *gateway_id, char *device_name) {
     DeviceCreationObj *createDeviceObj = (DeviceCreationObj *)malloc(sizeof(DeviceCreationObj));
     if(!createDeviceObj) {
@@ -128,6 +144,14 @@ DeviceCreationObj *createDeviceCreationObject(char *device_id, char *gateway_id,
     return createDeviceObj;
 }
 
+/**
+ * sets the location information for the object created through createDeviceCreationObject()
+ *
+ * @param createDeviceObj the object created using createDeviceCreationObject()
+ * @param latitide specifies the geo location - latitude of the device
+ * @param longitude specifies the geo location - longitude of the device
+ * @param height specifies the physical height of the device
+ */
 DeviceCreationObj *addLocInfo(DeviceCreationObj *createDeviceObj, char *latitude, char *longitude, char *height) {
 
     if(latitude && longitude) {
@@ -142,6 +166,12 @@ DeviceCreationObj *addLocInfo(DeviceCreationObj *createDeviceObj, char *latitude
     return createDeviceObj;
 }
 
+/**
+ * add the tags. Can be called multiple times to add different tags
+ *
+ * @param createDeviceObj the object created using createDeviceCreationObject()
+ * @param tagName specifies the tag to be attached to a device
+ */
 DeviceCreationObj *addTagInfo(DeviceCreationObj *createDeviceObj, char *tagName) {
     StringList *tagData;
 
@@ -163,6 +193,13 @@ DeviceCreationObj *addTagInfo(DeviceCreationObj *createDeviceObj, char *tagName)
     return createDeviceObj;
 }
 
+/**
+ * add device attributes information. Can be called multiple times to add different attributes
+ *
+ * @param createDeviceObj the object created using createDeviceCreationObject()
+ * @param name specifes the parameter name in the attribute
+ * @param value specifes the parameter value in the attribute
+ */
 DeviceCreationObj *addAttributesInfo(DeviceCreationObj *createDeviceObj, char *name, char *value) {
     KeyValueParams *keyValue;
 
@@ -185,6 +222,12 @@ DeviceCreationObj *addAttributesInfo(DeviceCreationObj *createDeviceObj, char *n
     return createDeviceObj;
 }
 
+/**
+ * REST API to create a device
+ *
+ * @param createDeviceObj the object created using createDeviceCreationObject()
+ * @return returns the result received from server, otherwise NULL
+ */
 char *createADevice(DeviceCreationObj *createDeviceObj) {
     struct curl_slist *headers = NULL;
     char *url;
@@ -285,6 +328,12 @@ char *createADevice(DeviceCreationObj *createDeviceObj) {
     return NULL;
 }
 
+/**
+ * REST API to update an existing device
+ *
+ * @param createDeviceObj the object created using createDeviceCreationObject()
+ * @return returns the result received from server, otherwise NULL
+ */
 char *updateADevice(DeviceCreationObj *createDeviceObj) {
     struct curl_slist *headers = NULL;
     char *url;
@@ -367,6 +416,12 @@ char *updateADevice(DeviceCreationObj *createDeviceObj) {
     return NULL;
 }
 
+/**
+ * REST API to activate a device
+ *
+ * @param activation_code specifies the activation code
+ * @return returns the result received from server, otherwise NULL
+ */
 char *activateADevice(char *activation_code) {
     struct curl_slist *headers = NULL;
     char *url;
@@ -413,6 +468,12 @@ char *activateADevice(char *activation_code) {
     return NULL;
 }
 
+/**
+ * REST API to delete an existing device
+ *
+ * @param device_id specifies the device ID
+ * @return returns the result received from server, otherwise NULL
+ */
 char *deleteADevice(char *device_id) {
     struct curl_slist *headers = NULL;
     char *url;
@@ -439,7 +500,7 @@ char *deleteADevice(char *device_id) {
     return NULL;
 }
 
-/** Stores device configuration JSON
+/* Stores device configuration JSON
 */
 void storeComponent(char *response) {
     cJSON *json = NULL, *jitem = NULL, *child = NULL;
@@ -646,6 +707,12 @@ void parseComponentsList() {
 }
 
 
+/**
+ * Checks whether a sensor is already registered or not
+ *
+ * @param name specifies the sensor name
+ * @return returns 'true' if already registered otherwise 'false'
+ */
 bool isSensorRegistered(char *name) {
     SensorComp *traverse = sensorsList;
 
@@ -663,6 +730,12 @@ bool isSensorRegistered(char *name) {
     return false;
 }
 
+/**
+ * Gets the ID for a given sensor name
+ *
+ * @param name specifies the sensor name
+ * @return returns the ID if available, otherwise NULL
+ */
 char *getSensorComponentId(char *name) {
     SensorComp *traverse = sensorsList;
 
@@ -753,6 +826,13 @@ bool removeSensorComponentFromCache(char *name) {
     return false;
 }
 
+/**
+ * REST API to add a component (also known as sensor) to device
+ *
+ * @param cmp_name specifies the sensor name
+ * @param cmp_type specifies the sensor type
+ * @return returns the result received from server, otherwise NULL
+ */
 char *addComponent(char *cmp_name, char *cmp_type) {
     char  uuid_str[38];
     struct curl_slist *headers = NULL;
@@ -800,6 +880,12 @@ char *addComponent(char *cmp_name, char *cmp_type) {
     return NULL;
 }
 
+/**
+ * REST API to delete a component (also known as sensor) from a device
+ *
+ * @param cmp_name specifies the sensor name
+ * @return returns the result received from server, otherwise NULL
+ */
 char *deleteComponent(char *sensor_name) {
     struct curl_slist *headers = NULL;
     char *url;
@@ -833,10 +919,20 @@ char *deleteComponent(char *sensor_name) {
     return NULL;
 }
 
+/**
+ * Specifies whether the device is activated or not
+ *
+ * @return returns 'true' if already activated, otherwise 'false'
+ */
 bool isDeviceActivated() {
     return configurations.device_id && configurations.deviceToken;
 }
 
+/**
+ * REST API to list all the tags of the device
+ *
+ * @return returns the result received from server, otherwise NULL
+ */
 char *listAllTagsForDevices() {
     struct curl_slist *headers = NULL;
     char *url;
@@ -856,6 +952,11 @@ char *listAllTagsForDevices() {
     return NULL;
 }
 
+/**
+ * REST API to list all the attributes of the device
+ *
+ * @return returns the result received from server, otherwise NULL
+ */
 char *listAllAttributesForDevices() {
     struct curl_slist *headers = NULL;
     char *url;
@@ -874,3 +975,5 @@ char *listAllAttributesForDevices() {
 
     return NULL;
 }
+
+/** @} */ // end of devicemanagement

@@ -65,42 +65,6 @@ iotkit_create_install_pkgconfig (iotkit.pc lib${LIB_SUFFIX}/pkgconfig)
 
 install (TARGETS iotkit DESTINATION lib)
 
-if (DOXYGEN_FOUND)
-  set (CMAKE_SWIG_FLAGS -DDOXYGEN=${DOXYGEN_FOUND})
-  # CPP class headers
-  foreach (_file ${DOCCLASSES})
-    add_custom_command (OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/${_file}_class_doc.i
-      COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/doxy2swig.py -n
-        ${CMAKE_BINARY_DIR}/xml/classiotkit_1_1_${_file}.xml
-        ${CMAKE_CURRENT_BINARY_DIR}/${_file}_class_doc.i
-      DEPENDS ${CMAKE_BINARY_DIR}/xml/classiotkit_1_1_${_file}.xml
-    )
-    add_custom_target (${_file}class_doc_i DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/${_file}_class_doc.i)
-    add_dependencies (${_file}class_doc_i doc)
-  endforeach ()
-  # C header files
-  set (DOCFILES common ${DOCCLASSES})
-  foreach (_file ${DOCFILES})
-    add_custom_command (OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/${_file}_doc.i
-      COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/doxy2swig.py -n
-        ${CMAKE_BINARY_DIR}/xml/${_file}_8h.xml
-        ${CMAKE_CURRENT_BINARY_DIR}/${_file}_doc.i
-      DEPENDS ${CMAKE_BINARY_DIR}/xml/${_file}_8h.xml
-    )
-    add_custom_target (${_file}doc_i DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/${_file}_doc.i)
-    add_dependencies (${_file}doc_i doc)
-  endforeach ()
-  # CPP common header
-  add_custom_command (OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/common_hpp_doc.i
-    COMMAND ${PYTHON_EXECUTABLE} ${CMAKE_CURRENT_SOURCE_DIR}/doxy2swig.py -n
-      ${CMAKE_BINARY_DIR}/xml/common_8hpp.xml
-      ${CMAKE_CURRENT_BINARY_DIR}//common_hpp_doc.i
-    DEPENDS ${CMAKE_BINARY_DIR}/xml/common_8hpp.xml
-  )
-  add_custom_target (common_hpp_doc_i DEPENDS ${CMAKE_CURRENT_BINARY_DIR}/common_hpp_doc.i)
-  add_dependencies (common_hpp_doc_i doc)
-endif ()
-
 if (BUILDSWIG)
   find_package (SWIG)
   if (SWIG_FOUND)

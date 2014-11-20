@@ -21,10 +21,27 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+/**
+ * @file authorization.c
+ *
+ * Provides API to handle Alert Management
+ */
 
 #include "authorization.h"
 
+/**
+ * @defgroup authorization
+ * This is Authorization Module
+ *  @{
+ */
 
+/**
+ * REST API to get user JWT token
+ *
+ * @param username specifies the username
+ * @param password specifies the password
+ * @return returns the result received from server, otherwise NULL
+ */
 char *getUserJwtToken(char *username, char *password) {
     struct curl_slist *headers = NULL;
     char *url;
@@ -67,7 +84,11 @@ char *getUserJwtToken(char *username, char *password) {
     return NULL;
 }
 
-
+/**
+ * REST API to get user JWT token information
+ *
+ * @return returns the result received from server, otherwise NULL
+ */
 char *getUserJwtTokenInfo() {
     struct curl_slist *headers = NULL;
     char *url;
@@ -88,8 +109,7 @@ char *getUserJwtTokenInfo() {
     return NULL;
 }
 
-
-// Deprecated API
+/* Deprecated API
 char *getAuthorizationTokenMeInfo() {
     struct curl_slist *headers = NULL;
     char *url;
@@ -108,4 +128,6 @@ char *getAuthorizationTokenMeInfo() {
     }
 
     return NULL;
-}
+} */
+
+/** @} */ // end of authorization

@@ -21,8 +21,25 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+/**
+ * @file advanced_data_inquiry.c
+ *
+ * Provides API to handle Advanced Data Inquiry
+ */
+
 #include "advanced_data_inquiry.h"
 
+/**
+ * @defgroup advanceddatainquiry
+ * This is Advanced Data Inquiry Module
+ *  @{
+ */
+
+/**
+ * Creates an data object to be used to generate JSON Body in Advanced Data Inquiry REST call
+ *
+ * @return returns the created object if memory is available, otherwise NULL
+ */
 AdvancedDataInquiry *createAdvancedDataInquiryObject() {
     AdvancedDataInquiry *newObject = (AdvancedDataInquiry *)malloc(sizeof(AdvancedDataInquiry));
 
@@ -53,12 +70,24 @@ AdvancedDataInquiry *createAdvancedDataInquiryObject() {
     return newObject;
 }
 
+/**
+ * Sets the message type
+ *
+ * @param advancedDataInquiryObject object created using createAdvancedDataInquiryObject"()"
+ * @param msgType message type is always 'advancedDataInquiryRequest'
+ */
 AdvancedDataInquiry *setMessageType(AdvancedDataInquiry *advancedDataInquiryObject, char *msgType) {
     advancedDataInquiryObject->msgType = strdup(msgType);
 
     return advancedDataInquiryObject;
 }
 
+/**
+ * add device gateway ID. Can be called multiple times to add different IDs
+ *
+ * @param advancedDataInquiryObject object created using createAdvancedDataInquiryObject"()"
+ * @param gatewayId gateway ID
+ */
 AdvancedDataInquiry *addGatewayIds(AdvancedDataInquiry *advancedDataInquiryObject, char *gatewayId) {
     StringList *addId;
 
@@ -80,6 +109,12 @@ AdvancedDataInquiry *addGatewayIds(AdvancedDataInquiry *advancedDataInquiryObjec
     return advancedDataInquiryObject;
 }
 
+/**
+ * add device ID. Can be called multiple times to add different IDs
+ *
+ * @param advancedDataInquiryObject object created using createAdvancedDataInquiryObject"()"
+ * @param deviceId device ID
+ */
 AdvancedDataInquiry *addDeviceIds(AdvancedDataInquiry *advancedDataInquiryObject, char *deviceId) {
     StringList *addId;
 
@@ -101,6 +136,12 @@ AdvancedDataInquiry *addDeviceIds(AdvancedDataInquiry *advancedDataInquiryObject
     return advancedDataInquiryObject;
 }
 
+/**
+ * add component ID. Can be called multiple times to add different IDs
+ *
+ * @param advancedDataInquiryObject object created using createAdvancedDataInquiryObject"()"
+ * @param componentId component ID
+ */
 AdvancedDataInquiry *addComponentIds(AdvancedDataInquiry *advancedDataInquiryObject, char *componentId) {
     StringList *addId;
 
@@ -122,18 +163,36 @@ AdvancedDataInquiry *addComponentIds(AdvancedDataInquiry *advancedDataInquiryObj
     return advancedDataInquiryObject;
 }
 
+/**
+ * set the data inquiry start timestamp
+ *
+ * @param advancedDataInquiryObject object created using createAdvancedDataInquiryObject"()"
+ * @param startTimestamp time stamp in milliseconds
+ */
 AdvancedDataInquiry *setStartTimestamp(AdvancedDataInquiry *advancedDataInquiryObject, long startTimestamp) {
     advancedDataInquiryObject->startTimestamp = startTimestamp;
 
     return advancedDataInquiryObject;
 }
 
+/**
+ * set the data inquiry end timestamp
+ *
+ * @param advancedDataInquiryObject object created using createAdvancedDataInquiryObject"()"
+ * @param endTimestamp time stamp in milliseconds
+ */
 AdvancedDataInquiry *setEndTimestamp(AdvancedDataInquiry *advancedDataInquiryObject, long endTimestamp) {
     advancedDataInquiryObject->endTimestamp = endTimestamp;
 
     return advancedDataInquiryObject;
 }
 
+/**
+ * add returned measure attributes. Can be called multiple times to add different attributes
+ *
+ * @param advancedDataInquiryObject object created using createAdvancedDataInquiryObject"()"
+ * @param attribute attribute to be added
+ */
 AdvancedDataInquiry *addReturnedMeasureAttributes(AdvancedDataInquiry *advancedDataInquiryObject, char *attribute) {
     StringList *addId;
 
@@ -155,12 +214,23 @@ AdvancedDataInquiry *addReturnedMeasureAttributes(AdvancedDataInquiry *advancedD
     return advancedDataInquiryObject;
 }
 
+/**
+ * specifies whether or not to include measure location in the report
+ *
+ * @param advancedDataInquiryObject object created using createAdvancedDataInquiryObject"()"
+ * @param measureLocation 'true' to include, otherwise not
+ */
 AdvancedDataInquiry *setShowMeasureLocation(AdvancedDataInquiry *advancedDataInquiryObject, bool measureLocation) {
     advancedDataInquiryObject->showMeasureLocation = measureLocation;
 
     return advancedDataInquiryObject;
 }
 
+/**
+ * creates an attribute filter object which can be used in addDevCompAttributeFilter"()", addMeasurementAttributeFilter"()" and addValueFilter"()"
+ *
+ * @param filterName attribute filter name
+ */
 AttributeFilter *createAttributeFilterObject(char *filterName) {
     AttributeFilter *newObject = (AttributeFilter *)malloc(sizeof(AttributeFilter));
 
@@ -174,6 +244,12 @@ AttributeFilter *createAttributeFilterObject(char *filterName) {
      return newObject;
 }
 
+/**
+ * add attribute filter value. Can be called multiple times to add different values
+ *
+ * @param attributeFilter attribute filter object created by createAttributeFilterObject"()"
+ * @param filterValue attribute filter value
+ */
 AttributeFilter *addAttributeFilterValues(AttributeFilter *attributeFilter, char *filterValue) {
     StringList *addId;
 
@@ -199,6 +275,12 @@ AttributeFilter *addAttributeFilterValues(AttributeFilter *attributeFilter, char
      return attributeFilter;
 }
 
+/**
+ * add device component attribute filter. Can be called multiple times to add different filters
+ *
+ * @param advancedDataInquiryObject object created using createAdvancedDataInquiryObject"()"
+ * @param attributeFilter attribute filter object created by createAttributeFilterObject"()"
+ */
 AdvancedDataInquiry *addDevCompAttributeFilter(AdvancedDataInquiry *advancedDataInquiryObject, AttributeFilter *attributeFilter) {
     AttributeFilterList *filterItem = (AttributeFilterList *)malloc(sizeof(AttributeFilterList));
     filterItem->filterData = attributeFilter;
@@ -218,6 +300,12 @@ AdvancedDataInquiry *addDevCompAttributeFilter(AdvancedDataInquiry *advancedData
     return advancedDataInquiryObject;
 }
 
+/**
+ * add measurement attribute filter. Can be called multiple times to add different filters
+ *
+ * @param advancedDataInquiryObject object created using createAdvancedDataInquiryObject"()"
+ * @param attributeFilter attribute filter object created by createAttributeFilterObject"()"
+ */
 AdvancedDataInquiry *addMeasurementAttributeFilter(AdvancedDataInquiry *advancedDataInquiryObject, AttributeFilter *attributeFilter) {
     AttributeFilterList *filterItem = (AttributeFilterList *)malloc(sizeof(AttributeFilterList));
     filterItem->filterData = attributeFilter;
@@ -237,6 +325,12 @@ AdvancedDataInquiry *addMeasurementAttributeFilter(AdvancedDataInquiry *advanced
     return advancedDataInquiryObject;
 }
 
+/**
+ * add value filter. Can be called multiple times to add different values
+ *
+ * @param advancedDataInquiryObject object created using createAdvancedDataInquiryObject"()"
+ * @param attributeFilter attribute filter object created by createAttributeFilterObject"()"
+ */
 AdvancedDataInquiry *addValueFilter(AdvancedDataInquiry *advancedDataInquiryObject, AttributeFilter *attributeFilter) {
     if(!advancedDataInquiryObject->valueFilter) {
         advancedDataInquiryObject->valueFilter = attributeFilter;
@@ -252,18 +346,37 @@ AdvancedDataInquiry *addValueFilter(AdvancedDataInquiry *advancedDataInquiryObje
     return advancedDataInquiryObject;
 }
 
+/**
+ * sets the number of records returned for each component in response
+ *
+ * @param advancedDataInquiryObject object created using createAdvancedDataInquiryObject"()"
+ * @param componentRowLimit limit of records to be returned for each component in response
+ */
 AdvancedDataInquiry *setComponentRowLimit(AdvancedDataInquiry *advancedDataInquiryObject, int componentRowLimit) {
     advancedDataInquiryObject->componentRowLimit = componentRowLimit;
 
     return advancedDataInquiryObject;
 }
 
+/**
+ * specifies to return only the count of records that would have returned from the query
+ *
+ * @param advancedDataInquiryObject object created using createAdvancedDataInquiryObject"()"
+ * @param countOnly 'true' gets only the count, otherwise the complete query response is received
+ */
 AdvancedDataInquiry *setCountOnly(AdvancedDataInquiry *advancedDataInquiryObject, bool countOnly) {
     advancedDataInquiryObject->countOnly = countOnly;
 
     return advancedDataInquiryObject;
 }
 
+/**
+ * add sort information. Can be called multiple times to add different sorts
+ *
+ * @param advancedDataInquiryObject object created using createAdvancedDataInquiryObject"()"
+ * @param name name of the field
+ * @param value value of the field (ASC or DESC)
+ */
 AdvancedDataInquiry *addSortInfo(AdvancedDataInquiry *advancedDataInquiryObject, char *name, char *value) {
     KeyValueParams *keyValue;
 
@@ -286,6 +399,12 @@ AdvancedDataInquiry *addSortInfo(AdvancedDataInquiry *advancedDataInquiryObject,
     return advancedDataInquiryObject;
 }
 
+/**
+ * REST API for advanced data inquiry
+ *
+ * @param advancedDataInquiryObject object created using createAdvancedDataInquiryObject"()"
+ * @return returns the result received from server, otherwise NULL
+ */
 char *advancedDataInquiry(AdvancedDataInquiry *advancedDataInquiryObject) {
 
     struct curl_slist *headers = NULL;
@@ -555,3 +674,5 @@ char *advancedDataInquiry(AdvancedDataInquiry *advancedDataInquiryObject) {
 
     return NULL;
 }
+
+/** @} */ // end of advanceddatainquiry

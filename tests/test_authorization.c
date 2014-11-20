@@ -40,12 +40,3 @@ bool testGetUserJwtTokenInfo() {
 
     return true;
 }
-
-bool testGetAuthorizationTokenMeInfo() {
-    char *response = NULL;
-
-    response = getAuthorizationTokenMeInfo();
-    printf("Response Received :%s\n", response);
-
-    return true;
-}

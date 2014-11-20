@@ -21,8 +21,26 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+/**
+ * @file account_management.c
+ *
+ * Provides APIs to handle Accounts and User related operations
+ */
+
 #include "account_management.h"
 
+/**
+ * @defgroup accountmanagement
+ * This is Account Management Module
+ *  @{
+ */
+
+/**
+ * REST API to create an Account under the user and stores the account ID in 'device_config.json'
+ *
+ * @param account_name an character pointer
+ * @return returns the result received from server, otherwise NULL
+ */
 char *createAnAccount(char *account_name) {
     struct curl_slist *headers = NULL;
     char *url;
@@ -54,6 +72,11 @@ char *createAnAccount(char *account_name) {
     return NULL;
 }
 
+/**
+ * REST API to retrieve the Account information
+ *
+ * @return returns the result received from server, otherwise NULL
+ */
 char *getAccountInformation() {
     struct curl_slist *headers = NULL;
     char *url;
@@ -73,6 +96,11 @@ char *getAccountInformation() {
     return NULL;
 }
 
+/**
+ * REST API to retrieve the Account Activation code if valid
+ *
+ * @return returns the result containing the activation code received from server, otherwise NULL
+ */
 char *getAccountActivationCode() {
     struct curl_slist *headers = NULL;
     char *url;
@@ -93,7 +121,11 @@ char *getAccountActivationCode() {
     return NULL;
 }
 
-
+/**
+ * REST API to force the renewal of the Account Activation code
+ *
+ * @return returns the result containing the activation code received from server, otherwise NULL
+ */
 char *renewActivationCode() {
     struct curl_slist *headers = NULL;
     char *url;
@@ -114,6 +146,12 @@ char *renewActivationCode() {
     return NULL;
 }
 
+/**
+ * REST API to update an Account properties under the user
+ *
+ * @param account_name an character pointer
+ * @return returns the result received from server, otherwise NULL
+ */
 char *updateAnAccount(char *account_name) {
     struct curl_slist *headers = NULL;
     char *url;
@@ -138,6 +176,11 @@ char *updateAnAccount(char *account_name) {
     return NULL;
 }
 
+/**
+ * REST API to delete an Account under the user
+ *
+ * @return returns the result received from server, otherwise NULL
+ */
 char *deleteAnAccount() {
     struct curl_slist *headers = NULL;
     char *url;
@@ -162,6 +205,11 @@ char *deleteAnAccount() {
     return NULL;
 }
 
+/**
+ * REST API to retrieve the user information associated with an Account
+ *
+ * @return returns the result received from server, otherwise NULL
+ */
 char *getUserAssociatedWithAccount() {
     struct curl_slist *headers = NULL;
     char *url;
@@ -181,6 +229,14 @@ char *getUserAssociatedWithAccount() {
     return NULL;
 }
 
+/**
+ * REST API to add another user to Account under the current user
+ *
+ * @param account_id an character pointer
+ * @param user_id user to be added to the account
+ * @param isAdmin 'true' specifies the new user should be provided with admin privilege otherwise normal user privilege
+ * @return returns the result received from server, otherwise NULL
+ */
 char *addAnUserToAccount(char *account_id, char * user_id, bool isAdmin) {
 // TODO: to be verified
     struct curl_slist *headers = NULL;
@@ -344,3 +400,5 @@ bool updateUserAssociatedWithAccount(UpdateUserAccount *updateUserAccount, long 
     return false;
 }
 */
+
+/** @} */ // end of accountmanagement

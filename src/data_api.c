@@ -21,7 +21,19 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+/**
+ * @file data_api.c
+ *
+ * Provides API to handle Data Submit and Retrieve
+ */
+
 #include "data_api.h"
+
+/**
+ * @defgroup dataapi
+ * This is Data API Module
+ *  @{
+ */
 
 long getCurrentTimeInMillis() {
     struct timeval tv;
@@ -33,6 +45,16 @@ long getCurrentTimeInMillis() {
     return millis;
 }
 
+/**
+ * REST API to submit data
+ *
+ * @param cname specifies the component name
+ * @param value specifies the value
+ * @param latitide specifies the geo location - latitude of the measurement
+ * @param longitude specifies the geo location - longitude of the measurement
+ * @param height specifies the physical height of the component during the measurement
+ * @return returns the result received from server, otherwise NULL
+ */
 char *submitData(char *cname, char *value, char *latitude, char *longitude, char *height) {
     struct curl_slist *headers = NULL;
     char *url;
@@ -110,6 +132,13 @@ char *submitData(char *cname, char *value, char *latitude, char *longitude, char
     return NULL;
 }
 
+/**
+ * Creates an data object to be used to generate JSON Body in retrieve data REST call
+ *
+ * @param fromMillis specifies the timestamp in milliseconds from which data should be considered
+ * @param toMillis specifies the timestamp in milliseconds till when the data should be considered
+ * @return returns the created object if memory is available, otherwise NULL
+ */
 RetrieveData *createRetrieveDataObject(long fromMillis, long toMillis) {
     RetrieveData *retrieveObj = (RetrieveData *)malloc(sizeof(RetrieveData));
     if(!retrieveObj) {
@@ -126,6 +155,12 @@ RetrieveData *createRetrieveDataObject(long fromMillis, long toMillis) {
     return retrieveObj;
 }
 
+/**
+ * add device ID. Can be called multiple times to add different device IDs
+ *
+ * @param retrieveObj the object created using createRetrieveDataObject()
+ * @param id specifies the device ID
+ */
 RetrieveData *addDeviceId(RetrieveData *retrieveObj, char *id) {
     StringList *addId;
 
@@ -147,7 +182,14 @@ RetrieveData *addDeviceId(RetrieveData *retrieveObj, char *id) {
     return retrieveObj;
 }
 
-RetrieveData *addSensorId(RetrieveData *retrieveObj, char *sensorName) {
+/**
+ * add sensor name. This API will replace the sensor name with its corresponding ID.
+ * If sensor ID is already known, then please use addSensorId() Can be called multiple times to add different sensor IDs
+ *
+ * @param retrieveObj the object created using createRetrieveDataObject()
+ * @param sensorName specifies the sensor name
+ */
+RetrieveData *addSensorName(RetrieveData *retrieveObj, char *sensorName) {
     char *cid = NULL;
     StringList *addId;
 
@@ -171,6 +213,42 @@ RetrieveData *addSensorId(RetrieveData *retrieveObj, char *sensorName) {
     return retrieveObj;
 }
 
+/**
+ * add sensor ID. Can be called multiple times to add different sensor IDs
+ *
+ * @param retrieveObj the object created using createRetrieveDataObject()
+ * @param id specifies the sensor ID
+ */
+RetrieveData *addSensorId(RetrieveData *retrieveObj, char *id) {
+    char *cid = NULL;
+    StringList *addId;
+
+    cid = strdup(id);
+
+    addId = (StringList *)malloc(sizeof(StringList));
+    addId->data = cid;
+    addId->next = NULL;
+
+    if(!retrieveObj->componentId) {
+        retrieveObj->componentId = addId;
+    } else {
+        StringList *traverseId = retrieveObj->componentId;
+
+        while(traverseId->next) {
+            traverseId = traverseId->next;
+        }
+        traverseId->next = addId;
+    }
+
+    return retrieveObj;
+}
+
+/**
+ * REST API to retrieve data
+ *
+ * @param retrieveObj the object created using createRetrieveDataObject()
+ * @return returns the result received from server, otherwise NULL
+ */
 char *retrieveData(RetrieveData *retrieveObj) {
     struct curl_slist *headers = NULL;
     char *url;
@@ -249,3 +327,5 @@ char *retrieveData(RetrieveData *retrieveObj) {
 
     return NULL;
 }
+
+/** @} */ // end of dataapi

@@ -44,7 +44,6 @@ typedef struct _DeviceCreationObj {
     KeyValueParams *attributes;
 } DeviceCreationObj;
 
-char *validateDeviceToken();
 char *listAllDevices();
 char *getMyDeviceInfo();
 char *getOneDeviceInfo(char *device_id);

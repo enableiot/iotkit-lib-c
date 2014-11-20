@@ -21,15 +21,36 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+/**
+ * @file iotkit.c
+ *
+ * Core iotkit library module
+ */
+
 #include "iotkit.h"
 #include "version.h"
 
+/**
+ * @defgroup iotkitmodule
+ * This is the core iotkit library Module
+ *  @{
+ */
+
 static bool isInitialized = false;
 
+/**
+ * Specifies the library version
+ *
+ * @return returns the library version string
+ */
 char *iotkit_get_version() {
     return VERSION;
 }
 
+/**
+ * Initialises the library
+ *
+ */
 void iotkit_init() {
 
     parseConfiguration("../config/config.json");
@@ -54,6 +75,10 @@ void iotkit_init() {
     }
 }
 
+/**
+ * Releases the memory resources used by the library
+ *
+ */
 void iotkit_cleanup() {
     if(isInitialized) {
         rest_cleanup();
@@ -927,3 +952,5 @@ void addKeyValueParams(KeyValueParams *params, char *key, char *value) {
     }
 
 #endif
+
+/** @} */ // end of iotkitmodule

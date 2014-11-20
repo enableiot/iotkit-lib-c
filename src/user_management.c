@@ -21,8 +21,27 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+/**
+ * @file user_management.c
+ *
+ * Provides API to handle User Management
+ */
+
 #include "user_management.h"
 
+/**
+ * @defgroup usermanagement
+ * This is User Management Module
+ *  @{
+ */
+
+/**
+ * REST API to create an user
+ *
+ * @param emailAddress specifies the username (email address) for the user
+ * @param password specifies the password for the user
+ * @return returns the result received from server, otherwise NULL
+ */
 char *createAnUser(char *emailAddress, char *password) {
     struct curl_slist *headers = NULL;
     char *url;
@@ -54,6 +73,12 @@ char *createAnUser(char *emailAddress, char *password) {
     return NULL;
 }
 
+/**
+ * REST API to get information for a specific user
+ *
+ * @param user_id specifies the user ID
+ * @return returns the result received from server, otherwise NULL
+ */
 char *getUserInformation(char *userId) {
     struct curl_slist *headers = NULL;
     char *url;
@@ -83,6 +108,13 @@ char *getUserInformation(char *userId) {
     return NULL;
 }
 
+/**
+ * REST API to update user attributes
+ *
+ * @param user_id specifies the user ID
+ * @param attributes specifies the user attributes
+ * @return returns the result received from server, otherwise NULL
+ */
 char *updateUserAttributes(char *userId, KeyValueParams *attributes) {
     struct curl_slist *headers = NULL;
     char *url;
@@ -146,6 +178,13 @@ char *updateUserAttributes(char *userId, KeyValueParams *attributes) {
     return NULL;
 }
 
+/**
+ * REST API to accept terms and conditions
+ *
+ * @param user_id specifies the user ID
+ * @param accept 'true' to accept, 'false' to decline
+ * @return returns the result received from server, otherwise NULL
+ */
 char *acceptTermsAndConditions(char *userId, bool accept) {
     struct curl_slist *headers = NULL;
     char *url;
@@ -196,6 +235,12 @@ char *acceptTermsAndConditions(char *userId, bool accept) {
     return NULL;
 }
 
+/**
+ * REST API to delete a user
+ *
+ * @param user_id specifies the user ID
+ * @return returns the result received from server, otherwise NULL
+ */
 char *deleteAUser(char *userId) {
     struct curl_slist *headers = NULL;
     char *url;
@@ -226,6 +271,12 @@ char *deleteAUser(char *userId) {
     return NULL;
 }
 
+/**
+ * REST API to initiate request for a change of password process
+ *
+ * @param emailAddress specifies the username of the user
+ * @return returns the result received from server, otherwise NULL
+ */
 char *requestChangePassword(char *emailAddress) {
     struct curl_slist *headers = NULL;
     char *url;
@@ -257,6 +308,13 @@ char *requestChangePassword(char *emailAddress) {
     return NULL;
 }
 
+/**
+ * REST API to update forgot password
+ *
+ * @param token specifies the token received by email to reset password
+ * @param new_password specifies the new password
+ * @return returns the result received from server, otherwise NULL
+ */
 char *updateForgotPassword(char *token, char *new_password) {
     struct curl_slist *headers = NULL;
     char *url;
@@ -288,6 +346,14 @@ char *updateForgotPassword(char *token, char *new_password) {
     return NULL;
 }
 
+/**
+ * REST API to change an user password
+ *
+ * @param emailAddress specifies the username of the user
+ * @param current_password specifies the current password
+ * @param new_password specifies the new password
+ * @return returns the result received from server, otherwise NULL
+ */
 char *changePassword(char *emailAddress, char *current_password, char *new_password) {
     struct curl_slist *headers = NULL;
     char *url;
@@ -324,3 +390,5 @@ char *changePassword(char *emailAddress, char *current_password, char *new_passw
 
     return NULL;
 }
+
+/** @} */ // end of usermanagement

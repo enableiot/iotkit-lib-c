@@ -32,7 +32,6 @@ extern "C" {
 
 char *getUserJwtToken(char *username, char *password);
 char *getUserJwtTokenInfo();
-char *getAuthorizationTokenMeInfo();
 
 #ifdef __cplusplus
 }

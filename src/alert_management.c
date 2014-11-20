@@ -21,7 +21,22 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+/**
+ * @file alert_management.c
+ *
+ * Provides API to handle Alert Management
+ */
+
 #include "alert_management.h"
+
+/**
+ * @defgroup alertmanagement
+ * This is Alert Management Module
+ *  @{
+ */
+
+/*
+ * // DEPRECATED API - CREATE NEW ALERT
 
 CreateNewAlert *createNewAlertObject() {
     CreateNewAlert *newObject = (CreateNewAlert *)malloc(sizeof(CreateNewAlert));
@@ -444,15 +459,15 @@ char *createNewAlert(CreateNewAlert *createNewAlertObj) {
                                         ConditionCmpsValuePoints *valuePoint = traverseValuePointList->valuePoint;
                                         strcat(body, "{");
                                         // TODO: some issue in the following loop; resulting into seg fault
-                                        /*while(valuePoint) {
-                                            char tempstr[BODY_SIZE_MIN];
-                                            sprintf(tempstr, "%ld", valuePoint->timestamp);
-                                            strcat(body, "\"timestamp\":");
-                                            strcat(body, tempstr);
-                                            strcat(body, ",\"value\":\"");
-                                            strcat(body, valuePoint->value);
-                                            strcat(body, "\"");
-                                        }*/
+                                        //while(valuePoint) {
+                                        //    char tempstr[BODY_SIZE_MIN];
+                                        //    sprintf(tempstr, "%ld", valuePoint->timestamp);
+                                        //    strcat(body, "\"timestamp\":");
+                                        //    strcat(body, tempstr);
+                                        //    strcat(body, ",\"value\":\"");
+                                        //    strcat(body, valuePoint->value);
+                                        //    strcat(body, "\"");
+                                        //}
                                         strcat(body, "}");
                                         traverseValuePointList = traverseValuePointList->next;
 
@@ -505,7 +520,13 @@ char *createNewAlert(CreateNewAlert *createNewAlertObj) {
 
     return NULL;
 }
+*/
 
+/**
+ * REST API to get list of alerts
+ *
+ * @return returns the result received from server, otherwise NULL
+ */
 char *getListOfAlerts() {
     struct curl_slist *headers = NULL;
     char *url;
@@ -525,6 +546,12 @@ char *getListOfAlerts() {
     return NULL;
 }
 
+/**
+ * REST API to get information for a specific alert
+ *
+ * @param alertId specifies the ID of an alert
+ * @return returns the result received from server, otherwise NULL
+ */
 char *getAlertInformation(char *alertId) {
     struct curl_slist *headers = NULL;
     char *url;
@@ -550,6 +577,12 @@ char *getAlertInformation(char *alertId) {
     return NULL;
 }
 
+/**
+ * REST API to reset a specific alert
+ *
+ * @param alertId specifies the ID of an alert
+ * @return returns the result received from server, otherwise NULL
+ */
 char *resetAlert(char *alertId) {
     struct curl_slist *headers = NULL;
     char *url;
@@ -576,6 +609,13 @@ char *resetAlert(char *alertId) {
     return NULL;
 }
 
+/**
+ * REST API to update status for an specific alert
+ *
+ * @param alertId specifies the ID of an alert
+ * @param status_name specifies the status (New or Open or Closed)
+ * @return returns the result received from server, otherwise NULL
+ */
 char *updateAlertStatus(char *alertId, char *status_name) {
     struct curl_slist *headers = NULL;
     char *url;
@@ -608,6 +648,15 @@ char *updateAlertStatus(char *alertId, char *status_name) {
     return NULL;
 }
 
+/**
+ * REST API to add comments to a specific alert
+ *
+ * @param alertId specifies the ID of an alert
+ * @param user specifies the user ID
+ * @param timestamp specifies the time stamp
+ * @param comment specifies the comment information
+ * @return returns the result received from server, otherwise NULL
+ */
 char *addCommentToAlert(char *alertId, char *user, long timestamp, char *comment) {
     struct curl_slist *headers = NULL;
     char *url;
@@ -644,3 +693,5 @@ char *addCommentToAlert(char *alertId, char *user, long timestamp, char *comment
 
     return NULL;
 }
+
+/** @} */ // end of alertmanagement

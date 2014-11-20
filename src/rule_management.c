@@ -21,8 +21,25 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+/**
+ * @file rule_management.c
+ *
+ * Provides API to handle Rule Management
+ */
+
 #include "rule_management.h"
 
+/**
+ * @defgroup rulemanagement
+ * This is Rule Management Module
+ *  @{
+ */
+
+/**
+ * Creates an data object to be used to generate JSON Body in createAnRule() REST call
+ *
+ * @return returns the created object if memory is available, otherwise NULL
+ */
 CreateRule *createRuleObject() {
     CreateRule *newObject = (CreateRule *)malloc(sizeof(CreateRule));
 
@@ -50,42 +67,77 @@ CreateRule *createRuleObject() {
     return newObject;
 }
 
+/**
+ * sets the rule name
+ * @param createRuleObj the object created using createRuleObject()
+ * @param name specifies the rule name
+ */
 CreateRule *setRuleName(CreateRule *createRuleObj, char *name) {
     createRuleObj->name = strdup(name);
 
     return createRuleObj;
 }
 
+/**
+ * sets the rule description
+ * @param createRuleObj the object created using createRuleObject()
+ * @param description specifies the rule description
+ */
 CreateRule *setRuleDescription(CreateRule *createRuleObj, char *description) {
     createRuleObj->description = strdup(description);
 
     return createRuleObj;
 }
 
+/**
+ * sets the rule priority
+ * @param createRuleObj the object created using createRuleObject()
+ * @param priority specifies the rule priority
+ */
 CreateRule *setRulePriority(CreateRule *createRuleObj, char *priority) {
     createRuleObj->priority = strdup(priority);
 
     return createRuleObj;
 }
 
+/**
+ * sets the rule type
+ * @param createRuleObj the object created using createRuleObject()
+ * @param type specifies the rule type
+ */
 CreateRule *setRuleType(CreateRule *createRuleObj, char *type) {
     createRuleObj->type = strdup(type);
 
     return createRuleObj;
 }
 
+/**
+ * sets the rule status
+ * @param createRuleObj the object created using createRuleObject()
+ * @param status specifies the rule status
+ */
 CreateRule *setRuleStatus(CreateRule *createRuleObj, char *status) {
     createRuleObj->status = strdup(status);
 
     return createRuleObj;
 }
 
+/**
+ * sets the rule reset type
+ * @param createRuleObj the object created using createRuleObject()
+ * @param resetType specifies the rule reset type
+ */
 CreateRule *setRuleResetType(CreateRule *createRuleObj, char *resetType) {
     createRuleObj->resetType = strdup(resetType);
 
     return createRuleObj;
 }
 
+/**
+ * Creates an Rule Action object. Can be called multiple times to create different actions
+ *
+ * @return returns the created object if memory is available, otherwise NULL
+ */
 CreateRuleActions *createRuleActionObject() {
     CreateRuleActions *newObject = (CreateRuleActions *)malloc(sizeof(CreateRuleActions));
 
@@ -99,12 +151,22 @@ CreateRuleActions *createRuleActionObject() {
     return newObject;
 }
 
+/**
+ * sets the rule action type
+ * @param createRuleActionObj the object created using createRuleActionObject()
+ * @param type specifies the rule action type
+ */
 CreateRuleActions *setRuleActionObjType(CreateRuleActions *createRuleActionObj, char *type) {
     createRuleActionObj->type = strdup(type);
 
     return createRuleActionObj;
 }
 
+/**
+ * sets the rule action type
+ * @param createRuleActionObj the object created using createRuleActionObject()
+ * @param target specifies the rule action target
+ */
 CreateRuleActions *addRuleActionObjTarget(CreateRuleActions *createRuleActionObj, char *target) {
     StringList *newObject = (StringList *)malloc(sizeof(StringList));
     newObject->data = strdup(target);
@@ -124,6 +186,11 @@ CreateRuleActions *addRuleActionObjTarget(CreateRuleActions *createRuleActionObj
     return createRuleActionObj;
 }
 
+/**
+ * add a rule action. Can be called multiple times to add multiple actions
+ * @param createRuleObj the object created using createRuleObject()
+ * @param action the object created using createRuleActionObject()
+ */
 CreateRule *setRuleActions(CreateRule *createRuleObj, CreateRuleActions *action) {
     CreateRuleActionsList *newObject = (CreateRuleActionsList *)malloc(sizeof(CreateRuleActionsList));
     newObject->data = action;
@@ -143,6 +210,11 @@ CreateRule *setRuleActions(CreateRule *createRuleObj, CreateRuleActions *action)
     return createRuleObj;
 }
 
+/**
+ * add a rule population ID. Can be called multiple times to add multiple IDs
+ * @param createRuleObj the object created using createRuleObject()
+ * @param populationId specifies the population ID
+ */
 CreateRule *addRulePopulationId(CreateRule *createRuleObj, char *populationId) {
     StringList *newObject = (StringList *)malloc(sizeof(StringList));
     newObject->data = strdup(populationId);
@@ -162,12 +234,22 @@ CreateRule *addRulePopulationId(CreateRule *createRuleObj, char *populationId) {
     return createRuleObj;
 }
 
+/**
+ * add a rule population attributes
+ * @param createRuleObj the object created using createRuleObject()
+ * @param attributes specifies the attributes
+ */
 CreateRule *setRulePopulationAttributes(CreateRule *createRuleObj, char *attributes) {
     createRuleObj->population_attributes = strdup(attributes);
 
     return createRuleObj;
 }
 
+/**
+ * Creates an Rule Condition Values object. Can be called multiple times to create different value objects
+ *
+ * @return returns the created object if memory is available, otherwise NULL
+ */
 CreateRuleConditionValues *createRuleConditionValuesObject() {
     CreateRuleConditionValues *newObject = (CreateRuleConditionValues *)malloc(sizeof(CreateRuleConditionValues));
 
@@ -183,6 +265,12 @@ CreateRuleConditionValues *createRuleConditionValuesObject() {
     return newObject;
 }
 
+/**
+ * add a condition value component. Can be called multiple times to create multiple value components
+ * @param createRuleConditionValuesObj the object created using createRuleConditionValuesObject()
+ * @param keyName specifies the key
+ * @param keyValue specifies the value
+ */
 CreateRuleConditionValues *addConditionComponent(CreateRuleConditionValues *createRuleConditionValuesObj, char *keyName, char *keyValue) {
     KeyValueParams *newObject = (KeyValueParams *)malloc(sizeof(KeyValueParams));
     newObject->name = strdup(keyName);
@@ -203,12 +291,22 @@ CreateRuleConditionValues *addConditionComponent(CreateRuleConditionValues *crea
     return createRuleConditionValuesObj;
 }
 
+/**
+ * add a condition value type
+ * @param createRuleConditionValuesObj the object created using createRuleConditionValuesObject()
+ * @param type specifies the values type
+ */
 CreateRuleConditionValues *setConditionType(CreateRuleConditionValues *createRuleConditionValuesObj, char *type) {
     createRuleConditionValuesObj->type = strdup(type);
 
     return createRuleConditionValuesObj;
 }
 
+/**
+ * add a condition value. Can be called multiple times to add multiple values
+ * @param createRuleConditionValuesObj the object created using createRuleConditionValuesObject()
+ * @param value specifies the value
+ */
 CreateRuleConditionValues *addConditionValues(CreateRuleConditionValues *createRuleConditionValuesObj, char *value) {
     StringList *newObject = (StringList *)malloc(sizeof(StringList));
     newObject->data = strdup(value);
@@ -228,18 +326,33 @@ CreateRuleConditionValues *addConditionValues(CreateRuleConditionValues *createR
     return createRuleConditionValuesObj;
 }
 
+/**
+ * add a condition value operator
+ * @param createRuleConditionValuesObj the object created using createRuleConditionValuesObject()
+ * @param opname specifies the values operator
+ */
 CreateRuleConditionValues *setConditionOperator(CreateRuleConditionValues *createRuleConditionValuesObj, char *opname) {
     createRuleConditionValuesObj->opname = strdup(opname);
 
     return createRuleConditionValuesObj;
 }
 
+/**
+ * sets rule condition operator
+ * @param createRuleObj the object created using createRuleObject()
+ * @param opname specifies the values operator
+ */
 CreateRule *setRuleConditionOp(CreateRule *createRuleObj, char *opname) {
     createRuleObj->opname = strdup(opname);
 
     return createRuleObj;
 }
 
+/**
+ * add rule condition values
+ * @param createRuleObj the object created using createRuleObject()
+ * @param createRuleConditionValuesObj the object created using createRuleConditionValuesObject()
+ */
 CreateRule *addRuleConditionValues(CreateRule *createRuleObj, CreateRuleConditionValues *createRuleConditionValuesObj) {
     CreateRuleConditionValuesList *newObject = (CreateRuleConditionValuesList *)malloc(sizeof(CreateRuleConditionValuesList));
     newObject->data = createRuleConditionValuesObj;
@@ -451,6 +564,12 @@ char *createRuleHttpRequestBody(CreateRule *createRuleObj) {
     return body;
 }
 
+/**
+ * REST API to create a rule
+ *
+ * @param createRuleObj the object created using createRuleObject()
+ * @return returns the result received from server, otherwise NULL
+ */
 char *createAnRule(CreateRule *createRuleObj) {
     struct curl_slist *headers = NULL;
     char *url;
@@ -478,6 +597,13 @@ char *createAnRule(CreateRule *createRuleObj) {
     return NULL;
 }
 
+/**
+ * REST API to update a rule
+ *
+ * @param createRuleObj the object created using createRuleObject()
+ * @param rule_id specifies the rule ID
+ * @return returns the result received from server, otherwise NULL
+ */
 char *updateAnRule(CreateRule *createRuleObj, char *rule_id) {
     struct curl_slist *headers = NULL;
     char *url;
@@ -511,6 +637,11 @@ char *updateAnRule(CreateRule *createRuleObj, char *rule_id) {
     return NULL;
 }
 
+/**
+ * REST API to get list of rules
+ *
+ * @return returns the result received from server, otherwise NULL
+ */
 char *getListOfRules() {
     struct curl_slist *headers = NULL;
     char *url;
@@ -530,6 +661,12 @@ char *getListOfRules() {
     return NULL;
 }
 
+/**
+ * REST API to get information for a specific rule
+ *
+ * @param rule_id specifies the rule ID
+ * @return returns the result received from server, otherwise NULL
+ */
 char *getOneRuleInformation(char *rule_id) {
     struct curl_slist *headers = NULL;
     char *url;
@@ -555,6 +692,12 @@ char *getOneRuleInformation(char *rule_id) {
     return NULL;
 }
 
+/**
+ * REST API to create a rule as draft
+ *
+ * @param rule_name specifies the rule name
+ * @return returns the result received from server, otherwise NULL
+ */
 char *createARuleAsDraft(char *rule_name) {
     struct curl_slist *headers = NULL;
     char *url;
@@ -582,6 +725,13 @@ char *createARuleAsDraft(char *rule_name) {
     return NULL;
 }
 
+/**
+ * REST API to update status of a rule
+ *
+ * @param rule_id specifies the rule ID
+ * @param rule_status specifies the rule status
+ * @return returns the result received from server, otherwise NULL
+ */
 char *updateStatusOfARule(char *rule_id, char *rule_status) {
     struct curl_slist *headers = NULL;
     char *url;
@@ -619,6 +769,12 @@ char *updateStatusOfARule(char *rule_id, char *rule_status) {
     return NULL;
 }
 
+/**
+ * REST API to delete a draft rule
+ *
+ * @param rule_id specifies the rule ID
+ * @return returns the result received from server, otherwise NULL
+ */
 char *deleteADraftRule(char *rule_id) {
     struct curl_slist *headers = NULL;
     char *url;
@@ -644,3 +800,5 @@ char *deleteADraftRule(char *rule_id) {
 
     return NULL;
 }
+
+/** @} */ // end of rulemanagement

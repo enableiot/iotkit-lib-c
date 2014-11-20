@@ -21,8 +21,25 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+/**
+ * @file aggregated_report_interface.c
+ *
+ * Provides API to handle Aggregated Report Interface
+ */
+
 #include "aggregated_report_interface.h"
 
+/**
+ * @defgroup aggregatedreportinterface
+ * This is Aggregated Report Interface Module
+ *  @{
+ */
+
+/**
+ * Creates an data object to be used to generate JSON Body in Aggregated Report Interface REST call
+ *
+ * @return returns the created object if memory is available, otherwise NULL
+ */
 AggregatedReportInterface *createAggregatedReportInterface() {
     AggregatedReportInterface *newObject = (AggregatedReportInterface *)malloc(sizeof(AggregatedReportInterface));
 
@@ -48,24 +65,48 @@ AggregatedReportInterface *createAggregatedReportInterface() {
     return newObject;
 }
 
+/**
+ * Sets the message type
+ *
+ * @param aggregatedReportInterfaceObject object created using createAggregatedReportInterface()
+ * @param msgType message type is always 'aggregatedReportRequest'
+ */
 AggregatedReportInterface *setReportMessageType(AggregatedReportInterface *aggregatedReportInterfaceObject, char *msgType) {
     aggregatedReportInterfaceObject->msgType = strdup(msgType);
 
     return aggregatedReportInterfaceObject;
 }
 
+/**
+ * set report start timestamp
+ *
+ * @param aggregatedReportInterfaceObject object created using createAggregatedReportInterface()
+ * @param startTimestamp time stamp in milliseconds
+ */
 AggregatedReportInterface *setReportStartTimestamp(AggregatedReportInterface *aggregatedReportInterfaceObject, long startTimestamp) {
     aggregatedReportInterfaceObject->startTimestamp = startTimestamp;
 
     return aggregatedReportInterfaceObject;
 }
 
+/**
+ * set report end timestamp
+ *
+ * @param aggregatedReportInterfaceObject object created using createAggregatedReportInterface()
+ * @param endTimestamp time stamp in milliseconds
+ */
 AggregatedReportInterface *setReportEndTimestamp(AggregatedReportInterface *aggregatedReportInterfaceObject, long endTimestamp) {
     aggregatedReportInterfaceObject->endTimestamp = endTimestamp;
 
     return aggregatedReportInterfaceObject;
 }
 
+/**
+ * add aggregation methods. Can be called multiple times to add different methods
+ *
+ * @param aggregatedReportInterfaceObject object created using createAggregatedReportInterface()
+ * @param aggregation aggregation method
+ */
 AggregatedReportInterface *addAggregationMethods(AggregatedReportInterface *aggregatedReportInterfaceObject, char *aggregation) {
     StringList *addId;
 
@@ -87,6 +128,12 @@ AggregatedReportInterface *addAggregationMethods(AggregatedReportInterface *aggr
     return aggregatedReportInterfaceObject;
 }
 
+/**
+ * add dimension for measurements aggregation. Can be called multiple times to add different dimensions
+ *
+ * @param aggregatedReportInterfaceObject object created using createAggregatedReportInterface()
+ * @param dimension dimension of measurement
+ */
 AggregatedReportInterface *addDimensions(AggregatedReportInterface *aggregatedReportInterfaceObject, char *dimension) {
     StringList *addId;
 
@@ -108,30 +155,60 @@ AggregatedReportInterface *addDimensions(AggregatedReportInterface *aggregatedRe
     return aggregatedReportInterfaceObject;
 }
 
+/**
+ * set offset data to return in the response
+ *
+ * @param aggregatedReportInterfaceObject object created using createAggregatedReportInterface()
+ * @param offset offset number
+ */
 AggregatedReportInterface *setOffset(AggregatedReportInterface *aggregatedReportInterfaceObject, int offset) {
     aggregatedReportInterfaceObject->offset = offset;
 
     return aggregatedReportInterfaceObject;
 }
 
+/**
+ * set row limit to return in the response
+ *
+ * @param aggregatedReportInterfaceObject object created using createAggregatedReportInterface()
+ * @param limit row limit number
+ */
 AggregatedReportInterface *setLimit(AggregatedReportInterface *aggregatedReportInterfaceObject, int limit) {
     aggregatedReportInterfaceObject->limit = limit;
 
     return aggregatedReportInterfaceObject;
 }
 
+/**
+ * specifies to return only the count of records that would have returned from the query
+ *
+ * @param aggregatedReportInterfaceObject object created using createAggregatedReportInterface()
+ * @param countOnly 'true' gets only the count, otherwise the complete query response is received
+ */
 AggregatedReportInterface *setReportCountOnly(AggregatedReportInterface *aggregatedReportInterfaceObject, bool countOnly) {
     aggregatedReportInterfaceObject->countOnly = countOnly;
 
     return aggregatedReportInterfaceObject;
 }
 
+/**
+ * specifies the response type
+ *
+ * @param aggregatedReportInterfaceObject object created using createAggregatedReportInterface()
+ * @param outputType the desired response type (json, csv etc.)
+ */
 AggregatedReportInterface *setOutputType(AggregatedReportInterface *aggregatedReportInterfaceObject, char *outputType) {
     aggregatedReportInterfaceObject->outputType = strdup(outputType);
 
     return aggregatedReportInterfaceObject;
 }
 
+/**
+ * add device ID. Can be called multiple times to add different IDs
+ *
+ * @param aggregatedReportInterfaceObject object created using createAggregatedReportInterface()
+ * @param deviceId device ID
+ */
 AggregatedReportInterface *addReportDeviceIds(AggregatedReportInterface *aggregatedReportInterfaceObject, char *deviceId) {
     StringList *addId;
 
@@ -153,6 +230,12 @@ AggregatedReportInterface *addReportDeviceIds(AggregatedReportInterface *aggrega
     return aggregatedReportInterfaceObject;
 }
 
+/**
+ * add device gateway ID. Can be called multiple times to add different IDs
+ *
+ * @param aggregatedReportInterfaceObject object created using createAggregatedReportInterface()
+ * @param gatewayId gateway ID
+ */
 AggregatedReportInterface *addReportGatewayIds(AggregatedReportInterface *aggregatedReportInterfaceObject, char *gatewayId) {
     StringList *addId;
 
@@ -174,6 +257,12 @@ AggregatedReportInterface *addReportGatewayIds(AggregatedReportInterface *aggreg
     return aggregatedReportInterfaceObject;
 }
 
+/**
+ * add component ID. Can be called multiple times to add different IDs
+ *
+ * @param aggregatedReportInterfaceObject object created using createAggregatedReportInterface()
+ * @param componentId component ID
+ */
 AggregatedReportInterface *addReportComponentIds(AggregatedReportInterface *aggregatedReportInterfaceObject, char *componentId) {
     StringList *addId;
 
@@ -195,6 +284,13 @@ AggregatedReportInterface *addReportComponentIds(AggregatedReportInterface *aggr
     return aggregatedReportInterfaceObject;
 }
 
+/**
+ * add sort information. Can be called multiple times to add different sorts
+ *
+ * @param aggregatedReportInterfaceObject object created using createAggregatedReportInterface()
+ * @param name name of the field
+ * @param value value of the field (ASC or DESC)
+ */
 AggregatedReportInterface *addReportSortInfo(AggregatedReportInterface *aggregatedReportInterfaceObject, char *name, char *value) {
     KeyValueParams *keyValue;
 
@@ -256,6 +352,13 @@ AttributeFilter *addAttributeFilterValues(AttributeFilter *attributeFilter, char
      return attributeFilter;
 }
 */
+
+/**
+ * add attribute filter. Can be called multiple times to add different filters
+ *
+ * @param aggregatedReportInterfaceObject object created using createAggregatedReportInterface()
+ * @param attributeFilter attribute filter object created by createAttributeFilterObject()
+ */
 AggregatedReportInterface *addFilters(AggregatedReportInterface *aggregatedReportInterfaceObject, AttributeFilter *attributeFilter) {
     AttributeFilterList *filterItem = (AttributeFilterList *)malloc(sizeof(AttributeFilterList));
     filterItem->filterData = attributeFilter;
@@ -275,7 +378,12 @@ AggregatedReportInterface *addFilters(AggregatedReportInterface *aggregatedRepor
     return aggregatedReportInterfaceObject;
 }
 
-
+/**
+ * REST API for aggregated report interface
+ *
+ * @param aggregatedReportInterfaceObject object created using createAggregatedReportInterface()
+ * @return returns the result received from server, otherwise NULL
+ */
 char *aggregatedReportInterface(AggregatedReportInterface *aggregatedReportInterfaceObject) {
 
     struct curl_slist *headers = NULL;
@@ -503,3 +611,5 @@ char *aggregatedReportInterface(AggregatedReportInterface *aggregatedReportInter
 
     return NULL;
 }
+
+/** @} */ // end of aggregatedreportinterface

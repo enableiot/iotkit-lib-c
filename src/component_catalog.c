@@ -21,8 +21,25 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
+/**
+ * @file component_catalog.c
+ *
+ * Provides API to handle Component Catalogs
+ */
+
 #include "component_catalog.h"
 
+/**
+ * @defgroup componentcatalog
+ * This is Component Catalog Module
+ *  @{
+ */
+
+/**
+ * REST API to list all component types
+ *
+ * @return returns the result received from server, otherwise NULL
+ */
 char *listAllComponentCatalogs() {
     struct curl_slist *headers = NULL;
     char *url;
@@ -42,6 +59,12 @@ char *listAllComponentCatalogs() {
     return NULL;
 }
 
+/**
+ * REST API to get component type details
+ *
+ * @param cmp_id specifies the component type ID
+ * @return returns the result received from server, otherwise NULL
+ */
 char *getComponentCatalogDetails(char *cmp_id) {
     struct curl_slist *headers = NULL;
     char *url;
@@ -67,6 +90,18 @@ char *getComponentCatalogDetails(char *cmp_id) {
     return NULL;
 }
 
+/**
+ * Creates an data object to be used to generate JSON Body in Advanced Data Inquiry REST call
+ *
+ * @param cmp_name specifies the component name
+ * @param cmp_version specifies the component version
+ * @param cmp_type specifies the component type
+ * @param cmp_datatype specifies the component data type
+ * @param cmp_format specifies the component format
+ * @param cmp_unit specifies the component units
+ * @param cmp_display specifies the component display type
+ * @return returns the created object if memory is available, otherwise NULL
+ */
 ComponentCatalog *createComponentCatalogObject(char *cmp_name, char *cmp_version, char *cmp_type, char *cmp_datatype, \
             char *cmp_format, char *cmp_unit, char *cmp_display) {
     ComponentCatalog *newObject = (ComponentCatalog *)malloc(sizeof(ComponentCatalog));
@@ -95,6 +130,12 @@ ComponentCatalog *createComponentCatalogObject(char *cmp_name, char *cmp_version
     return newObject;
 }
 
+/**
+ * sets the min value to the object created using createComponentCatalogObject()
+ *
+ * @param cmpCatalogObject the object created using createComponentCatalogObject()
+ * @param cmp_minvalue specifies the min value
+ */
 ComponentCatalog *addMinValue(ComponentCatalog *cmpCatalogObject, double cmp_minvalue) {
     cmpCatalogObject->isMinPresent = true;
     cmpCatalogObject->minvalue = cmp_minvalue;
@@ -102,6 +143,12 @@ ComponentCatalog *addMinValue(ComponentCatalog *cmpCatalogObject, double cmp_min
     return cmpCatalogObject;
 }
 
+/**
+ * sets the max value to the object created using createComponentCatalogObject()
+ *
+ * @param cmpCatalogObject the object created using createComponentCatalogObject()
+ * @param cmp_maxvalue specifies the max value
+ */
 ComponentCatalog *addMaxValue(ComponentCatalog *cmpCatalogObject, double cmp_maxvalue) {
     cmpCatalogObject->isMaxPresent = true;
     cmpCatalogObject->maxvalue = cmp_maxvalue;
@@ -109,12 +156,25 @@ ComponentCatalog *addMaxValue(ComponentCatalog *cmpCatalogObject, double cmp_max
     return cmpCatalogObject;
 }
 
+/**
+ * sets the command string to the object created using createComponentCatalogObject()
+ *
+ * @param cmpCatalogObject the object created using createComponentCatalogObject()
+ * @param cmp_command specifies the command string
+ */
 ComponentCatalog *addCommandString(ComponentCatalog *cmpCatalogObject, char *cmp_command) {
     cmpCatalogObject->command = cmp_command;
 
     return cmpCatalogObject;
 }
 
+/**
+ * adds the command parameters to the object created using createComponentCatalogObject()
+ *
+ * @param cmpCatalogObject the object created using createComponentCatalogObject()
+ * @param cmp_name specifies the component name
+ * @param cmd_value specifies the component value
+ */
 ComponentCatalog *addCommandParams(ComponentCatalog *cmpCatalogObject, char *cmd_name, char *cmd_value) {
     ActuatorCommandParams *newParam = (ActuatorCommandParams *)malloc(sizeof(ActuatorCommandParams));
 
@@ -137,6 +197,12 @@ ComponentCatalog *addCommandParams(ComponentCatalog *cmpCatalogObject, char *cmd
     return cmpCatalogObject;
 }
 
+/**
+ * REST API to create a component catalog
+ *
+ * @param cmpCatalogObject the object created using createComponentCatalogObject()
+ * @return returns the result received from server, otherwise NULL
+ */
 char *createAnComponentCatalog(ComponentCatalog *cmpCatalogObject) {
 
     struct curl_slist *headers = NULL;
@@ -245,6 +311,13 @@ char *createAnComponentCatalog(ComponentCatalog *cmpCatalogObject) {
     return NULL;
 }
 
+/**
+ * REST API to update a component catalog
+ *
+ * @param cmpCatalogObject the object created using createComponentCatalogObject()
+ * @param cmp_id specifies the component ID which has to be updated
+ * @return returns the result received from server, otherwise NULL
+ */
 char *updateAnComponentCatalog(ComponentCatalog *cmpCatalogObject, char *cmp_id) {
 
     struct curl_slist *headers = NULL;
@@ -395,3 +468,5 @@ char *updateAnComponentCatalog(ComponentCatalog *cmpCatalogObject, char *cmp_id)
 
     return NULL;
 }
+
+/** @} */ // end of componentcatalog

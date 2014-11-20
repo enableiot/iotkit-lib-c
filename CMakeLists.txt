@@ -63,7 +63,7 @@ endif ()
 find_path (SYSTEM_USR_DIR "stdlib.h")
 include_directories (${SYSTEM_USR_DIR})
 
-option (BUILDDOC "Build all doc." OFF)
+option (BUILDDOC "Build documentation." ON)
 option (BUILDSWIG "Build swig modules." ON)
 option (BUILDSWIGPYTHON "Build swig python modules." ON)
 option (BUILDSWIGNODE "Build swig node modules." ON)
