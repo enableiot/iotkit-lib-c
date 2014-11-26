@@ -47,11 +47,39 @@ char *iotkit_get_version() {
     return VERSION;
 }
 
+/** Checks for file existence.
+* @param[in] absPath absolute path of a file
+* @return returns true if the file exists and false otherwise
+*/
+bool isFileExists(char *filePath) {
+    FILE *fp;
+    if (fp = fopen(filePath, "r")) {
+        fclose(fp);
+        return true;
+    }
+
+    return false;
+}
+
 /**
  * Initialises the library
  *
  */
 void iotkit_init() {
+    int store_path_length = 0;
+    char *config_file_path = NULL;
+    char *config_dir_path = NULL;
+
+    if(isFileExists(CONFIGURATION_FILE_NAME)) {
+        store_path_length = strlen(CURRENT_DIR) + strlen(CONFIGURATION_FILE_NAME) + 2;
+        config_file_path = (char *)malloc(sizeof(char) * store_path_length);
+        strcpy(config_file_path, configurations.store_path);
+    } else {
+        store_path_length = strlen(DEFAULT_CONFIG_DIR) + strlen(CONFIGURATION_FILE_NAME) + 2;
+    }
+
+
+    strcat(config_file_path, CONFIGURATION_FILE_NAME);
 
     parseConfiguration("../config/config.json");
     parseAuthorizationToken();
@@ -145,6 +173,12 @@ void parseConfiguration(char *config_file_path) {
             }
             configurations.base_url = strdup(jitem->valuestring);
 
+            jitem = cJSON_GetObjectItem(json, "store_path");
+            if (isJsonString(jitem)) {
+                configurations.store_path = strdup(jitem->valuestring);
+            } else {
+                configurations.store_path = "./"; // means, use current folder for the runtime store
+            }
 
             jitem = cJSON_GetObjectItem(json, "apipath");
             if (!isJsonObject(jitem)) {

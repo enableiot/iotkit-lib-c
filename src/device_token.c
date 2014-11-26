@@ -28,11 +28,15 @@
 * @return returns client query description object upon successful parsing and NULL otherwise
 */
 void parseDeviceToken() {
-    char *config_file_path = "../config/device_config.json";
     char *out;
     int i = 0;
     cJSON *json, *jitem, *child;
     bool status = true;
+    int store_path_length = strlen(configurations.store_path) + strlen(DEVICE_CONFIG_FILE_NAME) + 2;
+    char *config_file_path = (char *)malloc(sizeof(char) * store_path_length);
+
+    strcpy(config_file_path, configurations.store_path);
+    strcat(config_file_path, DEVICE_CONFIG_FILE_NAME);
 
     FILE *fp = fopen(config_file_path, "rb");
     if (fp == NULL) {
@@ -40,6 +44,7 @@ void parseDeviceToken() {
 
         configurations.device_id = NULL;
         configurations.deviceToken = NULL;
+        storeDeviceCredentials(NULL, NULL, NULL, NULL); // create the file with default values
     }
     else {
         fseek(fp, 0, SEEK_END);
@@ -147,13 +152,36 @@ void parseDeviceToken() {
 /** Stores device configuration JSON
 */
 void storeDeviceCredentials(char *deviceId, char *deviceToken, char *data_account_id, char *data_account_name) {
-    char *config_file_path = "../config/device_config.json";
+    int store_path_length = strlen(configurations.store_path) + strlen(DEVICE_CONFIG_FILE_NAME) + 2;
+    char *config_file_path = (char *)malloc(sizeof(char) * store_path_length);
+
+    strcpy(config_file_path, configurations.store_path);
+    strcat(config_file_path, DEVICE_CONFIG_FILE_NAME);
 
     #if DEBUG
-        printf("deviceId is :%s\n", deviceId);
-        printf("deviceToken is :%s\n", deviceToken);
-        printf("data_account_id is :%s\n", data_account_id);
-        printf("data_account_name is :%s\n", data_account_name);
+        if(deviceId) {
+            printf("deviceId is :%s\n", deviceId);
+        } else {
+            printf("deviceId is NULL\n");
+        }
+
+        if(deviceToken) {
+            printf("deviceToken is :%s\n", deviceToken);
+        } else {
+            printf("deviceToken is NULL\n");
+        }
+
+        if(data_account_id) {
+            printf("data_account_id is :%s\n", data_account_id);
+        } else {
+            printf("data_account_id is NULL\n");
+        }
+
+        if(data_account_name) {
+            printf("data_account_name is :%s\n", data_account_name);
+        } else {
+            printf("data_account_name is NULL\n");
+        }
     #endif
 
     FILE *fp = fopen(config_file_path, "w+");

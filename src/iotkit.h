@@ -52,6 +52,13 @@ extern "C" {
 #define HEADER_AUTHORIZATION "Authorization"
 #define HEADER_AUTHORIZATION_BEARER "Bearer "
 
+#define CURRENT_DIR "./"
+#define DEFAULT_CONFIG_DIR "/etc/iotkit-lib/"
+#define CONFIGURATION_FILE_NAME "config.json"
+#define AUTHORIZATION_FILE_NAME "authorization.json"
+#define DEVICE_CONFIG_FILE_NAME "device_config.json"
+#define SENSOR_LIST_FILE_NAME "sensor-list.json"
+
 /** Sensor list to hold sensors
 */
 typedef struct _SensorComp {
@@ -152,6 +159,8 @@ typedef struct _Configurations {
     char *delete_a_user;
     char *request_change_password;
     char *change_password;
+
+    char *store_path; // path for json files
 } Configurations;
 
 

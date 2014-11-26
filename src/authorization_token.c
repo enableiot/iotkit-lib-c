@@ -28,11 +28,15 @@
 * @return returns client query description object upon successful parsing and NULL otherwise
 */
 void parseAuthorizationToken() {
-    char *config_file_path = "../config/authorization.json";
+    int store_path_length = strlen(configurations.store_path) + strlen(AUTHORIZATION_FILE_NAME) + 2;
+    char *config_file_path = (char *)malloc(sizeof(char) * store_path_length);
     char *out;
     int i = 0;
     cJSON *json, *jitem, *child;
     bool status = true;
+
+    strcpy(config_file_path, configurations.store_path);
+    strcat(config_file_path, AUTHORIZATION_FILE_NAME);
 
     FILE *fp = fopen(config_file_path, "rb");
     if (fp == NULL) {
@@ -134,13 +138,17 @@ void parseAuthorizationToken() {
 /** Stores device configuration JSON
 */
 void storeAuthorizationToken(char * response) {
-    char *config_file_path = "../config/authorization.json";
+    int store_path_length = strlen(configurations.store_path) + strlen(AUTHORIZATION_FILE_NAME) + 2;
+    char *config_file_path = (char *)malloc(sizeof(char) * store_path_length);
     char *authToken = NULL;
     char *expiry = NULL;
     char *user_account_id = NULL;
     char *validateToken = NULL;
     FILE *fp = NULL;
     cJSON *json, *jitem, *child;
+
+    strcpy(config_file_path, configurations.store_path);
+    strcat(config_file_path, AUTHORIZATION_FILE_NAME);
 
     if(response != NULL) {
         // parse the file

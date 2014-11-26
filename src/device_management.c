@@ -505,7 +505,11 @@ char *deleteADevice(char *device_id) {
 void storeComponent(char *response) {
     cJSON *json = NULL, *jitem = NULL, *child = NULL;
     char *cid = NULL, *name = NULL, *type = NULL;
-    char *config_file_path = "../config/sensor-list.json";
+    int store_path_length = strlen(configurations.store_path) + strlen(SENSOR_LIST_FILE_NAME) + 2;
+    char *config_file_path = (char *)malloc(sizeof(char) * store_path_length);
+
+    strcpy(config_file_path, configurations.store_path);
+    strcat(config_file_path, SENSOR_LIST_FILE_NAME);
 
     if(response != NULL) {
         // parse the file
@@ -600,12 +604,16 @@ void storeComponent(char *response) {
 }
 
 void parseComponentsList() {
-    char *config_file_path = "../config/sensor-list.json";
+    int store_path_length = strlen(configurations.store_path) + strlen(SENSOR_LIST_FILE_NAME) + 2;
+    char *config_file_path = (char *)malloc(sizeof(char) * store_path_length);
     char *out;
     int i = 0;
     cJSON *json, *jitem, *child;
     char *cid, *name, *type;
     SensorComp *traverse = NULL;
+
+    strcpy(config_file_path, configurations.store_path);
+    strcat(config_file_path, SENSOR_LIST_FILE_NAME);
 
     FILE *fp = fopen(config_file_path, "rb");
     if (fp == NULL) {
@@ -754,11 +762,15 @@ char *getSensorComponentId(char *name) {
 }
 
 bool storeSensorsFromList() {
+    int store_path_length = strlen(configurations.store_path) + strlen(SENSOR_LIST_FILE_NAME) + 2;
+    char *config_file_path = (char *)malloc(sizeof(char) * store_path_length);
     SensorComp *traverse = sensorsList;
     cJSON *root, *jitem;
-    char *config_file_path = "../config/sensor-list.json";
     FILE *fp = NULL;
     char *out;
+
+    strcpy(config_file_path, configurations.store_path);
+    strcat(config_file_path, SENSOR_LIST_FILE_NAME);
 
     root=cJSON_CreateArray();
 
