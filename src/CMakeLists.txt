@@ -53,9 +53,9 @@ set_target_properties(
    VERSION ${iotkit_VERSION_STRING}
 )
 install (FILES ${iotkit_LIB_GLOB_HEADERS} DESTINATION include/iotkit-lib)
-install (FILES ${PROJECT_SOURCE_DIR}/config/config.json DESTINATION /etc/iotkit-lib/)
+#install (FILES ${PROJECT_SOURCE_DIR}/config/config.json DESTINATION /etc/iotkit-lib/)
 
-INSTALL(CODE "FILE(MAKE_DIRECTORY /etc/share/iokit-lib)")
+#INSTALL(CODE "FILE(MAKE_DIRECTORY /etc/share/iokit-lib)")
 
 macro (iotkit_CREATE_INSTALL_PKGCONFIG generated_file install_location)
   configure_file (${generated_file}.cmake ${CMAKE_CURRENT_BINARY_DIR}/${generated_file} @ONLY)
