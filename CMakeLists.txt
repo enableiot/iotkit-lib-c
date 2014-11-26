@@ -47,8 +47,6 @@ set (CMAKE_C_FLAGS_COVERAGE "-g -O0 -Wall -W -fprofile-arcs -ftest-coverage")
 set (CMAKE_EXE_LINKER_FLAGS_COVERAGE "-fprofile-arcs -ftest-coverage")
 
 
-MESSAGE("Building the root source C Folder")
-
 # support for adding tests, adds another build target 'test'
 ENABLE_TESTING()
 

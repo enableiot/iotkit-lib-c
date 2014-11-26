@@ -1,11 +1,4 @@
 {
-    "cmp_catalog_id": "temperature.v1.0",
-    "device_loc": [
-        88.34,
-        64.22047,
-        -20
-    ],
-    "gateway_id": null,
     "host": "dashboard.us.enableiot.com",
     "port": 443,
     "isSecure": true,
@@ -84,5 +77,6 @@
             "request_change_password" : "/v1/api/users/forgot_password",
             "change_password" : "/v1/api/users/{email_id}/change_password"
         }
-    }
+    },
+    "store_path": "/usr/share/iokit-lib/"
 }
