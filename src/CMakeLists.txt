@@ -38,11 +38,9 @@ set (iotkit_LIB_GLOB_HEADERS
   ${PROJECT_SOURCE_DIR}/src/data_api.h
   ${PROJECT_SOURCE_DIR}/src/device_management.h
   ${PROJECT_SOURCE_DIR}/src/invitation_management.h
-  ${PROJECT_SOURCE_DIR}/src/rest.h
   ${PROJECT_SOURCE_DIR}/src/rule_management.h
   ${PROJECT_SOURCE_DIR}/src/user_management.h
   ${PROJECT_SOURCE_DIR}/src/util.h
-  ${PROJECT_SOURCE_DIR}/lib/cJSON/cJSON.h
 )
 
 add_library (iotkit SHARED ${iotkit_LIB_SRCS})
@@ -54,8 +52,10 @@ set_target_properties(
    SOVERSION ${iotkit_VERSION_MAJOR}
    VERSION ${iotkit_VERSION_STRING}
 )
-install (FILES ${iotkit_LIB_GLOB_HEADERS} DESTINATION include/)
-install (DIRECTORY ${PROJECT_SOURCE_DIR}/iotkit/ DESTINATION include/iotkit)
+install (FILES ${iotkit_LIB_GLOB_HEADERS} DESTINATION include/iotkit-lib)
+install (FILES ${PROJECT_SOURCE_DIR}/config/config.json DESTINATION /etc/iotkit-lib/)
+
+INSTALL(CODE "FILE(MAKE_DIRECTORY /etc/share/iokit-lib)")
 
 macro (iotkit_CREATE_INSTALL_PKGCONFIG generated_file install_location)
   configure_file (${generated_file}.cmake ${CMAKE_CURRENT_BINARY_DIR}/${generated_file} @ONLY)
