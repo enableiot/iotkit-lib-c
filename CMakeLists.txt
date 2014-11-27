@@ -64,7 +64,7 @@ include_directories (${SYSTEM_USR_DIR})
 option (BUILDDOC "Build documentation." ON)
 option (BUILDSWIG "Build swig modules." ON)
 option (BUILDSWIGPYTHON "Build swig python modules." ON)
-option (BUILDSWIGNODE "Build swig node modules." ON)
+option (BUILDSWIGNODE "Build swig node modules." OFF)
 
 if (BUILDDOC)
   # add a target to generate API documentation with Doxygen
