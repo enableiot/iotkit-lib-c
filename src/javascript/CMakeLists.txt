@@ -1,12 +1,10 @@
-find_path (NODE_ROOT_DIR "nodejs/src/node.h")
-
-MESSAGE("Where is node path" ${NODE_ROOT_DIR})
+find_path (NODE_ROOT_DIR "node/node.h")
 
 set (NODE_INCLUDE_DIRS
-  ${NODE_ROOT_DIR}/nodejs/src
+  ${NODE_ROOT_DIR}/src
   ${NODE_ROOT_DIR}/node
-  ${NODE_ROOT_DIR}/nodejs/deps/v8/include
-  ${NODE_ROOT_DIR}/nodejs/deps/uv/include
+  ${NODE_ROOT_DIR}/deps/v8/include
+  ${NODE_ROOT_DIR}/deps/uv/include
 )
 
 include_directories (
