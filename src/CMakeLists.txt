@@ -1,9 +1,9 @@
 include_directories(
   ${PROJECT_SOURCE_DIR}/lib/cJSON
   ${PROJECT_SOURCE_DIR}/src
-  ${STAGING_DIR_TARGET}/usr/include/c++/
+  ${STAGING_DIR_TARGET}/usr/include/
 )
-include_directories (${STAGING_DIR_TARGET}/usr/include/c++/)
+include_directories (${STAGING_DIR_TARGET}/usr/include/)
 
 set (iotkit_LIB_SRCS
   ${PROJECT_SOURCE_DIR}/src/iotkit.c
