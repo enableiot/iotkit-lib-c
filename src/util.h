@@ -30,7 +30,7 @@ extern "C" {
 
 #include <stdio.h>
 #include <stdbool.h>
-#include "../lib/cJSON/cJSON.h"
+#include "cJSON.h"
 
 /** Check whether JSON item is a boolean false */
 static inline bool isJsonBooleanFalse(cJSON *item) {

@@ -73,15 +73,16 @@ void iotkit_init() {
     if(isFileExists(CONFIGURATION_FILE_NAME)) {
         store_path_length = strlen(CURRENT_DIR) + strlen(CONFIGURATION_FILE_NAME) + 2;
         config_file_path = (char *)malloc(sizeof(char) * store_path_length);
-        strcpy(config_file_path, configurations.store_path);
+        strcpy(config_file_path, CURRENT_DIR);
     } else {
         store_path_length = strlen(DEFAULT_CONFIG_DIR) + strlen(CONFIGURATION_FILE_NAME) + 2;
+        config_file_path = (char *)malloc(sizeof(char) * store_path_length);
+        strcpy(config_file_path, DEFAULT_CONFIG_DIR);
     }
-
 
     strcat(config_file_path, CONFIGURATION_FILE_NAME);
 
-    parseConfiguration("../config/config.json");
+    parseConfiguration(config_file_path);
     parseAuthorizationToken();
     parseDeviceToken();
     parseComponentsList();

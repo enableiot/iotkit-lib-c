@@ -78,5 +78,5 @@
             "change_password" : "/v1/api/users/{email_id}/change_password"
         }
     },
-    "store_path": "/usr/share/iokit-lib/"
+    "store_path": "/usr/share/iotkit-lib/"
 }

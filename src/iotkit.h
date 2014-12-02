@@ -30,7 +30,7 @@ extern "C" {
 
 #include <stdlib.h>
 #include <stdbool.h>
-#include "../lib/cJSON/cJSON.h"
+#include "cJSON.h"
 #include "util.h"
 #include "rest.h"
 
