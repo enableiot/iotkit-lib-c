@@ -38,9 +38,11 @@ set (iotkit_LIB_GLOB_HEADERS
   ${PROJECT_SOURCE_DIR}/src/data_api.h
   ${PROJECT_SOURCE_DIR}/src/device_management.h
   ${PROJECT_SOURCE_DIR}/src/invitation_management.h
+  ${PROJECT_SOURCE_DIR}/src/rest.h
   ${PROJECT_SOURCE_DIR}/src/rule_management.h
   ${PROJECT_SOURCE_DIR}/src/user_management.h
   ${PROJECT_SOURCE_DIR}/src/util.h
+  ${PROJECT_SOURCE_DIR}/lib/cJSON/cJSON.h
 )
 
 add_library (iotkit SHARED ${iotkit_LIB_SRCS})
