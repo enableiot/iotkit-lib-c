@@ -58,8 +58,8 @@ if (SWIG_FOUND)
   include (${SWIG_USE_FILE})
 endif ()
 
-find_path (SYSTEM_USR_DIR "stdlib.h")
-include_directories (${SYSTEM_USR_DIR})
+#find_path (SYSTEM_USR_DIR "stdlib.h")
+#include_directories (${SYSTEM_USR_DIR})
 
 option (BUILDDOC "Build documentation." ON)
 option (BUILDSWIG "Build swig modules." ON)
