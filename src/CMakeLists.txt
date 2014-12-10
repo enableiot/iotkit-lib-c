@@ -4,7 +4,6 @@ include_directories(
   ${STAGING_DIR_TARGET1}/usr/include/
   ${STAGING_DIR_TARGET1}/usr/include/c++/
 )
-#include_directories (${STAGING_DIR_TARGET}/usr/include/)
 
 set (iotkit_LIB_SRCS
   ${PROJECT_SOURCE_DIR}/src/iotkit.c
