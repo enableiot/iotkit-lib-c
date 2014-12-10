@@ -1,7 +1,8 @@
 include_directories(
   ${PROJECT_SOURCE_DIR}/lib/cJSON
   ${PROJECT_SOURCE_DIR}/src
-#  ${STAGING_DIR_TARGET}/usr/include/
+  ${STAGING_DIR_TARGET}/usr/include/
+  ${STAGING_DIR_TARGET}/usr/include/c++/
 )
 #include_directories (${STAGING_DIR_TARGET}/usr/include/)
 

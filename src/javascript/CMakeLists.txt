@@ -12,7 +12,6 @@ include_directories (
   ${CMAKE_CURRENT_SOURCE_DIR}/..
 )
 
-set (CMAKE_CXX_FLAGS -DBUILDING_NODE_EXTENSION)
 # SWIG treats SWIG_FLAGS as a list and not a string so semicolon seperation is required
 set_source_files_properties (iotkitjs.i PROPERTIES SWIG_FLAGS "-node;-I${CMAKE_BINARY_DIR}/src")
 set_source_files_properties (iotkitjs.i PROPERTIES CPLUSPLUS ON)
@@ -28,6 +27,7 @@ if (DOXYGEN_FOUND)
 endif ()
 
 set_target_properties (iotkitjs PROPERTIES
+  COMPILE_FLAGS "${CMAKE_CXX_FLAGS} -DBUILDING_NODE_EXTENSION"
   PREFIX ""
   OUTPUT_NAME iotkit
   SUFFIX ".node"

@@ -12,8 +12,6 @@ swig_add_module (python-iotkit python python-iotkit.i ${iotkit_LIB_SRCS})
 swig_link_libraries (python-iotkit ${PYTHON_LIBRARIES})
 swig_link_libraries (python-iotkit curl)
 
-set (CMAKE_C_FLAGS -DSWIGPYTHON=${SWIG_FOUND})
-
 if (DOXYGEN_FOUND)
   foreach (_file ${DOCCLASSES})
     add_dependencies (${SWIG_MODULE_python-iotkit_REAL_NAME} ${_file}class_doc_i)
@@ -29,6 +27,7 @@ endif ()
 
 set_target_properties (${SWIG_MODULE_python-iotkit_REAL_NAME} PROPERTIES
   OUTPUT_NAME _iotkit
+  COMPILE_FLAGS "${CMAKE_C_FLAGS} -DSWIGPYTHON=${SWIG_FOUND}"
 )
 
 # Essentially do seperate_arguments but with "." instead of " "
