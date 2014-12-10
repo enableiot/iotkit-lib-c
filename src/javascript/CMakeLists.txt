@@ -10,8 +10,8 @@ set (NODE_INCLUDE_DIRS
 include_directories (
   ${NODE_INCLUDE_DIRS}
   ${CMAKE_CURRENT_SOURCE_DIR}/..
-  ${STAGING_DIR_TARGET1}/usr/include/
-  ${STAGING_DIR_TARGET1}/usr/include/c++/
+#  ${STAGING_DIR_TARGET1}/usr/include/
+#  ${STAGING_DIR_TARGET1}/usr/include/c++/
 )
 
 # SWIG treats SWIG_FLAGS as a list and not a string so semicolon seperation is required

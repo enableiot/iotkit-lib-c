@@ -4,8 +4,8 @@ INCLUDE_DIRECTORIES(${PYTHON_INCLUDE_PATH})
 include_directories(
   ${CMAKE_CURRENT_SOURCE_DIR}/..
   ${PYTHON_INCLUDE_DIRS}
-  ${STAGING_DIR_TARGET1}/usr/include/
-  ${STAGING_DIR_TARGET1}/usr/include/c++/
+#  ${STAGING_DIR_TARGET1}/usr/include/
+#  ${STAGING_DIR_TARGET1}/usr/include/c++/
 )
 
 set_source_files_properties (python-iotkit.i PROPERTIES CPLUSPLUS ON)
