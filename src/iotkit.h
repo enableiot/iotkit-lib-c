@@ -30,6 +30,7 @@ extern "C" {
 
 #include <stdlib.h>
 #include <stdbool.h>
+#include <string.h>
 #include "cJSON.h"
 #include "util.h"
 #include "rest.h"
@@ -206,6 +207,7 @@ void iotkit_cleanup();
 
 KeyValueParams *createKeyValueParams(char *key, char *value);
 void addKeyValueParams(KeyValueParams *params, char *key, char *value);
+char *createHttpResponseJson(HttpResponse *response);
 
 #ifdef __cplusplus
 }

@@ -28,7 +28,7 @@
 extern "C" {
 #endif
 
-#include "iotkit.h"
+#include "device_management.h"
 #include <sys/time.h>
 
 typedef struct _RetrieveData {

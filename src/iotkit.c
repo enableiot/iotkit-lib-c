@@ -44,7 +44,7 @@ static bool isInitialized = false;
  * @return returns the library version string
  */
 char *iotkit_get_version() {
-    return VERSION;
+    return strdup(VERSION);
 }
 
 /** Checks for file existence.
@@ -878,7 +878,7 @@ void addKeyValueParams(KeyValueParams *params, char *key, char *value) {
     KeyValueParams *traverse = NULL;
 
     if(!key || !value) {
-        return params;
+        return;
     }
 
     newObject = (KeyValueParams *)malloc(sizeof(KeyValueParams));

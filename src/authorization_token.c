@@ -21,7 +21,62 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include "iotkit.h"
+#include "authorization.h"
+
+void saveAuthInfoInStore(char *authToken, char *expiry, char *user_account_id) {
+    int store_path_length = strlen(configurations.store_path) + strlen(AUTHORIZATION_FILE_NAME) + 2;
+    char *config_file_path = (char *)malloc(sizeof(char) * store_path_length);
+    FILE *fp = NULL;
+
+    #if DEBUG
+        printf("authToken is :%s\n", authToken);
+        printf("expiry is :%s\n", expiry);
+    #endif
+
+    strcpy(config_file_path, configurations.store_path);
+    strcat(config_file_path, AUTHORIZATION_FILE_NAME);
+
+    fp = fopen(config_file_path, "w+");
+    if (fp == NULL) {
+        fprintf(stderr,"Error can't open file %s\n", config_file_path);
+    }
+    else {
+        cJSON *root;
+        char *out;
+        root=cJSON_CreateObject();
+
+        if(authToken) {
+            cJSON_AddItemToObject(root, "authorization", cJSON_CreateString(authToken));
+        } else {
+            cJSON_AddItemToObject(root, "authorization", cJSON_CreateFalse());
+        }
+
+        if(expiry) {
+            cJSON_AddItemToObject(root, "expiry", cJSON_CreateString(expiry));
+        } else {
+            cJSON_AddItemToObject(root, "expiry", cJSON_CreateFalse());
+        }
+
+        if(user_account_id) {
+            cJSON_AddItemToObject(root, "user_account_id", cJSON_CreateString(user_account_id));
+        } else {
+            cJSON_AddItemToObject(root, "user_account_id", cJSON_CreateFalse());
+        }
+
+        out = cJSON_Print(root, 2);
+
+        #if DEBUG
+            printf("%s\n", out);
+        #endif
+
+        fwrite(out, strlen(out), sizeof(char), fp);
+
+        // free buffers
+        free(out);
+        cJSON_Delete(root);
+        fclose(fp);
+    }
+}
 
 /** Parses configuration JSON
 * @param[in] config file path to the JSON
@@ -132,61 +187,6 @@ void parseAuthorizationToken() {
     }
 
     return ;
-}
-
-void saveAuthInfoInStore(char *authToken, char *expiry, char *user_account_id) {
-    int store_path_length = strlen(configurations.store_path) + strlen(AUTHORIZATION_FILE_NAME) + 2;
-    char *config_file_path = (char *)malloc(sizeof(char) * store_path_length);
-    FILE *fp = NULL;
-
-    #if DEBUG
-        printf("authToken is :%s\n", authToken);
-        printf("expiry is :%s\n", expiry);
-    #endif
-
-    strcpy(config_file_path, configurations.store_path);
-    strcat(config_file_path, AUTHORIZATION_FILE_NAME);
-
-    fp = fopen(config_file_path, "w+");
-    if (fp == NULL) {
-        fprintf(stderr,"Error can't open file %s\n", config_file_path);
-    }
-    else {
-        cJSON *root;
-        char *out;
-        root=cJSON_CreateObject();
-
-        if(authToken) {
-            cJSON_AddItemToObject(root, "authorization", cJSON_CreateString(authToken));
-        } else {
-            cJSON_AddItemToObject(root, "authorization", cJSON_CreateFalse());
-        }
-
-        if(expiry) {
-            cJSON_AddItemToObject(root, "expiry", cJSON_CreateString(expiry));
-        } else {
-            cJSON_AddItemToObject(root, "expiry", cJSON_CreateFalse());
-        }
-
-        if(user_account_id) {
-            cJSON_AddItemToObject(root, "user_account_id", cJSON_CreateString(user_account_id));
-        } else {
-            cJSON_AddItemToObject(root, "user_account_id", cJSON_CreateFalse());
-        }
-
-        out = cJSON_Print(root, 2);
-
-        #if DEBUG
-            printf("%s\n", out);
-        #endif
-
-        fwrite(out, strlen(out), sizeof(char), fp);
-
-        // free buffers
-        free(out);
-        cJSON_Delete(root);
-        fclose(fp);
-    }
 }
 
 /** Stores device configuration JSON

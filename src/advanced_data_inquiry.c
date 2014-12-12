@@ -335,7 +335,7 @@ AdvancedDataInquiry *addValueFilter(AdvancedDataInquiry *advancedDataInquiryObje
     if(!advancedDataInquiryObject->valueFilter) {
         advancedDataInquiryObject->valueFilter = attributeFilter;
     } else {
-        AttributeFilterList *traverseFilter = advancedDataInquiryObject->valueFilter;
+        AttributeFilter *traverseFilter = advancedDataInquiryObject->valueFilter;
 
         while(traverseFilter->next) {
             traverseFilter = traverseFilter->next;

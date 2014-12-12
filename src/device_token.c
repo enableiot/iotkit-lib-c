@@ -23,6 +23,95 @@
 
 #include "iotkit.h"
 
+/** Stores device configuration JSON
+*/
+void storeDeviceCredentials(char *deviceId, char *deviceToken, char *data_account_id, char *data_account_name) {
+    int store_path_length = strlen(configurations.store_path) + strlen(DEVICE_CONFIG_FILE_NAME) + 2;
+    char *config_file_path = (char *)malloc(sizeof(char) * store_path_length);
+
+    strcpy(config_file_path, configurations.store_path);
+    strcat(config_file_path, DEVICE_CONFIG_FILE_NAME);
+
+    #if DEBUG
+        if(deviceId) {
+            printf("deviceId is :%s\n", deviceId);
+        } else {
+            printf("deviceId is NULL\n");
+        }
+
+        if(deviceToken) {
+            printf("deviceToken is :%s\n", deviceToken);
+        } else {
+            printf("deviceToken is NULL\n");
+        }
+
+        if(data_account_id) {
+            printf("data_account_id is :%s\n", data_account_id);
+        } else {
+            printf("data_account_id is NULL\n");
+        }
+
+        if(data_account_name) {
+            printf("data_account_name is :%s\n", data_account_name);
+        } else {
+            printf("data_account_name is NULL\n");
+        }
+    #endif
+
+    FILE *fp = fopen(config_file_path, "w+");
+    if (fp == NULL) {
+        fprintf(stderr,"Error can't open file %s\n", config_file_path);
+    }
+    else {
+        cJSON *root;
+        char *out;
+        root=cJSON_CreateObject();
+
+        if(deviceId) {
+            cJSON_AddItemToObject(root, "deviceId", cJSON_CreateString(deviceId));
+            configurations.device_id = strdup(deviceId);
+        } else {
+            cJSON_AddItemToObject(root, "deviceId", cJSON_CreateFalse());
+        }
+
+        if(deviceToken) {
+            cJSON_AddItemToObject(root, "deviceToken", cJSON_CreateString(deviceToken));
+            configurations.deviceToken = strdup(deviceToken);
+        } else {
+            cJSON_AddItemToObject(root, "deviceToken", cJSON_CreateFalse());
+        }
+
+        if(data_account_id) {
+            cJSON_AddItemToObject(root, "data_account_id", cJSON_CreateString(data_account_id));
+            configurations.data_account_id = strdup(data_account_id);
+        } else {
+            cJSON_AddItemToObject(root, "data_account_id", cJSON_CreateFalse());
+        }
+
+        if(data_account_name) {
+            cJSON_AddItemToObject(root, "data_account_name", cJSON_CreateString(data_account_name));
+            configurations.data_account_name = strdup(data_account_name);
+        } else {
+            cJSON_AddItemToObject(root, "data_account_name", cJSON_CreateFalse());
+        }
+
+        out = cJSON_Print(root, 2);
+
+        #if DEBUG
+            printf("%s\n", out);
+        #endif
+
+        fwrite(out, strlen(out), sizeof(char), fp);
+
+        // free buffers
+        free(out);
+        cJSON_Delete(root);
+        fclose(fp);
+    }
+
+    return ;
+}
+
 /** Parses configuration JSON
 * @param[in] config file path to the JSON
 * @return returns client query description object upon successful parsing and NULL otherwise
@@ -149,96 +238,6 @@ void parseDeviceToken() {
     return ;
 }
 
-/** Stores device configuration JSON
-*/
-void storeDeviceCredentials(char *deviceId, char *deviceToken, char *data_account_id, char *data_account_name) {
-    int store_path_length = strlen(configurations.store_path) + strlen(DEVICE_CONFIG_FILE_NAME) + 2;
-    char *config_file_path = (char *)malloc(sizeof(char) * store_path_length);
-
-    strcpy(config_file_path, configurations.store_path);
-    strcat(config_file_path, DEVICE_CONFIG_FILE_NAME);
-
-    #if DEBUG
-        if(deviceId) {
-            printf("deviceId is :%s\n", deviceId);
-        } else {
-            printf("deviceId is NULL\n");
-        }
-
-        if(deviceToken) {
-            printf("deviceToken is :%s\n", deviceToken);
-        } else {
-            printf("deviceToken is NULL\n");
-        }
-
-        if(data_account_id) {
-            printf("data_account_id is :%s\n", data_account_id);
-        } else {
-            printf("data_account_id is NULL\n");
-        }
-
-        if(data_account_name) {
-            printf("data_account_name is :%s\n", data_account_name);
-        } else {
-            printf("data_account_name is NULL\n");
-        }
-    #endif
-
-    FILE *fp = fopen(config_file_path, "w+");
-    if (fp == NULL) {
-        fprintf(stderr,"Error can't open file %s\n", config_file_path);
-    }
-    else {
-        cJSON *root;
-        char *out;
-        root=cJSON_CreateObject();
-
-        if(deviceId) {
-            cJSON_AddItemToObject(root, "deviceId", cJSON_CreateString(deviceId));
-            configurations.device_id = strdup(deviceId);
-        } else {
-            cJSON_AddItemToObject(root, "deviceId", cJSON_CreateFalse());
-        }
-
-        if(deviceToken) {
-            cJSON_AddItemToObject(root, "deviceToken", cJSON_CreateString(deviceToken));
-            configurations.deviceToken = strdup(deviceToken);
-        } else {
-            cJSON_AddItemToObject(root, "deviceToken", cJSON_CreateFalse());
-        }
-
-        if(data_account_id) {
-            cJSON_AddItemToObject(root, "data_account_id", cJSON_CreateString(data_account_id));
-            configurations.data_account_id = strdup(data_account_id);
-        } else {
-            cJSON_AddItemToObject(root, "data_account_id", cJSON_CreateFalse());
-        }
-
-        if(data_account_name) {
-            cJSON_AddItemToObject(root, "data_account_name", cJSON_CreateString(data_account_name));
-            configurations.data_account_name = strdup(data_account_name);
-        } else {
-            cJSON_AddItemToObject(root, "data_account_name", cJSON_CreateFalse());
-        }
-
-        out = cJSON_Print(root, 2);
-
-        #if DEBUG
-            printf("%s\n", out);
-        #endif
-
-        fwrite(out, strlen(out), sizeof(char), fp);
-
-        // free buffers
-        free(out);
-        cJSON_Delete(root);
-        fclose(fp);
-    }
-
-    return ;
-}
-
-
 void storeDeviceID(char *response) {
 
     if(response != NULL) {
@@ -260,7 +259,7 @@ void storeDeviceID(char *response) {
 
             if (!isJsonObject(json)) {
                 fprintf(stderr,"Invalid JSON response\n");
-                return false;
+                return;
             }
 
             jitem = cJSON_GetObjectItem(json, "status");
@@ -275,7 +274,7 @@ void storeDeviceID(char *response) {
                     fprintf(stderr,"Could not create device\n");
                 }
 
-                return false;
+                return;
             }
 
             jitem = cJSON_GetObjectItem(json, "deviceId");
@@ -288,7 +287,7 @@ void storeDeviceID(char *response) {
             configurations.deviceToken = NULL;
             storeDeviceCredentials(jitem->valuestring, configurations.deviceToken, configurations.data_account_id, configurations.data_account_name);
 
-            return true;
+            return;
         }
     }
 }
@@ -314,14 +313,14 @@ void storeDeviceToken(char *response) {
 
             if (!isJsonObject(json)) {
                 fprintf(stderr,"Invalid JSON response\n");
-                return false;
+                return;
             }
 
             jitem = cJSON_GetObjectItem(json, "message");
 
             if(jitem) {
                 fprintf(stderr,"Could not create device: %s\n", jitem->valuestring);
-                return false;
+                return;
             }
 
             jitem = cJSON_GetObjectItem(json, "deviceToken");
@@ -338,7 +337,7 @@ void storeDeviceToken(char *response) {
 
             storeDeviceCredentials(configurations.device_id, deviceToken, configurations.data_account_id, configurations.data_account_name);
 
-            return true;
+            return;
         }
     }
 }
@@ -364,7 +363,7 @@ void storeAccountInfo(char *response) {
 
             if (!isJsonObject(json)) {
                 fprintf(stderr,"Invalid JSON response\n");
-                return false;
+                return;
             }
 
             jitem = cJSON_GetObjectItem(json, "name");
