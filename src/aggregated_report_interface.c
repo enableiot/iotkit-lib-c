@@ -47,7 +47,6 @@ AggregatedReportInterface *createAggregatedReportInterface() {
         return NULL;
     }
 
-    newObject->msgType = NULL;
     newObject->startTimestamp = 0L;
     newObject->endTimestamp = 0L;
     newObject->aggregationMethods = NULL;
@@ -66,24 +65,12 @@ AggregatedReportInterface *createAggregatedReportInterface() {
 }
 
 /**
- * Sets the message type
- *
- * @param aggregatedReportInterfaceObject object created using createAggregatedReportInterface()
- * @param msgType message type is always 'aggregatedReportRequest'
- */
-AggregatedReportInterface *setReportMessageType(AggregatedReportInterface *aggregatedReportInterfaceObject, char *msgType) {
-    aggregatedReportInterfaceObject->msgType = strdup(msgType);
-
-    return aggregatedReportInterfaceObject;
-}
-
-/**
  * set report start timestamp
  *
  * @param aggregatedReportInterfaceObject object created using createAggregatedReportInterface()
  * @param startTimestamp time stamp in milliseconds
  */
-AggregatedReportInterface *setReportStartTimestamp(AggregatedReportInterface *aggregatedReportInterfaceObject, long startTimestamp) {
+AggregatedReportInterface *setReportStartTimestamp(AggregatedReportInterface *aggregatedReportInterfaceObject, long long startTimestamp) {
     aggregatedReportInterfaceObject->startTimestamp = startTimestamp;
 
     return aggregatedReportInterfaceObject;
@@ -95,7 +82,7 @@ AggregatedReportInterface *setReportStartTimestamp(AggregatedReportInterface *ag
  * @param aggregatedReportInterfaceObject object created using createAggregatedReportInterface()
  * @param endTimestamp time stamp in milliseconds
  */
-AggregatedReportInterface *setReportEndTimestamp(AggregatedReportInterface *aggregatedReportInterfaceObject, long endTimestamp) {
+AggregatedReportInterface *setReportEndTimestamp(AggregatedReportInterface *aggregatedReportInterfaceObject, long long endTimestamp) {
     aggregatedReportInterfaceObject->endTimestamp = endTimestamp;
 
     return aggregatedReportInterfaceObject;
@@ -313,46 +300,6 @@ AggregatedReportInterface *addReportSortInfo(AggregatedReportInterface *aggregat
     return aggregatedReportInterfaceObject;
 }
 
-
-/*AttributeFilter *createAttributeFilterObject(char *filterName) {
-    AttributeFilter *newObject = (AttributeFilter *)malloc(sizeof(AttributeFilter));
-
-    if(!newObject) {
-         return NULL;
-     }
-
-     newObject->filterName = strdup(filterName);
-     newObject->filterValues = NULL;
-
-     return newObject;
-}
-
-AttributeFilter *addAttributeFilterValues(AttributeFilter *attributeFilter, char *filterValue) {
-    StringList *addId;
-
-    if(!attributeFilter) {
-         return NULL;
-     }
-
-    addId = (StringList *)malloc(sizeof(StringList));
-    addId->data = strdup(filterValue);
-    addId->next = NULL;
-
-    if(!attributeFilter->filterValues) {
-        attributeFilter->filterValues = addId;
-    } else {
-        StringList *traverseId = attributeFilter->filterValues;
-
-        while(traverseId->next) {
-            traverseId = traverseId->next;
-        }
-        traverseId->next = addId;
-    }
-
-     return attributeFilter;
-}
-*/
-
 /**
  * add attribute filter. Can be called multiple times to add different filters
  *
@@ -400,28 +347,19 @@ char *aggregatedReportInterface(AggregatedReportInterface *aggregatedReportInter
 
         strcpy(body, "{");
 
-        strcat(body, "\"msgType\":\"");
-        if(aggregatedReportInterfaceObject->msgType) {
-            strcat(body, aggregatedReportInterfaceObject->msgType);
-            strcat(body, "\"");
-        } else {
-            strcat(body, "aggregatedReportRequest\"");
-        }
-
-
 //        if(aggregatedReportInterfaceObject->startTimestamp > 0L)
         {
             char timeStamp[BODY_SIZE_MIN];
-            sprintf(timeStamp, "%ld", aggregatedReportInterfaceObject->startTimestamp);
-            strcat(body, ",\"startTimestamp\":");
+            sprintf(timeStamp, "%lld", aggregatedReportInterfaceObject->startTimestamp);
+            strcat(body, "\"from\":");
             strcat(body, timeStamp);
         }
 
 //        if(aggregatedReportInterfaceObject->endTimestamp> 0L)
         {
             char timeStamp[BODY_SIZE_MIN];
-            sprintf(timeStamp, "%ld", aggregatedReportInterfaceObject->endTimestamp);
-            strcat(body, ",\"endTimestamp\":");
+            sprintf(timeStamp, "%lld", aggregatedReportInterfaceObject->endTimestamp);
+            strcat(body, ",\"to\":");
             strcat(body, timeStamp);
         }
 

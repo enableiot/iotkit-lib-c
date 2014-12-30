@@ -147,26 +147,160 @@ char *renewActivationCode() {
 }
 
 /**
+ * Create Update User Account Object
+ *
+ * @param new_name an character pointer representing new account name
+ * @return returns the object created if successful, otherwise NULL
+ */
+UpdateUserAccount *createUpdateUserAccountObject(char *new_name) {
+    UpdateUserAccount *newObject = (UpdateUserAccount *)malloc(sizeof(UpdateUserAccount));
+
+    if(!newObject) {
+        return NULL;
+    }
+
+    newObject->new_name = strdup(new_name);
+
+    // assign default values
+    newObject->attributes = NULL;
+    newObject->healthTimePeriod = 86400;
+    newObject->exec_interval = 120;
+    newObject->base_line_exec_interval = 86400;
+    newObject->cd_model_frequency = 604800;
+    newObject->cd_execution_frequency = 600;
+    newObject->data_retention = 0;
+
+    return newObject;
+}
+
+/**
+ * set Update User Account attributes
+ *
+ * @param updateUserAccount representing Update User Account Object
+ * @param attributes list of key value pairs
+ */
+void setUpdateAccountAttributes(UpdateUserAccount *updateUserAccount, KeyValueParams *attributes) {
+    updateUserAccount->attributes = attributes;
+}
+
+/**
+ * set Update User Account health time period
+ *
+ * @param updateUserAccount representing Update User Account Object
+ * @param healthTimePeriod value of health time period
+ */
+void setUpdateAccountHealthTimePeriod(UpdateUserAccount *updateUserAccount, int healthTimePeriod) {
+    updateUserAccount->healthTimePeriod = healthTimePeriod;
+}
+
+/**
+ * set Update User Account execution interval
+ *
+ * @param updateUserAccount representing Update User Account Object
+ * @param exec_interval value of execution interval
+ */
+void setUpdateAccountExecInterval(UpdateUserAccount *updateUserAccount, int exec_interval) {
+    updateUserAccount->exec_interval = exec_interval;
+}
+
+/**
+ * set Update User Account base line execution interval
+ *
+ * @param updateUserAccount representing Update User Account Object
+ * @param base_line_exec_interval value of base line execution interval
+ */
+void setUpdateAccountBaseLineExecInterval(UpdateUserAccount *updateUserAccount, int base_line_exec_interval) {
+    updateUserAccount->base_line_exec_interval = base_line_exec_interval;
+}
+
+/**
+ * set Update User Account cd model frequency
+ *
+ * @param updateUserAccount representing Update User Account Object
+ * @param cd_model_frequency value of cd_model_frequency
+ */
+void setUpdateAccountCdModelFrequency(UpdateUserAccount *updateUserAccount, int cd_model_frequency) {
+    updateUserAccount->cd_model_frequency = cd_model_frequency;
+}
+
+/**
+ * set Update User Account cd execution frequency
+ *
+ * @param updateUserAccount representing Update User Account Object
+ * @param cd_execution_frequency value of cd_execution_frequency
+ */
+void setUpdateAccountCdExecutionFrequency(UpdateUserAccount *updateUserAccount, int cd_execution_frequency) {
+    updateUserAccount->cd_execution_frequency = cd_execution_frequency;
+}
+
+/**
+ * set Update User Account Data Retention
+ *
+ * @param updateUserAccount representing Update User Account Object
+ * @param data_retention value of data_retention
+ */
+void setUpdateAccountDataRetention(UpdateUserAccount *updateUserAccount, int data_retention) {
+    updateUserAccount->data_retention = data_retention;
+}
+
+/**
  * REST API to update an Account properties under the user
  *
  * @param account_name an character pointer
  * @return returns the result received from server, otherwise NULL
  */
-char *updateAnAccount(char *account_name) {
+char *updateAnAccount(UpdateUserAccount *updateUserAccount) {
     struct curl_slist *headers = NULL;
     char *url;
     char body[BODY_SIZE_MIN];
+    char  uuid_str[38];
     HttpResponse *response = (HttpResponse *)malloc(sizeof(HttpResponse));
     response->code = 0;
     response->data = NULL;
 
-    // TODO: json object needs to be sent for updation
     if(prepareUrl(&url, configurations.base_url, configurations.update_an_account_name, NULL)) {
+
+        // generate UUID
+        get_uuid_string(uuid_str,sizeof(uuid_str));
 
         appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
         appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
 
-        sprintf(body, "{\"name\":\"%s\"}", account_name);
+        sprintf(body, "{\"name\":\"%s\",\"healthTimePeriod\":%d,\"exec_interval\":%d,\"base_line_exec_interval\":%d"
+        ",\"cd_model_frequency\":%d,\"cd_execution_frequency\":%d,\"data_retention\":%d",
+        updateUserAccount->new_name, updateUserAccount->healthTimePeriod, updateUserAccount->exec_interval, \
+        updateUserAccount->base_line_exec_interval, updateUserAccount->cd_model_frequency, updateUserAccount->cd_execution_frequency, updateUserAccount->data_retention);
+
+        strcat(body, ",\"attributes\":{");
+
+        if(updateUserAccount->attributes) {
+            KeyValueParams *traverseKeyValues = updateUserAccount->attributes;
+
+            while(traverseKeyValues != NULL) {
+
+                strcat(body, "\"");
+                strcat(body, traverseKeyValues->name);
+                strcat(body, "\":\"");
+                strcat(body, traverseKeyValues->value);
+                strcat(body, "\"");
+
+                traverseKeyValues = traverseKeyValues->next;
+
+                if(traverseKeyValues) {
+                    strcat(body, ",");
+                }
+            }
+        }
+
+        strcat(body, "}");
+        strcat(body, ", \"id\":\"");
+        strcat(body, configurations.data_account_id);
+        strcat(body, "\"");
+        strcat(body, "}");
+
+        #if DEBUG
+            printf("Prepared BODY is %s\n", body);
+        #endif
 
         doHttpPut(url, headers, body, response);
 
@@ -238,7 +372,6 @@ char *getUserAssociatedWithAccount() {
  * @return returns the result received from server, otherwise NULL
  */
 char *addAnUserToAccount(char *account_id, char * user_id, bool isAdmin) {
-// TODO: to be verified
     struct curl_slist *headers = NULL;
     char *url;
     char body[BODY_SIZE_MIN];
@@ -257,11 +390,22 @@ char *addAnUserToAccount(char *account_id, char * user_id, bool isAdmin) {
         appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
         appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
 
-        if(isAdmin) {
-            sprintf(body, "{\"accounts\":{\"%s\":\"%s\"}}", account_id, "admin");
+        sprintf(body, "{\"id\":\"%s\",\"accounts\":{\"", user_id);
+        if(account_id) {
+            strcat(body, account_id);
         } else {
-            sprintf(body, "{\"accounts\":{\"%s\":\"%s\"}}", account_id, "user");
+            strcat(body, configurations.data_account_id);
         }
+
+        strcat(body, "\":\"");
+
+        if(isAdmin) {
+            strcat(body, "admin");
+        } else {
+            strcat(body, "user");
+        }
+
+        strcat(body, "\"}}");
 
         #if DEBUG
             printf("Prepared BODY is %s\n", body);
@@ -274,131 +418,5 @@ char *addAnUserToAccount(char *account_id, char * user_id, bool isAdmin) {
 
     return NULL;
 }
-
-/*
-UpdateUserAccount *createUpdateUserAccountObject() {
-    UpdateUserAccount *newObject = (UpdateUserAccount *)malloc(sizeof(UpdateUserAccount));
-
-    if(!newObject) {
-        return NULL;
-    }
-
-    newObject->attributes = NULL;
-    newObject->email = NULL;
-    newObject->termsAndConditions = false;
-    newObject->verified = false;
-}
-
-UpdateUserAccount *addUpdateUserAccountAttributes(UpdateUserAccount *updateUserAccount, char *name, char *value) {
-    KeyValueParams *newParam = (KeyValueParams *)malloc(sizeof(KeyValueParams));
-
-    newParam->name = name;
-    newParam->value = value;
-    newParam->next = NULL;
-
-    if(!updateUserAccount->attributes) {
-        updateUserAccount->attributes = newParam;
-    } else {
-        KeyValueParams *traverse = updateUserAccount->attributes;
-
-        while(traverse->next != NULL) {
-            traverse = traverse->next;
-        }
-
-        traverse->next = newParam;
-    }
-
-    return updateUserAccount;
-}
-
-UpdateUserAccount *addUpdateUserAccountEmail(UpdateUserAccount *updateUserAccount, char *email) {
-    updateUserAccount->email = email;
-
-    return updateUserAccount;
-}
-
-UpdateUserAccount *addUpdateUserAccountTerms(UpdateUserAccount *updateUserAccount, bool terms) {
-    updateUserAccount->termsAndConditions = terms;
-
-    return updateUserAccount;
-}
-
-UpdateUserAccount *addUpdateUserAccountVerified(UpdateUserAccount *updateUserAccount, bool verified) {
-    updateUserAccount->verified = verified;
-
-    return updateUserAccount;
-}
-
-bool updateUserAssociatedWithAccount(UpdateUserAccount *updateUserAccount, long *httpResponseCode, char **response) {
-    struct curl_slist *headers = NULL;
-    char *url;
-    char body[BODY_SIZE_MED];
-    KeyValueParams *traverse = updateUserAccount->attributes;
-
-    appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
-
-    if(prepareUrl(&url, configurations.base_url, configurations.update_user_associated_with_account, NULL)) {
-
-        strcpy(body, "{");
-
-        strcat(body, "\"id\":\"");
-        strcat(body, configurations.data_account_id);
-        strcat(body, "\",");
-
-        strcat(body, "\"accounts\":{\"");
-        strcat(body, configurations.data_account_id);
-        strcat(body, "\":\"admin\"},");
-
-        strcat(body, "\"attributes\":{");
-        while(traverse) {
-            strcat(body, "\"");
-            strcat(body, traverse->name);
-            strcat(body, "\":\"");
-            strcat(body, traverse->value);
-            strcat(body, "\"");
-
-            traverse = traverse->next;
-
-            if(traverse) {
-                strcat(body, ",");
-            }
-        }
-        strcat(body, "},");
-
-        if(updateUserAccount->email) {
-            strcat(body, "\"email\":\"");
-            strcat(body, updateUserAccount->email);
-            strcat(body, "\",");
-        }
-
-        strcat(body, "\"termsAndConditions\":\"");
-        if(updateUserAccount->termsAndConditions) {
-            strcat(body, "true");
-        } else {
-            strcat(body, "false");
-        }
-        strcat(body, "\",");
-
-        strcat(body, "\"verified\":");
-        if(updateUserAccount->verified) {
-            strcat(body, "true");
-        } else {
-            strcat(body, "false");
-        }
-
-        strcat(body, "}");
-
-        #if DEBUG
-            printf("Prepared BODY is %s\n", body);
-        #endif
-
-        doHttpPut(url, headers, body, httpResponseCode, response);
-
-        return true;
-    }
-
-    return false;
-}
-*/
 
 /** @} */ // end of accountmanagement

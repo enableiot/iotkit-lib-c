@@ -21,35 +21,35 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef __REST_H
-#define __REST_H
-
-#ifdef __cplusplus
-extern "C" {
-#endif
-
-#include <string.h>
 #include <stdlib.h>
 #include <stdbool.h>
-#include <curl/curl.h>
+#include <string.h>
 
-#ifndef DEBUG
-   #define DEBUG 0
-#endif
+#include "../lib/cJSON/cJSON.h"
+#include "../src/util.h"
 
-struct putData {
-  char *data;
-  size_t len;
-};
+bool checkResponseValue(char *response, int responseCode) {
+    cJSON *json = NULL, *jitem = NULL;
 
-typedef struct _HttpResponse {
-    long code;
-    char *data;
-} HttpResponse;
+// parse the file
+    json = cJSON_Parse(response);
+    if (!json) {
+        fprintf(stderr,"Error before: [%s]\n",cJSON_GetErrorPtr());
+        return false;
+    } else {
+        if (!isJsonObject(json)) {
+            fprintf(stderr,"Invalid JSON format response\n");
+            return false;
+        }
 
+        jitem = cJSON_GetObjectItem(json, "code");
+        if (!isJsonNumber(jitem)) {
+            fprintf(stderr,"Invalid JSON format for json property %s\n", jitem->string);
+            return false;
+        }
 
-#ifdef __cplusplus
+        if (jitem->valueint == responseCode) {
+            return true;
+        }
+    }
 }
-#endif
-
-#endif

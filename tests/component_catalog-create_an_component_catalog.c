@@ -21,30 +21,12 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include "../src/component_catalog.h"
+#include "component_catalog.h"
 
-bool testListAllComponentCatalogs() {
+int main(void) {
     char *response = NULL;
 
-    response = listAllComponentCatalogs();
-
-    printf("Response Received :%s\n", response);
-
-    return true;
-}
-
-bool testGetComponentCatalogDetails() {
-    char *response = NULL;
-
-    response = getComponentCatalogDetails("temperature.v1.0");
-
-    printf("Response Received :%s\n", response);
-
-    return true;
-}
-
-bool testCreateAnComponentCatalog() {
-    char *response = NULL;
+    iotkit_init();
 
     ComponentCatalog *cmpObject = createComponentCatalogObject("actua13", "1.0", "actuator", "Number", "float", "Degrees Celsius", "timeSeries");
     addMinValue(cmpObject, -150.0f);
@@ -58,22 +40,11 @@ bool testCreateAnComponentCatalog() {
     response = createAnComponentCatalog(cmpObject);
     printf("Response Received :%s\n", response);
 
-    return true;
-}
+    iotkit_cleanup();
 
-bool testUpdateAnComponentCatalog() {
-    char *response = NULL;
+    if(checkResponseValue(response, 201) == true) {
+        exit(EXIT_SUCCESS);
+    }
 
-    ComponentCatalog *cmpObject = createComponentCatalogObject(NULL, NULL, "actuator", "Number", "integer", "Degrees Celsius2", "timeSeries");
-    addMinValue(cmpObject, -150.0f);
-    addMaxValue(cmpObject, 150.0f);
-    addCommandString(cmpObject, "off");
-
-    addCommandParams(cmpObject, "my12", "1-5");
-    addCommandParams(cmpObject, "my22", "5-10");
-
-    response = updateAnComponentCatalog(cmpObject, "actua13.v1.0");
-    printf("Response Received :%s\n", response);
-
-    return true;
+    exit(EXIT_FAILURE);
 }

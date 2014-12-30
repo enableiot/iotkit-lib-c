@@ -21,22 +21,22 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include "../src/iotkit.h"
+#include "alert_management.h"
 
-bool testGetUserJwtToken() {
+int main(void) {
     char *response = NULL;
 
-    response = getUserJwtToken("pradeep.chenthati@aricent.com", "Password2");
+    iotkit_init();
+
+    response = getAlertInformation("75");
+
     printf("Response Received :%s\n", response);
 
-    return true;
-}
+    iotkit_cleanup();
 
-bool testGetUserJwtTokenInfo() {
-    char *response = NULL;
+    if(checkResponseValue(response, 200) == true) {
+        exit(EXIT_SUCCESS);
+    }
 
-    response = getUserJwtTokenInfo();
-    printf("Response Received :%s\n", response);
-
-    return true;
+    exit(EXIT_FAILURE);
 }

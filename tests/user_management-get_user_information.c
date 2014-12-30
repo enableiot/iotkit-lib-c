@@ -21,44 +21,27 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include "../src/iotkit.h"
+#include "iotkit.h"
+#include "cJSON.h"
 
-bool testGetListOfInvitation() {
+int main(void) {
     char *response = NULL;
 
-    response = getListOfInvitation();
+    iotkit_init();
+
+// pass user ID explicitly
+//    getUserInformation("544c093c676e33cf6a779070", &httpResponseCode, &response);
+
+// or pass NULL to consider own user ID
+    response = getUserInformation(NULL);
 
     printf("Response Received :%s\n", response);
 
-    return true;
-}
+    iotkit_cleanup();
 
-bool testGetInvitationListSendToSpecificUser() {
-    char *response = NULL;
+    if(checkResponseValue(response, 200) == true) {
+        exit(EXIT_SUCCESS);
+    }
 
-    response = getInvitationListSendToSpecificUser("pradyp7@gmail.com");
-
-    printf("Response Received :%s\n", response);
-
-    return true;
-}
-
-bool testCreateInvitation() {
-    char *response = NULL;
-
-    response = createInvitation("pradyp7@gmail.com");
-
-    printf("Response Received :%s\n", response);
-
-    return true;
-}
-
-bool testDeleteInvitation() {
-    char *response = NULL;
-
-    response = deleteInvitation("pradyp7@gmail.com");
-
-    printf("Response Received :%s\n", response);
-
-    return true;
+    exit(EXIT_FAILURE);
 }

@@ -21,35 +21,35 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef __REST_H
-#define __REST_H
+#include "account_management.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+int main(void) {
+    char *response = NULL;
+    UpdateUserAccount *updateUserAccount = createUpdateUserAccountObject("itwillcreate7");
+    KeyValueParams *attributes = NULL;
 
-#include <string.h>
-#include <stdlib.h>
-#include <stdbool.h>
-#include <curl/curl.h>
+    iotkit_init();
 
-#ifndef DEBUG
-   #define DEBUG 0
-#endif
+    attributes = createKeyValueParams("phone", "2350980909");
+    addKeyValueParams(attributes, "newattr", "another attribute");
 
-struct putData {
-  char *data;
-  size_t len;
-};
+    setUpdateAccountAttributes(updateUserAccount, attributes);
+    setUpdateAccountHealthTimePeriod(updateUserAccount, 86400);
+    setUpdateAccountExecInterval(updateUserAccount, 120);
+    setUpdateAccountBaseLineExecInterval(updateUserAccount, 86400);
+    setUpdateAccountCdModelFrequency(updateUserAccount, 604800);
+    setUpdateAccountCdExecutionFrequency(updateUserAccount, 600);
+    setUpdateAccountDataRetention(updateUserAccount, 0);
 
-typedef struct _HttpResponse {
-    long code;
-    char *data;
-} HttpResponse;
+    response = updateAnAccount(updateUserAccount);
 
+    printf("Response Received :%s\n", response);
 
-#ifdef __cplusplus
+    iotkit_cleanup();
+
+    if(checkResponseValue(response, 200) == true) {
+        exit(EXIT_SUCCESS);
+    }
+
+    exit(EXIT_FAILURE);
 }
-#endif
-
-#endif

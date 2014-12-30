@@ -23,19 +23,32 @@
 
 #include "../src/advanced_data_inquiry.h"
 
-bool testAdvancedDataInquiry() {
+long long getCurrentTimeInMillis() {
+    long elapsedtime = -1L;
+    long long currentTimeInMills;
+
+    time(&elapsedtime);
+
+    currentTimeInMills = (long long)elapsedtime * 1000L;
+
+    return currentTimeInMills;
+}
+
+int main(void) {
     char *response = NULL;
+
+    iotkit_init();
 
     AttributeFilter *devCompAttributeFilter1 = NULL, *devCompAttributeFilter2 = NULL;
     AttributeFilter *measurementAttributeFilter1 = NULL, *measurementAttributeFilter2 = NULL;
     AttributeFilter *valueFilter = NULL;
     AdvancedDataInquiry *advancedDataInquiryObj = createAdvancedDataInquiryObject();
 
-    addGatewayIds(advancedDataInquiryObj, "02-00-a7-81-77-ff");
+    addGatewayIds(advancedDataInquiryObj, "ff-32-dd-ba-bb-cc");
     addGatewayIds(advancedDataInquiryObj, "02-00-86-81-77-14");
     addGatewayIds(advancedDataInquiryObj, "02-00-86-81-77-15");
 
-    addDeviceIds(advancedDataInquiryObj, "02-00-a7-81-77-ff");
+    addDeviceIds(advancedDataInquiryObj, "ff-32-dd-ba-bb-cc");
     addDeviceIds(advancedDataInquiryObj, "02-00-86-81-77-18");
     addDeviceIds(advancedDataInquiryObj, "02-00-86-81-77-19");
 
@@ -43,8 +56,8 @@ bool testAdvancedDataInquiry() {
     addComponentIds(advancedDataInquiryObj, "madras9");
     addComponentIds(advancedDataInquiryObj, "garage3");
 
-    setStartTimestamp(advancedDataInquiryObj, 1391971083468L);
-    setEndTimestamp(advancedDataInquiryObj, 1415301870434);
+    setStartTimestamp(advancedDataInquiryObj, 1415301870434L);
+    setEndTimestamp(advancedDataInquiryObj, getCurrentTimeInMillis());
 
     addReturnedMeasureAttributes(advancedDataInquiryObj, "attr_1");
     addReturnedMeasureAttributes(advancedDataInquiryObj, "attr_2");
@@ -52,7 +65,7 @@ bool testAdvancedDataInquiry() {
 
     setShowMeasureLocation(advancedDataInquiryObj, true);
 
-    devCompAttributeFilter1 = createAttributeFilterObject("filter_1");
+    /*devCompAttributeFilter1 = createAttributeFilterObject("filter_1");
     addAttributeFilterValues(devCompAttributeFilter1, "value1");
     addAttributeFilterValues(devCompAttributeFilter1, "value2");
     addAttributeFilterValues(devCompAttributeFilter1, "value3");
@@ -90,15 +103,17 @@ bool testAdvancedDataInquiry() {
 
     addSortInfo(advancedDataInquiryObj, "sortField1", "ASC");
     addSortInfo(advancedDataInquiryObj, "sortField2", "DESC");
-
+*/
 
     response = advancedDataInquiry(advancedDataInquiryObj);
 
     printf("Response Received :%s\n", response);
 
-    /*if(response->code == 200) {
-        return true;
-    }*/
+    iotkit_cleanup();
 
-    return false;
+    if(checkResponseValue(response, 200) == true) {
+        exit(EXIT_SUCCESS);
+    }
+
+    exit(EXIT_FAILURE);
 }

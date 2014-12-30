@@ -21,35 +21,21 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef __REST_H
-#define __REST_H
+#include "device_management.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+int main(void) {
+    bool isActivated = false;
+    iotkit_init();
+    isActivated = isDeviceActivated();
 
-#include <string.h>
-#include <stdlib.h>
-#include <stdbool.h>
-#include <curl/curl.h>
+    if(isActivated) {
+        puts("Device activated : true");
+        exit(EXIT_SUCCESS);
+    } else {
+        puts("Device activated : false");
+    }
 
-#ifndef DEBUG
-   #define DEBUG 0
-#endif
+    iotkit_cleanup();
 
-struct putData {
-  char *data;
-  size_t len;
-};
-
-typedef struct _HttpResponse {
-    long code;
-    char *data;
-} HttpResponse;
-
-
-#ifdef __cplusplus
+    exit(EXIT_FAILURE);
 }
-#endif
-
-#endif

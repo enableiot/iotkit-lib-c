@@ -47,7 +47,6 @@ AdvancedDataInquiry *createAdvancedDataInquiryObject() {
         return NULL;
     }
 
-    newObject->msgType = NULL;
     newObject->gatewayIds = NULL;
     newObject->deviceIds = NULL;
     newObject->componentIds = NULL;
@@ -68,18 +67,6 @@ AdvancedDataInquiry *createAdvancedDataInquiryObject() {
     newObject->sort = NULL;
 
     return newObject;
-}
-
-/**
- * Sets the message type
- *
- * @param advancedDataInquiryObject object created using createAdvancedDataInquiryObject"()"
- * @param msgType message type is always 'advancedDataInquiryRequest'
- */
-AdvancedDataInquiry *setMessageType(AdvancedDataInquiry *advancedDataInquiryObject, char *msgType) {
-    advancedDataInquiryObject->msgType = strdup(msgType);
-
-    return advancedDataInquiryObject;
 }
 
 /**
@@ -169,7 +156,7 @@ AdvancedDataInquiry *addComponentIds(AdvancedDataInquiry *advancedDataInquiryObj
  * @param advancedDataInquiryObject object created using createAdvancedDataInquiryObject"()"
  * @param startTimestamp time stamp in milliseconds
  */
-AdvancedDataInquiry *setStartTimestamp(AdvancedDataInquiry *advancedDataInquiryObject, long startTimestamp) {
+AdvancedDataInquiry *setStartTimestamp(AdvancedDataInquiry *advancedDataInquiryObject, long long startTimestamp) {
     advancedDataInquiryObject->startTimestamp = startTimestamp;
 
     return advancedDataInquiryObject;
@@ -181,7 +168,7 @@ AdvancedDataInquiry *setStartTimestamp(AdvancedDataInquiry *advancedDataInquiryO
  * @param advancedDataInquiryObject object created using createAdvancedDataInquiryObject"()"
  * @param endTimestamp time stamp in milliseconds
  */
-AdvancedDataInquiry *setEndTimestamp(AdvancedDataInquiry *advancedDataInquiryObject, long endTimestamp) {
+AdvancedDataInquiry *setEndTimestamp(AdvancedDataInquiry *advancedDataInquiryObject, long long endTimestamp) {
     advancedDataInquiryObject->endTimestamp = endTimestamp;
 
     return advancedDataInquiryObject;
@@ -240,6 +227,7 @@ AttributeFilter *createAttributeFilterObject(char *filterName) {
 
      newObject->filterName = strdup(filterName);
      newObject->filterValues = NULL;
+     newObject->next = NULL;
 
      return newObject;
 }
@@ -421,16 +409,8 @@ char *advancedDataInquiry(AdvancedDataInquiry *advancedDataInquiryObject) {
 
         strcpy(body, "{");
 
-        strcat(body, "\"msgType\":\"");
-        if(advancedDataInquiryObject->msgType) {
-            strcat(body, advancedDataInquiryObject->msgType);
-            strcat(body, "\"");
-        } else {
-            strcat(body, "advancedDataInquiryRequest\"");
-        }
-
         if(advancedDataInquiryObject->gatewayIds) {
-            strcat(body, ",\"gatewayIds\":[");
+            strcat(body, "\"gatewayIds\":[");
 
             traverse = advancedDataInquiryObject->gatewayIds;
             while (traverse != NULL) {
@@ -443,11 +423,11 @@ char *advancedDataInquiry(AdvancedDataInquiry *advancedDataInquiryObject) {
                     strcat(body, ",");
                 }
             }
-            strcat(body, "]");
+            strcat(body, "],");
         }
 
         if(advancedDataInquiryObject->deviceIds) {
-            strcat(body, ",\"deviceIds\":[");
+            strcat(body, "\"deviceIds\":[");
 
             traverse = advancedDataInquiryObject->deviceIds;
             while (traverse != NULL) {
@@ -460,11 +440,11 @@ char *advancedDataInquiry(AdvancedDataInquiry *advancedDataInquiryObject) {
                     strcat(body, ",");
                 }
             }
-            strcat(body, "]");
+            strcat(body, "],");
         }
 
         if(advancedDataInquiryObject->componentIds) {
-            strcat(body, ",\"componentIds\":[");
+            strcat(body, "\"componentIds\":[");
 
             traverse = advancedDataInquiryObject->componentIds;
             while (traverse != NULL) {
@@ -477,22 +457,22 @@ char *advancedDataInquiry(AdvancedDataInquiry *advancedDataInquiryObject) {
                     strcat(body, ",");
                 }
             }
-            strcat(body, "]");
+            strcat(body, "],");
         }
 
 //        if(advancedDataInquiryObject->startTimestamp > 0L)
         {
             char timeStamp[BODY_SIZE_MIN];
-            sprintf(timeStamp, "%ld", advancedDataInquiryObject->startTimestamp);
-            strcat(body, ",\"startTimestamp\":");
+            sprintf(timeStamp, "%lld", advancedDataInquiryObject->startTimestamp);
+            strcat(body, "\"from\":");
             strcat(body, timeStamp);
         }
 
 //        if(advancedDataInquiryObject->endTimestamp> 0L)
         {
             char timeStamp[BODY_SIZE_MIN];
-            sprintf(timeStamp, "%ld", advancedDataInquiryObject->endTimestamp);
-            strcat(body, ",\"endTimestamp\":");
+            sprintf(timeStamp, "%lld", advancedDataInquiryObject->endTimestamp);
+            strcat(body, ",\"to\":");
             strcat(body, timeStamp);
         }
 
@@ -551,12 +531,10 @@ char *advancedDataInquiry(AdvancedDataInquiry *advancedDataInquiryObject) {
 
         if(advancedDataInquiryObject->devCompAttributeFilter) {
             AttributeFilterList *attributesList = advancedDataInquiryObject->devCompAttributeFilter;
-
             strcat(body, ",\"devCompAttributeFilter\":{");
 
             while(attributesList) {
                 AttributeFilter *attributes = attributesList->filterData;
-
                 #if DEBUG
                     printf("Attributes filter is %d\n", attributesList->filterData);
                 #endif
@@ -568,14 +546,12 @@ char *advancedDataInquiry(AdvancedDataInquiry *advancedDataInquiryObject) {
                     strcat(body, "\"");
                     strcat(body, attributes->filterName);
                     strcat(body, "\":[");
-
                     traverse = attributes->filterValues;
                     while (traverse != NULL) {
                         strcat(body, "\"");
                         strcat(body, traverse->data);
                         strcat(body, "\"");
                         traverse = traverse->next;
-
                         if(traverse) {
                             strcat(body, ",");
                         }
@@ -583,12 +559,10 @@ char *advancedDataInquiry(AdvancedDataInquiry *advancedDataInquiryObject) {
                     strcat(body, "]");
 
                     attributes = attributes->next;
-
                     if(attributes) {
                         strcat(body, ",");
                     }
                 }
-
                 attributesList = attributesList->next;
                 if(attributesList) {
                     strcat(body, ",");
@@ -597,7 +571,6 @@ char *advancedDataInquiry(AdvancedDataInquiry *advancedDataInquiryObject) {
 
             strcat(body, "}");
         }
-
 
         if(advancedDataInquiryObject->measurementAttributeFilter) {
             AttributeFilterList *attributesList = advancedDataInquiryObject->measurementAttributeFilter;
@@ -659,7 +632,6 @@ char *advancedDataInquiry(AdvancedDataInquiry *advancedDataInquiryObject) {
             }
             strcat(body, "]}");
         }
-
 
         strcat(body, "}");
 

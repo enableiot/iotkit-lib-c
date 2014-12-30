@@ -21,35 +21,20 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef __REST_H
-#define __REST_H
+#include "device_management.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+int main(void) {
+    char *sensorId = NULL;
+    iotkit_init();
 
-#include <string.h>
-#include <stdlib.h>
-#include <stdbool.h>
-#include <curl/curl.h>
+    sensorId = getSensorComponentId("madras9");
+    printf("Sensor id for \"%s\" is :%s\n", "madras9", sensorId);
 
-#ifndef DEBUG
-   #define DEBUG 0
-#endif
+    iotkit_cleanup();
 
-struct putData {
-  char *data;
-  size_t len;
-};
+    if(sensorId) {
+        exit(EXIT_SUCCESS);
+    }
 
-typedef struct _HttpResponse {
-    long code;
-    char *data;
-} HttpResponse;
-
-
-#ifdef __cplusplus
+    exit(EXIT_FAILURE);
 }
-#endif
-
-#endif

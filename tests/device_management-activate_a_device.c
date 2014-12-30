@@ -21,35 +21,38 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef __REST_H
-#define __REST_H
+#include "device_management.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+int main(void) {
+    char *response = NULL;
+    char *activationCode = NULL;
+    FILE *fp = fopen(".tempcode", "rb");
 
-#include <string.h>
-#include <stdlib.h>
-#include <stdbool.h>
-#include <curl/curl.h>
+    if (fp == NULL) {
+        fprintf(stderr,"Error can't open file .tempcode\n");
+    } else {
+        fseek(fp, 0, SEEK_END);
+        long size = ftell(fp);
+        rewind(fp);
 
-#ifndef DEBUG
-   #define DEBUG 0
-#endif
+        // read the file
+        activationCode = (char *)malloc(size+1);
+        fread(activationCode, 1, size, fp);
+        activationCode[size] = '\0';
+        fclose(fp);
+        remove(".tempcode");
+    }
 
-struct putData {
-  char *data;
-  size_t len;
-};
+    iotkit_init();
 
-typedef struct _HttpResponse {
-    long code;
-    char *data;
-} HttpResponse;
+    response = activateADevice(activationCode);
+    printf("Response Received :%s\n", response);
 
+    iotkit_cleanup();
 
-#ifdef __cplusplus
+    if(checkResponseValue(response, 200) == true) {
+        exit(EXIT_SUCCESS);
+    }
+
+    exit(EXIT_FAILURE);
 }
-#endif
-
-#endif

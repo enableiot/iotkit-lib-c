@@ -35,14 +35,15 @@
  *  @{
  */
 
-long getCurrentTimeInMillis() {
-    struct timeval tv;
-    long millis = -1L;
-    if (gettimeofday(&tv, NULL) == 0) {
-        millis = (tv.tv_sec * 1000) + (tv.tv_usec / 1000);
-    }
+long long getCurrentTimeInMillis() {
+    long elapsedtime = -1L;
+    long long currentTimeInMills;
 
-    return millis;
+    time(&elapsedtime);
+
+    currentTimeInMills = (long long)elapsedtime * 1000L;
+
+    return currentTimeInMills;
 }
 
 /**
@@ -90,7 +91,7 @@ char *submitData(char *cname, char *value, char *latitude, char *longitude, char
         appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
         appendHttpHeader(&headers, HEADER_AUTHORIZATION, getDeviceAuthorizationToken());
 
-        sprintf(currentTimeInMills, "%ld", getCurrentTimeInMillis());
+        sprintf(currentTimeInMills, "%lld", getCurrentTimeInMillis());
 
         strcpy(body, "{");
         strcat(body, "\"on\":");

@@ -21,35 +21,31 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef __REST_H
-#define __REST_H
+#include "device_management.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+int main(void) {
+    char *response = NULL;
+    DeviceCreationObj *createDeviceObj;
 
-#include <string.h>
-#include <stdlib.h>
-#include <stdbool.h>
-#include <curl/curl.h>
+    iotkit_init();
 
-#ifndef DEBUG
-   #define DEBUG 0
-#endif
+    createDeviceObj = createDeviceCreationObject(NULL, "ff-32-dd-ba-bb-cc", "anddr34e3");
+    addLocInfo(createDeviceObj, "55.540164", "-112.926048", "25.0");
+    addTagInfo(createDeviceObj, "United States of America");
+    addTagInfo(createDeviceObj, "Oregon State");
+    addTagInfo(createDeviceObj, "Hillsboro City");
+    addAttributesInfo(createDeviceObj, "vendor", "Intel Corp.");
+    addAttributesInfo(createDeviceObj, "platform", "x86");
+    addAttributesInfo(createDeviceObj, "os", "Ubuntu 14.04");
 
-struct putData {
-  char *data;
-  size_t len;
-};
+    response = updateADevice(createDeviceObj);
+    printf("Response Received :%s\n", response);
 
-typedef struct _HttpResponse {
-    long code;
-    char *data;
-} HttpResponse;
+    iotkit_cleanup();
 
+    if(checkResponseValue(response, 200) == true) {
+        exit(EXIT_SUCCESS);
+    }
 
-#ifdef __cplusplus
+    exit(EXIT_FAILURE);
 }
-#endif
-
-#endif

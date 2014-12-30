@@ -21,29 +21,22 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#include "../src/data_api.h"
+#include "alert_management.h"
 
-bool testSubmitData() {
+int main(void) {
     char *response = NULL;
 
-    response = submitData("madras9", "26.15", "45.540164", "-122.926048", "124.3");
+    iotkit_init();
+
+    response = getListOfAlerts();
+
     printf("Response Received :%s\n", response);
 
-    return true;
-}
+    iotkit_cleanup();
 
-bool testRetrieveData() {
-    RetrieveData *retrieveObj;
-    char *response = NULL;
+    if(checkResponseValue(response, 200) == true) {
+        exit(EXIT_SUCCESS);
+    }
 
-    retrieveObj = createRetrieveDataObject(1410387088000, 1415301870434);
-    addDeviceId(retrieveObj, "02-00-a7-81-77-ff");
-    addDeviceId(retrieveObj, "c0-3f-d5-60-d0-74");
-    addSensorId(retrieveObj, "madras7");
-    addSensorId(retrieveObj, "madras9");
-
-    response = retrieveData(retrieveObj);
-    printf("Response Received :%s\n", response);
-
-    return true;
+    exit(EXIT_FAILURE);
 }

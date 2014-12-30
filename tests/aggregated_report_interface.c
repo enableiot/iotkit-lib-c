@@ -23,42 +23,56 @@
 
 #include "../src/aggregated_report_interface.h"
 
-bool testAggregatedReportInterface() {
+long long getCurrentTimeInMillis() {
+    long elapsedtime = -1L;
+    long long currentTimeInMills;
+
+    time(&elapsedtime);
+
+    currentTimeInMills = (long long)elapsedtime * 1000L;
+
+    return currentTimeInMills;
+}
+
+int main(void) {
     char *response = NULL;
     AttributeFilter *valueFilter = NULL;
-    AggregatedReportInterface *aggregatedReportInterfaceObj = createAggregatedReportInterface();
+    AggregatedReportInterface *aggregatedReportInterfaceObj = NULL;
 
+    iotkit_init();
 
-    setReportStartTimestamp(aggregatedReportInterfaceObj, 1391971083468L);
-    setReportEndTimestamp(aggregatedReportInterfaceObj, 1413504889801L);
+    aggregatedReportInterfaceObj = createAggregatedReportInterface();
+
+    setReportStartTimestamp(aggregatedReportInterfaceObj, 1413504889801L);
+    setReportEndTimestamp(aggregatedReportInterfaceObj, getCurrentTimeInMillis());
 
     addAggregationMethods(aggregatedReportInterfaceObj, "average");
     addAggregationMethods(aggregatedReportInterfaceObj, "min");
     addAggregationMethods(aggregatedReportInterfaceObj, "max");
 
-    addDimensions(aggregatedReportInterfaceObj, "dimen1");
+  /*  addDimensions(aggregatedReportInterfaceObj, "dimen1");
     addDimensions(aggregatedReportInterfaceObj, "dimen2");
     addDimensions(aggregatedReportInterfaceObj, "dimen3");
 
     setOffset(aggregatedReportInterfaceObj, 0);
-    setLimit(aggregatedReportInterfaceObj, 0);
+    setLimit(aggregatedReportInterfaceObj, 0); */
 
     setReportCountOnly(aggregatedReportInterfaceObj, true);
     setOutputType(aggregatedReportInterfaceObj, "json");
 
-    addReportDeviceIds(aggregatedReportInterfaceObj, "02-00-86-81-77-17");
+    addReportDeviceIds(aggregatedReportInterfaceObj, "ff-32-dd-ba-bb-cc");
     addReportDeviceIds(aggregatedReportInterfaceObj, "02-00-86-81-77-18");
     addReportDeviceIds(aggregatedReportInterfaceObj, "02-00-86-81-77-19");
 
-    addReportGatewayIds(aggregatedReportInterfaceObj, "02-00-86-81-77-13");
+    addReportGatewayIds(aggregatedReportInterfaceObj, "ff-32-dd-ba-bb-cc");
     addReportGatewayIds(aggregatedReportInterfaceObj, "02-00-86-81-77-14");
     addReportGatewayIds(aggregatedReportInterfaceObj, "02-00-86-81-77-15");
 
     addReportComponentIds(aggregatedReportInterfaceObj, "garage1");
     addReportComponentIds(aggregatedReportInterfaceObj, "garage2");
-    addReportComponentIds(aggregatedReportInterfaceObj, "garage3");
+    addReportComponentIds(aggregatedReportInterfaceObj, "madras9");
 
-    addReportSortInfo(aggregatedReportInterfaceObj, "sortField1", "ASC");
+    /*addReportSortInfo(aggregatedReportInterfaceObj, "sortField1", "ASC");
     addReportSortInfo(aggregatedReportInterfaceObj, "sortField2", "DESC");
 
 /////////////////////////
@@ -67,15 +81,17 @@ bool testAggregatedReportInterface() {
     addAttributeFilterValues(valueFilter, "value2");
 
     addFilters(aggregatedReportInterfaceObj, valueFilter);
-
+*/
 
     response = aggregatedReportInterface(aggregatedReportInterfaceObj);
 
     printf("Response Received :%s\n", response);
 
-    /*if(response->code == 200) {
-        return true;
-    }*/
+    iotkit_cleanup();
 
-    return false;
+    if(checkResponseValue(response, 200) == true) {
+        exit(EXIT_SUCCESS);
+    }
+
+    exit(EXIT_FAILURE);
 }

@@ -21,35 +21,25 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef __REST_H
-#define __REST_H
+#include "iotkit.h"
+#include "cJSON.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+int main(void) {
+    char *response = NULL;
+    cJSON *json, *jitem;
+    int httpResponseCode;
 
-#include <string.h>
-#include <stdlib.h>
-#include <stdbool.h>
-#include <curl/curl.h>
+    iotkit_init();
 
-#ifndef DEBUG
-   #define DEBUG 0
-#endif
+    response = createAnUser("snowysnops@gmail.com", "snopsSnowy1");
 
-struct putData {
-  char *data;
-  size_t len;
-};
+    printf("Response Received :%s\n", response);
 
-typedef struct _HttpResponse {
-    long code;
-    char *data;
-} HttpResponse;
+    iotkit_cleanup();
 
+    if(checkResponseValue(response, 201) == true) {
+        exit(EXIT_SUCCESS);
+    }
 
-#ifdef __cplusplus
+    exit(EXIT_FAILURE);
 }
-#endif
-
-#endif

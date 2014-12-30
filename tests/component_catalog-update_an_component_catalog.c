@@ -21,35 +21,29 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef __REST_H
-#define __REST_H
+#include "component_catalog.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+int main(void) {
+    char *response = NULL;
 
-#include <string.h>
-#include <stdlib.h>
-#include <stdbool.h>
-#include <curl/curl.h>
+    iotkit_init();
 
-#ifndef DEBUG
-   #define DEBUG 0
-#endif
+    ComponentCatalog *cmpObject = createComponentCatalogObject(NULL, NULL, "actuator", "Number", "integer", "Degrees Celsius2", "timeSeries");
+    addMinValue(cmpObject, -150.0f);
+    addMaxValue(cmpObject, 150.0f);
+    addCommandString(cmpObject, "off");
 
-struct putData {
-  char *data;
-  size_t len;
-};
+    addCommandParams(cmpObject, "my12", "1-5");
+    addCommandParams(cmpObject, "my22", "5-10");
 
-typedef struct _HttpResponse {
-    long code;
-    char *data;
-} HttpResponse;
+    response = updateAnComponentCatalog(cmpObject, "actua13.v1.0");
+    printf("Response Received :%s\n", response);
 
+    iotkit_cleanup();
 
-#ifdef __cplusplus
+    if(checkResponseValue(response, 201) == true) {
+        exit(EXIT_SUCCESS);
+    }
+
+    exit(EXIT_FAILURE);
 }
-#endif
-
-#endif

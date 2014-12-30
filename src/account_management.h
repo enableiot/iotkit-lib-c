@@ -32,12 +32,14 @@ extern "C" {
 #include "iotkit.h"
 
 typedef struct _UpdateUserAccount {
-
+    char *new_name;
     KeyValueParams *attributes;
-
-    char *email;
-    bool termsAndConditions;
-    bool verified;
+    int healthTimePeriod;
+    int exec_interval;
+    int base_line_exec_interval;
+    int cd_model_frequency;
+    int cd_execution_frequency;
+    int data_retention;
 } UpdateUserAccount;
 
 
@@ -45,11 +47,19 @@ char *createAnAccount(char *account_name);
 char *getAccountInformation();
 char *getAccountActivationCode();
 char *renewActivationCode();
-char *updateAnAccount(char *account_name);
+char *updateAnAccount(UpdateUserAccount *updateUserAccount);
 char *deleteAnAccount();
 char *getUserAssociatedWithAccount();
 char *addAnUserToAccount(char *account_id, char * user_id, bool isAdmin);
 
+UpdateUserAccount *createUpdateUserAccountObject(char *new_name);
+void setUpdateAccountAttributes(UpdateUserAccount *updateUserAccount, KeyValueParams *attributes);
+void setUpdateAccountHealthTimePeriod(UpdateUserAccount *updateUserAccount, int healthTimePeriod);
+void setUpdateAccountExecInterval(UpdateUserAccount *updateUserAccount, int exec_interval);
+void setUpdateAccountBaseLineExecInterval(UpdateUserAccount *updateUserAccount, int base_line_exec_interval);
+void setUpdateAccountCdModelFrequency(UpdateUserAccount *updateUserAccount, int cd_model_frequency);
+void setUpdateAccountCdExecutionFrequency(UpdateUserAccount *updateUserAccount, int cd_execution_frequency);
+void setUpdateAccountDataRetention(UpdateUserAccount *updateUserAccount, int data_retention);
 
 #ifdef __cplusplus
 }

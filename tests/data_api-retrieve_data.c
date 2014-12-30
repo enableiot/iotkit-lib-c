@@ -21,35 +21,28 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef __REST_H
-#define __REST_H
+#include "data_api.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+int main(void) {
+    char *response = NULL;
+    RetrieveData *retrieveObj;
 
-#include <string.h>
-#include <stdlib.h>
-#include <stdbool.h>
-#include <curl/curl.h>
+    iotkit_init();
 
-#ifndef DEBUG
-   #define DEBUG 0
-#endif
+    retrieveObj = createRetrieveDataObject(1410387088000, 1415301870434);
+    addDeviceId(retrieveObj, "02-00-a7-81-77-ff");
+    addDeviceId(retrieveObj, "c0-3f-d5-60-d0-74");
+    addSensorId(retrieveObj, "madras7");
+    addSensorId(retrieveObj, "madras9");
 
-struct putData {
-  char *data;
-  size_t len;
-};
+    response = retrieveData(retrieveObj);
+    printf("Response Received :%s\n", response);
 
-typedef struct _HttpResponse {
-    long code;
-    char *data;
-} HttpResponse;
+    iotkit_cleanup();
 
+    if(checkResponseValue(response, 200) == true) {
+        exit(EXIT_SUCCESS);
+    }
 
-#ifdef __cplusplus
+    exit(EXIT_FAILURE);
 }
-#endif
-
-#endif

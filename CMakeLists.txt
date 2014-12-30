@@ -81,7 +81,7 @@ endif()
 
 # add the sub-directories
 ADD_SUBDIRECTORY(src)
-#ADD_SUBDIRECTORY(tests)
+ADD_SUBDIRECTORY(tests)
 
 SET (CTEST_BINARY_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/output/bin" )
 MESSAGE (STATUS "Ctest Binary Directory  set to: ${CTEST_BINARY_DIRECTORY}")

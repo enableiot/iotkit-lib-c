@@ -129,7 +129,9 @@ DeviceCreationObj *createDeviceCreationObject(char *device_id, char *gateway_id,
         return NULL;
     }
 
-    createDeviceObj->device_id = strdup(device_id);
+    if(device_id) {
+        createDeviceObj->device_id = strdup(device_id);
+    }
     createDeviceObj->gateway_id = strdup(gateway_id);
     createDeviceObj->device_name = strdup(device_name);
 
@@ -562,6 +564,7 @@ void storeComponent(char *response) {
                     // read the file
                     char *buffer = (char *)malloc(size+1);
                     fread(buffer, 1, size, fp);
+                    fclose(fp);
 
                     // parse the file
                     root = cJSON_Parse(buffer);
@@ -575,8 +578,6 @@ void storeComponent(char *response) {
                         }
                     }
                 }
-
-                fclose(fp);
 
                 cJSON_AddItemToArray(root, jitem);
 

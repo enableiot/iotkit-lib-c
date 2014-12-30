@@ -21,35 +21,23 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef __REST_H
-#define __REST_H
+#include "device_management.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+int main(void) {
+    char *response = NULL;
+    bool isRegistered = false;
 
-#include <string.h>
-#include <stdlib.h>
-#include <stdbool.h>
-#include <curl/curl.h>
+    iotkit_init();
 
-#ifndef DEBUG
-   #define DEBUG 0
-#endif
+    isRegistered = isSensorRegistered("madras9");
+    iotkit_cleanup();
 
-struct putData {
-  char *data;
-  size_t len;
-};
+    if(isRegistered) {
+        printf("Yes, sensor is already registered !!\n");
+        exit(EXIT_SUCCESS);
+    } else {
+        printf("No, sensor is not yet registered !!\n");
+    }
 
-typedef struct _HttpResponse {
-    long code;
-    char *data;
-} HttpResponse;
-
-
-#ifdef __cplusplus
+    exit(EXIT_FAILURE);
 }
-#endif
-
-#endif

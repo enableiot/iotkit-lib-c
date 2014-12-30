@@ -21,35 +21,21 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
  */
 
-#ifndef __REST_H
-#define __REST_H
+#include "device_management.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+int main(void) {
+    char *response = NULL;
 
-#include <string.h>
-#include <stdlib.h>
-#include <stdbool.h>
-#include <curl/curl.h>
+    iotkit_init();
 
-#ifndef DEBUG
-   #define DEBUG 0
-#endif
+    response = deleteADevice("ff-32-dd-ba-bb-cc");
+    printf("Response Received :%s\n", response);
 
-struct putData {
-  char *data;
-  size_t len;
-};
+    iotkit_cleanup();
 
-typedef struct _HttpResponse {
-    long code;
-    char *data;
-} HttpResponse;
+    if(checkResponseValue(response, 204) == true) {
+        exit(EXIT_SUCCESS);
+    }
 
-
-#ifdef __cplusplus
+    exit(EXIT_FAILURE);
 }
-#endif
-
-#endif
