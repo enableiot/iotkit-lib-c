@@ -574,7 +574,15 @@ char *createAnRule(CreateRule *createRuleObj) {
     struct curl_slist *headers = NULL;
     char *url;
     char *body = NULL;
-    HttpResponse *response = (HttpResponse *)malloc(sizeof(HttpResponse));
+    char *authorizationHeader = (char *)getConfigAuthorizationToken();
+    HttpResponse *response = NULL;
+
+    if(authorizationHeader == NULL) {
+        fprintf(stderr, "createAnRule::Authorization Token not available\n");
+        return NULL;
+    }
+
+    response = (HttpResponse *)malloc(sizeof(HttpResponse));
     response->code = 0;
     response->data = NULL;
 
@@ -585,7 +593,7 @@ char *createAnRule(CreateRule *createRuleObj) {
 
     if(prepareUrl(&url, configurations.base_url, configurations.create_a_rule, NULL)) {
         appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
-        appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
+        appendHttpHeader(&headers, HEADER_AUTHORIZATION, authorizationHeader);
 
         body = createRuleHttpRequestBody(createRuleObj);
 
@@ -609,7 +617,15 @@ char *updateAnRule(CreateRule *createRuleObj, char *rule_id) {
     char *url;
     char *body = NULL;
     KeyValueParams *urlParams = NULL;
-    HttpResponse *response = (HttpResponse *)malloc(sizeof(HttpResponse));
+    char *authorizationHeader = (char *)getConfigAuthorizationToken();
+    HttpResponse *response = NULL;
+
+    if(authorizationHeader == NULL) {
+        fprintf(stderr, "updateAnRule::Authorization Token not available\n");
+        return NULL;
+    }
+
+    response = (HttpResponse *)malloc(sizeof(HttpResponse));
     response->code = 0;
     response->data = NULL;
 
@@ -625,7 +641,7 @@ char *updateAnRule(CreateRule *createRuleObj, char *rule_id) {
 
     if(prepareUrl(&url, configurations.base_url, configurations.update_a_rule, urlParams)) {
         appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
-        appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
+        appendHttpHeader(&headers, HEADER_AUTHORIZATION, authorizationHeader);
 
         body = createRuleHttpRequestBody(createRuleObj);
 
@@ -645,12 +661,20 @@ char *updateAnRule(CreateRule *createRuleObj, char *rule_id) {
 char *getListOfRules() {
     struct curl_slist *headers = NULL;
     char *url;
-    HttpResponse *response = (HttpResponse *)malloc(sizeof(HttpResponse));
+    char *authorizationHeader = (char *)getConfigAuthorizationToken();
+    HttpResponse *response = NULL;
+
+    if(authorizationHeader == NULL) {
+        fprintf(stderr, "getListOfRules::Authorization Token not available\n");
+        return NULL;
+    }
+
+    response = (HttpResponse *)malloc(sizeof(HttpResponse));
     response->code = 0;
     response->data = NULL;
 
     appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
-    appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
+    appendHttpHeader(&headers, HEADER_AUTHORIZATION, authorizationHeader);
 
     if(prepareUrl(&url, configurations.base_url, configurations.get_list_of_rules, NULL)){
         doHttpGet(url, headers, response);
@@ -671,7 +695,15 @@ char *getOneRuleInformation(char *rule_id) {
     struct curl_slist *headers = NULL;
     char *url;
     KeyValueParams *urlParams = NULL;
-    HttpResponse *response = (HttpResponse *)malloc(sizeof(HttpResponse));
+    char *authorizationHeader = (char *)getConfigAuthorizationToken();
+    HttpResponse *response = NULL;
+
+    if(authorizationHeader == NULL) {
+        fprintf(stderr, "getOneRuleInformation::Authorization Token not available\n");
+        return NULL;
+    }
+
+    response = (HttpResponse *)malloc(sizeof(HttpResponse));
     response->code = 0;
     response->data = NULL;
 
@@ -681,7 +713,7 @@ char *getOneRuleInformation(char *rule_id) {
     urlParams->next = NULL;
 
     appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
-    appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
+    appendHttpHeader(&headers, HEADER_AUTHORIZATION, authorizationHeader);
 
     if(prepareUrl(&url, configurations.base_url, configurations.get_one_rule_info, urlParams)){
         doHttpGet(url, headers, response);
@@ -702,7 +734,15 @@ char *createARuleAsDraft(char *rule_name) {
     struct curl_slist *headers = NULL;
     char *url;
     char body[BODY_SIZE_MIN];
-    HttpResponse *response = (HttpResponse *)malloc(sizeof(HttpResponse));
+    char *authorizationHeader = (char *)getConfigAuthorizationToken();
+    HttpResponse *response = NULL;
+
+    if(authorizationHeader == NULL) {
+        fprintf(stderr, "createARuleAsDraft::Authorization Token not available\n");
+        return NULL;
+    }
+
+    response = (HttpResponse *)malloc(sizeof(HttpResponse));
     response->code = 0;
     response->data = NULL;
 
@@ -713,7 +753,7 @@ char *createARuleAsDraft(char *rule_name) {
 
     if(prepareUrl(&url, configurations.base_url, configurations.create_a_rule_as_draft, NULL)) {
         appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
-        appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
+        appendHttpHeader(&headers, HEADER_AUTHORIZATION, authorizationHeader);
 
         sprintf(body, "{\"name\":\"%s\"}", rule_name);
 
@@ -737,7 +777,15 @@ char *updateStatusOfARule(char *rule_id, char *rule_status) {
     char *url;
     char body[BODY_SIZE_MIN];
     KeyValueParams *urlParams = NULL;
-    HttpResponse *response = (HttpResponse *)malloc(sizeof(HttpResponse));
+    char *authorizationHeader = (char *)getConfigAuthorizationToken();
+    HttpResponse *response = NULL;
+
+    if(authorizationHeader == NULL) {
+        fprintf(stderr, "updateStatusOfARule::Authorization Token not available\n");
+        return NULL;
+    }
+
+    response = (HttpResponse *)malloc(sizeof(HttpResponse));
     response->code = 0;
     response->data = NULL;
 
@@ -753,7 +801,7 @@ char *updateStatusOfARule(char *rule_id, char *rule_status) {
 
     if(prepareUrl(&url, configurations.base_url, configurations.update_status_of_a_rule, urlParams)) {
         appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
-        appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
+        appendHttpHeader(&headers, HEADER_AUTHORIZATION, authorizationHeader);
 
         sprintf(body, "{\"status\":\"%s\"}", rule_status);
 
@@ -779,7 +827,15 @@ char *deleteADraftRule(char *rule_id) {
     struct curl_slist *headers = NULL;
     char *url;
     KeyValueParams *urlParams = NULL;
-    HttpResponse *response = (HttpResponse *)malloc(sizeof(HttpResponse));
+    char *authorizationHeader = (char *)getConfigAuthorizationToken();
+    HttpResponse *response = NULL;
+
+    if(authorizationHeader == NULL) {
+        fprintf(stderr, "deleteADraftRule::Authorization Token not available\n");
+        return NULL;
+    }
+
+    response = (HttpResponse *)malloc(sizeof(HttpResponse));
     response->code = 0;
     response->data = NULL;
 
@@ -791,7 +847,7 @@ char *deleteADraftRule(char *rule_id) {
     if(prepareUrl(&url, configurations.base_url, configurations.delete_a_draft_rule, urlParams)) {
 
         appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
-        appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
+        appendHttpHeader(&headers, HEADER_AUTHORIZATION, authorizationHeader);
 
         doHttpDelete(url, headers, response);
 

@@ -43,11 +43,19 @@
 char *listAllComponentCatalogs() {
     struct curl_slist *headers = NULL;
     char *url;
-    HttpResponse *response = (HttpResponse *)malloc(sizeof(HttpResponse));
+    char *authorizationHeader = (char *)getConfigAuthorizationToken();
+    HttpResponse *response = NULL;
+
+    if(authorizationHeader == NULL) {
+        fprintf(stderr, "listAllComponentCatalogs::Authorization Token not available\n");
+        return NULL;
+    }
+
+    response = (HttpResponse *)malloc(sizeof(HttpResponse));
     response->code = 0;
     response->data = NULL;
 
-    appendHttpHeader(&headers, HEADER_AUTHORIZATION, getDeviceAuthorizationToken());
+    appendHttpHeader(&headers, HEADER_AUTHORIZATION, authorizationHeader);
 
     if(prepareUrl(&url, configurations.base_url, configurations.list_components, NULL)) {
 
@@ -69,7 +77,15 @@ char *getComponentCatalogDetails(char *cmp_id) {
     struct curl_slist *headers = NULL;
     char *url;
     KeyValueParams *urlParams = NULL;
-    HttpResponse *response = (HttpResponse *)malloc(sizeof(HttpResponse));
+    char *authorizationHeader = (char *)getConfigAuthorizationToken();
+    HttpResponse *response = NULL;
+
+    if(authorizationHeader == NULL) {
+        fprintf(stderr, "getComponentCatalogDetails::Authorization Token not available\n");
+        return NULL;
+    }
+
+    response = (HttpResponse *)malloc(sizeof(HttpResponse));
     response->code = 0;
     response->data = NULL;
 
@@ -78,7 +94,7 @@ char *getComponentCatalogDetails(char *cmp_id) {
     urlParams->value = cmp_id;
     urlParams->next = NULL;
 
-    appendHttpHeader(&headers, HEADER_AUTHORIZATION, getDeviceAuthorizationToken());
+    appendHttpHeader(&headers, HEADER_AUTHORIZATION, authorizationHeader);
 
     if(prepareUrl(&url, configurations.base_url, configurations.get_component_details, urlParams)) {
 
@@ -208,7 +224,15 @@ char *createAnComponentCatalog(ComponentCatalog *cmpCatalogObject) {
     struct curl_slist *headers = NULL;
     char *url;
     char body[BODY_SIZE_MIN];
-    HttpResponse *response = (HttpResponse *)malloc(sizeof(HttpResponse));
+    char *authorizationHeader = (char *)getConfigAuthorizationToken();
+    HttpResponse *response = NULL;
+
+    if(authorizationHeader == NULL) {
+        fprintf(stderr, "createAnComponentCatalog::Authorization Token not available\n");
+        return NULL;
+    }
+
+    response = (HttpResponse *)malloc(sizeof(HttpResponse));
     response->code = 0;
     response->data = NULL;
 
@@ -229,7 +253,7 @@ char *createAnComponentCatalog(ComponentCatalog *cmpCatalogObject) {
 
     if(prepareUrl(&url, configurations.base_url, configurations.create_an_cmp_catalog, NULL)) {
         appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
-        appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
+        appendHttpHeader(&headers, HEADER_AUTHORIZATION, authorizationHeader);
 
         strcpy(body, "{");
 
@@ -326,7 +350,15 @@ char *updateAnComponentCatalog(ComponentCatalog *cmpCatalogObject, char *cmp_id)
     bool isCommaRequired = false;
     KeyValueParams *urlParams = NULL;
     char value[BODY_SIZE_MIN];
-    HttpResponse *response = (HttpResponse *)malloc(sizeof(HttpResponse));
+    char *authorizationHeader = (char *)getConfigAuthorizationToken();
+    HttpResponse *response = NULL;
+
+    if(authorizationHeader == NULL) {
+        fprintf(stderr, "updateAnComponentCatalog::Authorization Token not available\n");
+        return NULL;
+    }
+
+    response = (HttpResponse *)malloc(sizeof(HttpResponse));
     response->code = 0;
     response->data = NULL;
 
@@ -343,7 +375,7 @@ char *updateAnComponentCatalog(ComponentCatalog *cmpCatalogObject, char *cmp_id)
 
     if(prepareUrl(&url, configurations.base_url, configurations.update_an_cmp_catalog, urlParams)) {
         appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
-        appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
+        appendHttpHeader(&headers, HEADER_AUTHORIZATION, authorizationHeader);
 
         strcpy(body, "{");
 

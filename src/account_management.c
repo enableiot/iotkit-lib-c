@@ -45,18 +45,26 @@ char *createAnAccount(char *account_name) {
     struct curl_slist *headers = NULL;
     char *url;
     char body[BODY_SIZE_MIN];
-    HttpResponse *response = (HttpResponse *)malloc(sizeof(HttpResponse));
+    char *authorizationHeader = (char *)getConfigAuthorizationToken();
+    HttpResponse *response = NULL;
+
+    if(authorizationHeader == NULL) {
+        fprintf(stderr, "createAnAccount::Authorization Token not available\n");
+        return NULL;
+    }
+
+    response = (HttpResponse *)malloc(sizeof(HttpResponse));
     response->code = 0;
     response->data = NULL;
 
     if(!account_name) {
-        fprintf(stderr, "createAnAccount::Account name cannot be NULL");
+        fprintf(stderr, "createAnAccount::Account name cannot be NULL\n");
         return NULL;
     }
 
     if(prepareUrl(&url, configurations.base_url, configurations.create_an_account, NULL)) {
         appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
-        appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
+        appendHttpHeader(&headers, HEADER_AUTHORIZATION, authorizationHeader);
 
         sprintf(body, "{\"name\":\"%s\"}", account_name);
 
@@ -80,12 +88,20 @@ char *createAnAccount(char *account_name) {
 char *getAccountInformation() {
     struct curl_slist *headers = NULL;
     char *url;
-    HttpResponse *response = (HttpResponse *)malloc(sizeof(HttpResponse));
+    char *authorizationHeader = (char *)getConfigAuthorizationToken();
+    HttpResponse *response = NULL;
+
+    if(authorizationHeader == NULL) {
+        fprintf(stderr, "getAccountInformation::Authorization Token not available\n");
+        return NULL;
+    }
+
+    response = (HttpResponse *)malloc(sizeof(HttpResponse));
     response->code = 0;
     response->data = NULL;
 
     appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
-    appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
+    appendHttpHeader(&headers, HEADER_AUTHORIZATION, authorizationHeader);
 
     if(prepareUrl(&url, configurations.base_url, configurations.get_account_information, NULL)){
         doHttpGet(url, headers, response);
@@ -104,12 +120,20 @@ char *getAccountInformation() {
 char *getAccountActivationCode() {
     struct curl_slist *headers = NULL;
     char *url;
-    HttpResponse *response = (HttpResponse *)malloc(sizeof(HttpResponse));
+    char *authorizationHeader = (char *)getConfigAuthorizationToken();
+    HttpResponse *response = NULL;
+
+    if(authorizationHeader == NULL) {
+        fprintf(stderr, "getAccountActivationCode::Authorization Token not available\n");
+        return NULL;
+    }
+
+    response = (HttpResponse *)malloc(sizeof(HttpResponse));
     response->code = 0;
     response->data = NULL;
 
     appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
-    appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
+    appendHttpHeader(&headers, HEADER_AUTHORIZATION, authorizationHeader);
 
     if(prepareUrl(&url, configurations.base_url, configurations.get_account_activation_code, NULL)) {
 
@@ -129,14 +153,22 @@ char *getAccountActivationCode() {
 char *renewActivationCode() {
     struct curl_slist *headers = NULL;
     char *url;
-    HttpResponse *response = (HttpResponse *)malloc(sizeof(HttpResponse));
+    char *authorizationHeader = (char *)getConfigAuthorizationToken();
+    HttpResponse *response = NULL;
+
+    if(authorizationHeader == NULL) {
+        fprintf(stderr, "renewActivationCode::Authorization Token not available\n");
+        return NULL;
+    }
+
+    response = (HttpResponse *)malloc(sizeof(HttpResponse));
     response->code = 0;
     response->data = NULL;
 
     if(prepareUrl(&url, configurations.base_url, configurations.renew_account_activation, NULL)) {
 
         appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
-        appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
+        appendHttpHeader(&headers, HEADER_AUTHORIZATION, authorizationHeader);
 
         doHttpPut(url, headers, NULL, response);
 
@@ -254,7 +286,15 @@ char *updateAnAccount(UpdateUserAccount *updateUserAccount) {
     char *url;
     char body[BODY_SIZE_MIN];
     char  uuid_str[38];
-    HttpResponse *response = (HttpResponse *)malloc(sizeof(HttpResponse));
+    char *authorizationHeader = (char *)getConfigAuthorizationToken();
+    HttpResponse *response = NULL;
+
+    if(authorizationHeader == NULL) {
+        fprintf(stderr, "updateAnAccount::Authorization Token not available\n");
+        return NULL;
+    }
+
+    response = (HttpResponse *)malloc(sizeof(HttpResponse));
     response->code = 0;
     response->data = NULL;
 
@@ -264,7 +304,7 @@ char *updateAnAccount(UpdateUserAccount *updateUserAccount) {
         get_uuid_string(uuid_str,sizeof(uuid_str));
 
         appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
-        appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
+        appendHttpHeader(&headers, HEADER_AUTHORIZATION, authorizationHeader);
 
         sprintf(body, "{\"name\":\"%s\",\"healthTimePeriod\":%d,\"exec_interval\":%d,\"base_line_exec_interval\":%d"
         ",\"cd_model_frequency\":%d,\"cd_execution_frequency\":%d,\"data_retention\":%d",
@@ -318,14 +358,22 @@ char *updateAnAccount(UpdateUserAccount *updateUserAccount) {
 char *deleteAnAccount() {
     struct curl_slist *headers = NULL;
     char *url;
-    HttpResponse *response = (HttpResponse *)malloc(sizeof(HttpResponse));
+    char *authorizationHeader = (char *)getConfigAuthorizationToken();
+    HttpResponse *response = NULL;
+
+    if(authorizationHeader == NULL) {
+        fprintf(stderr, "deleteAnAccount::Authorization Token not available\n");
+        return NULL;
+    }
+
+    response = (HttpResponse *)malloc(sizeof(HttpResponse));
     response->code = 0;
     response->data = NULL;
 
     if(prepareUrl(&url, configurations.base_url, configurations.delete_an_account_name, NULL)) {
 
         appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
-        appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
+        appendHttpHeader(&headers, HEADER_AUTHORIZATION, authorizationHeader);
 
         doHttpDelete(url, headers, response);
 
@@ -347,11 +395,19 @@ char *deleteAnAccount() {
 char *getUserAssociatedWithAccount() {
     struct curl_slist *headers = NULL;
     char *url;
-    HttpResponse *response = (HttpResponse *)malloc(sizeof(HttpResponse));
+    char *authorizationHeader = (char *)getConfigAuthorizationToken();
+    HttpResponse *response = NULL;
+
+    if(authorizationHeader == NULL) {
+        fprintf(stderr, "getUserAssociatedWithAccount::Authorization Token not available\n");
+        return NULL;
+    }
+
+    response = (HttpResponse *)malloc(sizeof(HttpResponse));
     response->code = 0;
     response->data = NULL;
 
-    appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
+    appendHttpHeader(&headers, HEADER_AUTHORIZATION, authorizationHeader);
 
     if(prepareUrl(&url, configurations.base_url, configurations.get_user_associated_with_account, NULL)) {
 
@@ -376,7 +432,15 @@ char *addAnUserToAccount(char *account_id, char * user_id, bool isAdmin) {
     char *url;
     char body[BODY_SIZE_MIN];
     KeyValueParams *urlParams = NULL;
-    HttpResponse *response = (HttpResponse *)malloc(sizeof(HttpResponse));
+    char *authorizationHeader = (char *)getConfigAuthorizationToken();
+    HttpResponse *response = NULL;
+
+    if(authorizationHeader == NULL) {
+        fprintf(stderr, "addAnUserToAccount::Authorization Token not available\n");
+        return NULL;
+    }
+
+    response = (HttpResponse *)malloc(sizeof(HttpResponse));
     response->code = 0;
     response->data = NULL;
 
@@ -388,7 +452,7 @@ char *addAnUserToAccount(char *account_id, char * user_id, bool isAdmin) {
     if(prepareUrl(&url, configurations.base_url, configurations.add_an_user_to_account, urlParams)) {
 
         appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
-        appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
+        appendHttpHeader(&headers, HEADER_AUTHORIZATION, authorizationHeader);
 
         sprintf(body, "{\"id\":\"%s\",\"accounts\":{\"", user_id);
         if(account_id) {

@@ -530,11 +530,19 @@ char *createNewAlert(CreateNewAlert *createNewAlertObj) {
 char *getListOfAlerts() {
     struct curl_slist *headers = NULL;
     char *url;
-    HttpResponse *response = (HttpResponse *)malloc(sizeof(HttpResponse));
+    char *authorizationHeader = (char *)getConfigAuthorizationToken();
+    HttpResponse *response = NULL;
+
+    if(authorizationHeader == NULL) {
+        fprintf(stderr, "getListOfAlerts::Authorization Token not available\n");
+        return NULL;
+    }
+
+    response = (HttpResponse *)malloc(sizeof(HttpResponse));
     response->code = 0;
     response->data = NULL;
 
-    appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
+    appendHttpHeader(&headers, HEADER_AUTHORIZATION, authorizationHeader);
 
     if(prepareUrl(&url, configurations.base_url, configurations.get_list_of_alerts, NULL)) {
 
@@ -556,7 +564,15 @@ char *getAlertInformation(char *alertId) {
     struct curl_slist *headers = NULL;
     char *url;
     KeyValueParams *urlParams = NULL;
-    HttpResponse *response = (HttpResponse *)malloc(sizeof(HttpResponse));
+    char *authorizationHeader = (char *)getConfigAuthorizationToken();
+    HttpResponse *response = NULL;
+
+    if(authorizationHeader == NULL) {
+        fprintf(stderr, "getAlertInformation::Authorization Token not available\n");
+        return NULL;
+    }
+
+    response = (HttpResponse *)malloc(sizeof(HttpResponse));
     response->code = 0;
     response->data = NULL;
 
@@ -565,7 +581,7 @@ char *getAlertInformation(char *alertId) {
     urlParams->value = strdup(alertId);
     urlParams->next = NULL;
 
-    appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
+    appendHttpHeader(&headers, HEADER_AUTHORIZATION, authorizationHeader);
 
     if(prepareUrl(&url, configurations.base_url, configurations.get_alert_information, urlParams)) {
 
@@ -587,7 +603,15 @@ char *resetAlert(char *alertId) {
     struct curl_slist *headers = NULL;
     char *url;
     KeyValueParams *urlParams = NULL;
-    HttpResponse *response = (HttpResponse *)malloc(sizeof(HttpResponse));
+    char *authorizationHeader = (char *)getConfigAuthorizationToken();
+    HttpResponse *response = NULL;
+
+    if(authorizationHeader == NULL) {
+        fprintf(stderr, "resetAlert::Authorization Token not available\n");
+        return NULL;
+    }
+
+    response = (HttpResponse *)malloc(sizeof(HttpResponse));
     response->code = 0;
     response->data = NULL;
 
@@ -599,7 +623,7 @@ char *resetAlert(char *alertId) {
     if(prepareUrl(&url, configurations.base_url, configurations.reset_alert, urlParams)) {
 
         appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
-        appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
+        appendHttpHeader(&headers, HEADER_AUTHORIZATION, authorizationHeader);
 
         doHttpPut(url, headers, NULL, response);
 
@@ -620,7 +644,15 @@ char *updateAlertStatus(char *alertId, char *status_name) {
     struct curl_slist *headers = NULL;
     char *url;
     KeyValueParams *urlParams = NULL, *urlParams1 = NULL;
-    HttpResponse *response = (HttpResponse *)malloc(sizeof(HttpResponse));
+    char *authorizationHeader = (char *)getConfigAuthorizationToken();
+    HttpResponse *response = NULL;
+
+    if(authorizationHeader == NULL) {
+        fprintf(stderr, "updateAlertStatus::Authorization Token not available\n");
+        return NULL;
+    }
+
+    response = (HttpResponse *)malloc(sizeof(HttpResponse));
     response->code = 0;
     response->data = NULL;
 
@@ -638,7 +670,7 @@ char *updateAlertStatus(char *alertId, char *status_name) {
     if(prepareUrl(&url, configurations.base_url, configurations.update_alert_status, urlParams)) {
 
         appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
-        appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
+        appendHttpHeader(&headers, HEADER_AUTHORIZATION, authorizationHeader);
 
         doHttpPut(url, headers, NULL, response);
 
@@ -662,7 +694,15 @@ char *addCommentToAlert(char *alertId, char *user, long timestamp, char *comment
     char *url;
     char body[BODY_SIZE_MIN];
     KeyValueParams *urlParams = NULL;
-    HttpResponse *response = (HttpResponse *)malloc(sizeof(HttpResponse));
+    char *authorizationHeader = (char *)getConfigAuthorizationToken();
+    HttpResponse *response = NULL;
+
+    if(authorizationHeader == NULL) {
+        fprintf(stderr, "addCommentToAlert::Authorization Token not available\n");
+        return NULL;
+    }
+
+    response = (HttpResponse *)malloc(sizeof(HttpResponse));
     response->code = 0;
     response->data = NULL;
 
@@ -678,7 +718,7 @@ char *addCommentToAlert(char *alertId, char *user, long timestamp, char *comment
 
     if(prepareUrl(&url, configurations.base_url, configurations.add_comment_to_alert, urlParams)) {
         appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
-        appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
+        appendHttpHeader(&headers, HEADER_AUTHORIZATION, authorizationHeader);
 
         sprintf(body, "[{\"user\":\"%s\",\"timestamp\":%ld,\"text\":\"%s\"}]", user, timestamp, comment);
 

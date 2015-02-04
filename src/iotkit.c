@@ -808,7 +808,13 @@ bool prepareUrl(char **full_url, char *url_prepend, char *url_append, KeyValuePa
 
 char *getConfigAuthorizationToken() {
     char *authorization;
-    int authorizationSize = strlen(HEADER_AUTHORIZATION_BEARER) + strlen(configurations.authorization_key) + 1;
+    int authorizationSize = 0;
+
+    if(configurations.authorization_key == NULL) {
+        return NULL;
+    }
+
+    authorizationSize = strlen(HEADER_AUTHORIZATION_BEARER) + strlen(configurations.authorization_key) + 1;
 
     authorization = (char *)malloc(sizeof(char) * authorizationSize);
     strcpy(authorization, HEADER_AUTHORIZATION_BEARER);

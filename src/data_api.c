@@ -62,7 +62,15 @@ char *submitData(char *cname, char *value, char *latitude, char *longitude, char
     char body[BODY_SIZE_MED];
     char *cid = NULL;
     char currentTimeInMills[BODY_SIZE_MED];
-    HttpResponse *response = (HttpResponse *)malloc(sizeof(HttpResponse));
+    char *authorizationHeader = (char *)getConfigAuthorizationToken();
+    HttpResponse *response = NULL;
+
+    if(authorizationHeader == NULL) {
+        fprintf(stderr, "submitData::Authorization Token not available\n");
+        return NULL;
+    }
+
+    response = (HttpResponse *)malloc(sizeof(HttpResponse));
     response->code = 0;
     response->data = NULL;
 
@@ -89,7 +97,7 @@ char *submitData(char *cname, char *value, char *latitude, char *longitude, char
 
     if(prepareUrl(&url, configurations.base_url, configurations.submit_data, NULL)) {
         appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
-        appendHttpHeader(&headers, HEADER_AUTHORIZATION, getDeviceAuthorizationToken());
+        appendHttpHeader(&headers, HEADER_AUTHORIZATION, authorizationHeader);
 
         sprintf(currentTimeInMills, "%lld", getCurrentTimeInMillis());
 
@@ -257,7 +265,15 @@ char *retrieveData(RetrieveData *retrieveObj) {
     char fromTimeInMillis[BODY_SIZE_MIN];
     char toTimeInMillis[BODY_SIZE_MIN];
     StringList *traverse = NULL;
-    HttpResponse *response = (HttpResponse *)malloc(sizeof(HttpResponse));
+    char *authorizationHeader = (char *)getConfigAuthorizationToken();
+    HttpResponse *response = NULL;
+
+    if(authorizationHeader == NULL) {
+        fprintf(stderr, "retrieveData::Authorization Token not available\n");
+        return NULL;
+    }
+
+    response = (HttpResponse *)malloc(sizeof(HttpResponse));
     response->code = 0;
     response->data = NULL;
 
@@ -273,7 +289,7 @@ char *retrieveData(RetrieveData *retrieveObj) {
 
     if(prepareUrl(&url, configurations.base_url, configurations.retrieve_data, NULL)) {
         appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
-        appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
+        appendHttpHeader(&headers, HEADER_AUTHORIZATION, authorizationHeader);
 
         sprintf(fromTimeInMillis, "%ld", retrieveObj->fromMillis);
         sprintf(toTimeInMillis, "%ld", retrieveObj->toMillis);

@@ -92,12 +92,20 @@ char *getUserJwtToken(char *username, char *password) {
 char *getUserJwtTokenInfo() {
     struct curl_slist *headers = NULL;
     char *url;
-    HttpResponse *response = (HttpResponse *)malloc(sizeof(HttpResponse));
+    char *authorizationHeader = (char *)getConfigAuthorizationToken();
+    HttpResponse *response = NULL;
+
+    if(authorizationHeader == NULL) {
+        fprintf(stderr, "getUserJwtTokenInfo::Authorization Token not available\n");
+        return NULL;
+    }
+
+    response = (HttpResponse *)malloc(sizeof(HttpResponse));
     response->code = 0;
     response->data = NULL;
 
     appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
-    appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
+    appendHttpHeader(&headers, HEADER_AUTHORIZATION, authorizationHeader);
 
     if(prepareUrl(&url, configurations.base_url, configurations.auth_token_info, NULL)) {
 

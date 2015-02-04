@@ -57,7 +57,6 @@ char *createAnUser(char *emailAddress, char *password) {
 
     if(prepareUrl(&url, configurations.base_url, configurations.create_a_user, NULL)) {
         appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
-//        appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
 
         sprintf(body, "{\"email\":\"%s\",\"password\":\"%s\"}", emailAddress, password);
 
@@ -83,7 +82,15 @@ char *getUserInformation(char *userId) {
     struct curl_slist *headers = NULL;
     char *url;
     KeyValueParams *urlParams = NULL;
-    HttpResponse *response = (HttpResponse *)malloc(sizeof(HttpResponse));
+    char *authorizationHeader = (char *)getConfigAuthorizationToken();
+    HttpResponse *response = NULL;
+
+    if(authorizationHeader == NULL) {
+        fprintf(stderr, "getUserInformation::Authorization Token not available\n");
+        return NULL;
+    }
+
+    response = (HttpResponse *)malloc(sizeof(HttpResponse));
     response->code = 0;
     response->data = NULL;
 
@@ -97,7 +104,7 @@ char *getUserInformation(char *userId) {
     urlParams->next = NULL;
 
     appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
-    appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
+    appendHttpHeader(&headers, HEADER_AUTHORIZATION, authorizationHeader);
 
     if(prepareUrl(&url, configurations.base_url, configurations.get_user_information, urlParams)) {
         doHttpGet(url, headers, response);
@@ -120,7 +127,15 @@ char *updateUserAttributes(char *userId, KeyValueParams *attributes) {
     char *url;
     char body[BODY_SIZE_MED];
     KeyValueParams *urlParams = NULL;
-    HttpResponse *response = (HttpResponse *)malloc(sizeof(HttpResponse));
+    char *authorizationHeader = (char *)getConfigAuthorizationToken();
+    HttpResponse *response = NULL;
+
+    if(authorizationHeader == NULL) {
+        fprintf(stderr, "updateUserAttributes::Authorization Token not available\n");
+        return NULL;
+    }
+
+    response = (HttpResponse *)malloc(sizeof(HttpResponse));
     response->code = 0;
     response->data = NULL;
 
@@ -142,7 +157,7 @@ char *updateUserAttributes(char *userId, KeyValueParams *attributes) {
         KeyValueParams *traverse = attributes;
 
         appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
-        appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
+        appendHttpHeader(&headers, HEADER_AUTHORIZATION, authorizationHeader);
 
         strcpy(body, "{\"id\":\"");
         if(userId) {
@@ -190,7 +205,15 @@ char *acceptTermsAndConditions(char *userId, bool accept) {
     char *url;
     char body[BODY_SIZE_MIN];
     KeyValueParams *urlParams = NULL;
-    HttpResponse *response = (HttpResponse *)malloc(sizeof(HttpResponse));
+    char *authorizationHeader = (char *)getConfigAuthorizationToken();
+    HttpResponse *response = NULL;
+
+    if(authorizationHeader == NULL) {
+        fprintf(stderr, "acceptTermsAndConditions::Authorization Token not available\n");
+        return NULL;
+    }
+
+    response = (HttpResponse *)malloc(sizeof(HttpResponse));
     response->code = 0;
     response->data = NULL;
 
@@ -206,7 +229,7 @@ char *acceptTermsAndConditions(char *userId, bool accept) {
     if(prepareUrl(&url, configurations.base_url, configurations.accept_terms_and_conditions, urlParams)) {
 
         appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
-        appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
+        appendHttpHeader(&headers, HEADER_AUTHORIZATION, authorizationHeader);
 
         strcpy(body, "{\"id\":\"");
         if(userId) {
@@ -245,7 +268,15 @@ char *deleteAUser(char *userId) {
     struct curl_slist *headers = NULL;
     char *url;
     KeyValueParams *urlParams = NULL;
-    HttpResponse *response = (HttpResponse *)malloc(sizeof(HttpResponse));
+    char *authorizationHeader = (char *)getConfigAuthorizationToken();
+    HttpResponse *response = NULL;
+
+    if(authorizationHeader == NULL) {
+        fprintf(stderr, "deleteAUser::Authorization Token not available\n");
+        return NULL;
+    }
+
+    response = (HttpResponse *)malloc(sizeof(HttpResponse));
     response->code = 0;
     response->data = NULL;
 
@@ -261,7 +292,7 @@ char *deleteAUser(char *userId) {
     if(prepareUrl(&url, configurations.base_url, configurations.delete_a_user, urlParams)) {
 
         appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
-        appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
+        appendHttpHeader(&headers, HEADER_AUTHORIZATION, authorizationHeader);
 
         doHttpDelete(url, headers, response);
 
@@ -281,7 +312,15 @@ char *requestChangePassword(char *emailAddress) {
     struct curl_slist *headers = NULL;
     char *url;
     char body[BODY_SIZE_MIN];
-    HttpResponse *response = (HttpResponse *)malloc(sizeof(HttpResponse));
+    char *authorizationHeader = (char *)getConfigAuthorizationToken();
+    HttpResponse *response = NULL;
+
+    if(authorizationHeader == NULL) {
+        fprintf(stderr, "requestChangePassword::Authorization Token not available\n");
+        return NULL;
+    }
+
+    response = (HttpResponse *)malloc(sizeof(HttpResponse));
     response->code = 0;
     response->data = NULL;
 
@@ -292,7 +331,7 @@ char *requestChangePassword(char *emailAddress) {
 
     if(prepareUrl(&url, configurations.base_url, configurations.request_change_password, NULL)) {
         appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
-        appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
+        appendHttpHeader(&headers, HEADER_AUTHORIZATION, authorizationHeader);
 
         sprintf(body, "{\"email\":\"%s\"}", emailAddress);
 
@@ -319,7 +358,15 @@ char *updateForgotPassword(char *token, char *new_password) {
     struct curl_slist *headers = NULL;
     char *url;
     char body[BODY_SIZE_MIN];
-    HttpResponse *response = (HttpResponse *)malloc(sizeof(HttpResponse));
+    char *authorizationHeader = (char *)getConfigAuthorizationToken();
+    HttpResponse *response = NULL;
+
+    if(authorizationHeader == NULL) {
+        fprintf(stderr, "updateForgotPassword::Authorization Token not available\n");
+        return NULL;
+    }
+
+    response = (HttpResponse *)malloc(sizeof(HttpResponse));
     response->code = 0;
     response->data = NULL;
 
@@ -330,7 +377,7 @@ char *updateForgotPassword(char *token, char *new_password) {
 
     if(prepareUrl(&url, configurations.base_url, configurations.request_change_password, NULL)) {
         appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
-        appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
+        appendHttpHeader(&headers, HEADER_AUTHORIZATION, authorizationHeader);
 
         sprintf(body, "{\"token\":\"%s\",\"password\":\"%s\"}", token, new_password);
 
@@ -359,7 +406,15 @@ char *changePassword(char *emailAddress, char *current_password, char *new_passw
     char *url;
     char body[BODY_SIZE_MIN];
     KeyValueParams *urlParams = NULL;
-    HttpResponse *response = (HttpResponse *)malloc(sizeof(HttpResponse));
+    char *authorizationHeader = (char *)getConfigAuthorizationToken();
+    HttpResponse *response = NULL;
+
+    if(authorizationHeader == NULL) {
+        fprintf(stderr, "changePassword::Authorization Token not available\n");
+        return NULL;
+    }
+
+    response = (HttpResponse *)malloc(sizeof(HttpResponse));
     response->code = 0;
     response->data = NULL;
 
@@ -375,7 +430,7 @@ char *changePassword(char *emailAddress, char *current_password, char *new_passw
 
     if(prepareUrl(&url, configurations.base_url, configurations.change_password, urlParams)) {
         appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
-        appendHttpHeader(&headers, HEADER_AUTHORIZATION, getConfigAuthorizationToken());
+        appendHttpHeader(&headers, HEADER_AUTHORIZATION, authorizationHeader);
 
         sprintf(body, "{\"currentpwd\":\"%s\",\"password\":\"%s\"}", current_password, new_password);
 
