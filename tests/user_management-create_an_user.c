@@ -31,7 +31,7 @@ int main(void) {
 
     iotkit_init();
 
-    response = createAnUser("snowysnops@gmail.com", "snopsSnowy1");
+    response = createAnUser("snowysnops@gmail.com", "snopsSnowy1", true);
 
     printf("Response Received :%s\n", response);
 

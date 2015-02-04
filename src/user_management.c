@@ -42,7 +42,7 @@
  * @param password specifies the password for the user
  * @return returns the result received from server, otherwise NULL
  */
-char *createAnUser(char *emailAddress, char *password) {
+char *createAnUser(char *emailAddress, char *password, bool acceptTermsAndConditions) {
     struct curl_slist *headers = NULL;
     char *url;
     char body[BODY_SIZE_MIN];
@@ -58,7 +58,15 @@ char *createAnUser(char *emailAddress, char *password) {
     if(prepareUrl(&url, configurations.base_url, configurations.create_a_user, NULL)) {
         appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
 
-        sprintf(body, "{\"email\":\"%s\",\"password\":\"%s\"}", emailAddress, password);
+        sprintf(body, "{\"email\":\"%s\",\"password\":\"%s\",", emailAddress, password);
+
+        if(acceptTermsAndConditions) {
+            strcat(body, "\"termsAndConditions\": true");
+        } else {
+            strcat(body, "\"termsAndConditions\": false");
+        }
+
+        strcat(body, "}");
 
         #if DEBUG
             printf("Prepared BODY is %s\n", body);

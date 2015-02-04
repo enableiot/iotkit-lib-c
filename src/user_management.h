@@ -30,7 +30,7 @@ extern "C" {
 
 #include "iotkit.h"
 
-char *createAnUser(char *emailAddress, char *password);
+char *createAnUser(char *emailAddress, char *password, bool acceptTermsAndConditions);
 char *getUserInformation(char *userId);
 char *updateUserAttributes(char *userId, KeyValueParams *attributes);
 char *acceptTermsAndConditions(char *userId, bool accept);
