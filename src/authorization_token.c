@@ -228,6 +228,9 @@ void storeAuthorizationToken(char * response) {
     // retrieve the expiry info
     validateToken = getUserJwtTokenInfo();
     if(validateToken != NULL) {
+        #if DEBUG
+            printf("Token validation API returned: %s\n", validateToken);
+        #endif
         // parse the file
         json = cJSON_Parse(validateToken);
         if (!json) {
