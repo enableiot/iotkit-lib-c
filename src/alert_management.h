@@ -100,7 +100,7 @@ typedef struct _CreateNewAlert {
     CreateNewAlertDataList *dataList;
 } CreateNewAlert;
 
-char *createNewAlert(CreateNewAlert *createNewAlertObj);
+/*char *createNewAlert(CreateNewAlert *createNewAlertObj);
 CreateNewAlert *cna_setMsgType(CreateNewAlert *createNewAlertObj, char *msgType);
 CreateNewAlertData *createNewAlertDataObject();
 CreateNewAlertData *cna_setAccountId(CreateNewAlertData *createNewAlertDataObj, char *accountId);
@@ -128,7 +128,7 @@ CreateNewAlertDataConditionCmps *cnac_setDataType(CreateNewAlertDataConditionCmp
 CreateNewAlertDataConditionCmps *cnac_setComponentName(CreateNewAlertDataConditionCmps *createNewAlertDataConditionCmpsObj, char *cmpName);
 CreateNewAlertDataConditionCmps *cnac_addValuePoints(CreateNewAlertDataConditionCmps *createNewAlertDataConditionCmpsObj, long timestamp, char *value);
 char *createNewAlert(CreateNewAlert *createNewAlertObj);
-
+*/
 char *getListOfAlerts();
 char *getAlertInformation(char *alertId);
 char *resetAlert(char *alertId);

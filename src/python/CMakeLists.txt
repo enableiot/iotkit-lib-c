@@ -37,6 +37,6 @@ list (GET PYTHON_VERSION_LIST 1 PYTHON_VERSION_MINOR)
 
 install (FILES ${CMAKE_CURRENT_BINARY_DIR}/_iotkit.so
          ${CMAKE_CURRENT_BINARY_DIR}/iotkit.py
-         DESTINATION lib/python${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}/site-packages/)
+         DESTINATION lib/python${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}/dist-packages/)
 
 #add_subdirectory (docs)
