@@ -40,6 +40,7 @@
  *
  * @param emailAddress specifies the username (email address) for the user
  * @param password specifies the password for the user
+ * @param acceptTermsAndConditions specifies acceptance for terms and conditions
  * @return returns the result received from server, otherwise NULL
  */
 char *createAnUser(char *emailAddress, char *password, bool acceptTermsAndConditions) {
