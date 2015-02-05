@@ -62,11 +62,11 @@ char *submitData(char *cname, char *value, char *latitude, char *longitude, char
     char body[BODY_SIZE_MED];
     char *cid = NULL;
     char currentTimeInMills[BODY_SIZE_MED];
-    char *authorizationHeader = (char *)getConfigAuthorizationToken();
+    char *deviceAuthorizationHeader = (char *)getDeviceAuthorizationToken();
     HttpResponse *response = NULL;
 
-    if(authorizationHeader == NULL) {
-        fprintf(stderr, "submitData::Authorization Token not available\n");
+    if(deviceAuthorizationHeader == NULL) {
+        fprintf(stderr, "submitData::Device Authorization Token not available\n");
         return NULL;
     }
 
@@ -97,7 +97,7 @@ char *submitData(char *cname, char *value, char *latitude, char *longitude, char
 
     if(prepareUrl(&url, configurations.base_url, configurations.submit_data, NULL)) {
         appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
-        appendHttpHeader(&headers, HEADER_AUTHORIZATION, authorizationHeader);
+        appendHttpHeader(&headers, HEADER_AUTHORIZATION, deviceAuthorizationHeader);
 
         sprintf(currentTimeInMills, "%lld", getCurrentTimeInMillis());
 
