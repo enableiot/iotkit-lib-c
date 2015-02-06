@@ -436,6 +436,13 @@ void parseConfiguration(char *config_file_path) {
             }
             configurations.activate_a_device = strdup(child2->valuestring);
 
+            child2 = cJSON_GetObjectItem(child1, "activate_a_device2");
+            if (!isJsonString(child2)) {
+                fprintf(stderr,"Invalid JSON format for json property %s\n", child2->string);
+                return;
+            }
+            configurations.activate_a_device2 = strdup(child2->valuestring);
+
             child2 = cJSON_GetObjectItem(child1, "delete_a_device");
             if (!isJsonString(child2)) {
                 fprintf(stderr,"Invalid JSON format for json property %s\n", child2->string);

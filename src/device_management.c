@@ -459,26 +459,17 @@ char *updateADevice(DeviceCreationObj *createDeviceObj) {
 }
 
 /**
- * REST API to activate a device
+ * REST API to activate a device using Authorization token
  *
  * @param activation_code specifies the activation code
  * @return returns the result received from server, otherwise NULL
  */
 char *activateADevice(char *activation_code) {
     struct curl_slist *headers = NULL;
-    char *url;
+    char *url = NULL;
     char body[BODY_SIZE_MED];
     char *authorizationHeader = (char *)getConfigAuthorizationToken();
     HttpResponse *response = NULL;
-
-    if(authorizationHeader == NULL) {
-        fprintf(stderr, "activateADevice::Authorization Token not available\n");
-        return NULL;
-    }
-
-    response = (HttpResponse *)malloc(sizeof(HttpResponse));
-    response->code = 0;
-    response->data = NULL;
 
     if(configurations.deviceToken) {
         fprintf(stderr, "activateADevice::Device appears to be already activated. Could not proceed\n");
@@ -489,6 +480,15 @@ char *activateADevice(char *activation_code) {
         fprintf(stderr, "activateADevice::Activation Code cannot be NULL");
         return NULL;
     }
+
+    if(authorizationHeader == NULL) {
+        fprintf(stderr, "activateADevice::Authorization Token not available\n");
+        return NULL;
+    }
+
+    response = (HttpResponse *)malloc(sizeof(HttpResponse));
+    response->code = 0;
+    response->data = NULL;
 
     if(prepareUrl(&url, configurations.base_url, configurations.activate_a_device, NULL)) {
         appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
@@ -509,6 +509,72 @@ char *activateADevice(char *activation_code) {
         doHttpPut(url, headers, body, response);
 
         if(response->data) {
+            storeDeviceToken(response->data);
+        }
+
+        return createHttpResponseJson(response);
+    }
+
+    return NULL;
+}
+
+/**
+ * REST API to activate a device without Authorization token
+ *
+ * @param activation_code specifies the activation code
+ * @param device_id specifies the device ID
+ * @return returns the result received from server, otherwise NULL
+ */
+char *activateADevice2(char *activation_code, char *device_id) {
+    struct curl_slist *headers = NULL;
+    char *url = NULL;
+    char body[BODY_SIZE_MED];
+    HttpResponse *response = NULL;
+    KeyValueParams *urlParams = NULL;
+
+    if(configurations.deviceToken) {
+        fprintf(stderr, "activateADevice::Device appears to be already activated. Could not proceed\n");
+        return NULL;
+    }
+
+    if(!activation_code) {
+        fprintf(stderr, "activateADevice::Activation Code cannot be NULL\n");
+        return NULL;
+    }
+
+    if(!device_id) {
+        fprintf(stderr, "activateADevice::Device ID cannot be NULL\n");
+        return NULL;
+    }
+
+    urlParams = (KeyValueParams *)malloc(sizeof(KeyValueParams));
+    urlParams->name = strdup("deviceid");
+    urlParams->value = strdup(device_id);
+    urlParams->next = NULL;
+
+    response = (HttpResponse *)malloc(sizeof(HttpResponse));
+    response->code = 0;
+    response->data = NULL;
+
+    if(prepareUrl(&url, configurations.base_url, configurations.activate_a_device2, urlParams)) {
+        appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
+
+        strcpy(body, "{");
+
+        strcat(body, "\"activationCode\":\"");
+        strcat(body, activation_code);
+        strcat(body, "\"");
+
+        strcat(body, "}");
+
+        #if DEBUG
+            printf("Prepared BODY is %s\n", body);
+        #endif
+
+        doHttpPut(url, headers, body, response);
+
+        if(response->data) {
+            configurations.device_id = strdup(device_id);
             storeDeviceToken(response->data);
         }
 

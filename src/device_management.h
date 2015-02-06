@@ -56,6 +56,7 @@ DeviceCreationObj *addAttributesInfo(DeviceCreationObj *createDeviceObj, char *n
 char *createADevice(DeviceCreationObj *createDeviceObj);
 char *updateADevice(DeviceCreationObj *createDeviceObj);
 char *activateADevice(char *activation_code);
+char *activateADevice2(char *activation_code, char *device_id);
 char *deleteADevice(char *device_id);
 
 bool isSensorRegistered(char *name);

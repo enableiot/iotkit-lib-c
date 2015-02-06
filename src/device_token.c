@@ -335,7 +335,7 @@ void storeDeviceToken(char *response) {
                 accountId = strdup(jitem->valuestring);
             }
 
-            storeDeviceCredentials(configurations.device_id, deviceToken, configurations.data_account_id, configurations.data_account_name);
+            storeDeviceCredentials(configurations.device_id, deviceToken, accountId, configurations.data_account_name);
 
             return;
         }

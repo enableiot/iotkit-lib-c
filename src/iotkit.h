@@ -126,6 +126,7 @@ typedef struct _Configurations {
     char *create_a_device;
     char *update_a_device;
     char *activate_a_device;
+    char *activate_a_device2;
     char *delete_a_device;
     char *add_a_component;
     char *delete_a_component;
