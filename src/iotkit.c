@@ -832,7 +832,13 @@ char *getConfigAuthorizationToken() {
 
 char *getDeviceAuthorizationToken() {
     char *authorization;
-    int authorizationSize = strlen(HEADER_AUTHORIZATION_BEARER) + strlen(configurations.deviceToken) + 1;
+    int authorizationSize = 0;
+
+    if(configurations.deviceToken == NULL) {
+        return NULL;
+    }
+
+    authorizationSize = strlen(HEADER_AUTHORIZATION_BEARER) + strlen(configurations.deviceToken) + 1;
 
     authorization = (char *)malloc(sizeof(char) * authorizationSize);
     strcpy(authorization, HEADER_AUTHORIZATION_BEARER);
