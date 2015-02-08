@@ -624,6 +624,40 @@ char *deleteADevice(char *device_id) {
     return NULL;
 }
 
+void cacheSensorList(char *cid, char *name, char *type) {
+    SensorComp *traverse = NULL;
+    SensorComp *newSensor = (SensorComp *)malloc(sizeof(SensorComp));
+
+    if (newSensor != NULL) {
+        newSensor->next = NULL;
+        newSensor->cid = cid;
+        newSensor->name = name;
+        newSensor->type = type;
+
+        if(sensorsList == NULL) {
+            sensorsList = newSensor;
+        } else {
+            traverse = sensorsList;
+            while(traverse->next != NULL) {
+                traverse = traverse->next;
+            }
+
+            traverse->next = newSensor;
+        }
+    }
+
+    #if DEBUG
+        traverse = sensorsList;
+        while(traverse != NULL) {
+            printf("Component id : %s\n", traverse->cid);
+            printf("Name : %s\n", traverse->name);
+            printf("Type : %s\n", traverse->type);
+
+            traverse = traverse->next;
+        }
+    #endif
+}
+
 /* Stores device configuration JSON
 */
 void storeComponent(char *response) {
@@ -720,6 +754,8 @@ void storeComponent(char *response) {
                     free(out);
                     cJSON_Delete(root);
                     fclose(fp);
+
+                    cacheSensorList(cid, name, type);
                 }
             }
         }
@@ -733,7 +769,6 @@ void parseComponentsList() {
     int i = 0;
     cJSON *json, *jitem, *child;
     char *cid, *name, *type;
-    SensorComp *traverse = NULL;
 
     strcpy(config_file_path, configurations.store_path);
     strcat(config_file_path, SENSOR_LIST_FILE_NAME);
@@ -795,39 +830,11 @@ void parseComponentsList() {
 
                 type = strdup(child->valuestring);
 
-                SensorComp *newSensor = (SensorComp *)malloc(sizeof(SensorComp));
-                if (newSensor != NULL) {
-                    newSensor->next = NULL;
-                    newSensor->cid = cid;
-                    newSensor->name = name;
-                    newSensor->type = type;
-
-                    if(sensorsList == NULL) {
-                        sensorsList = newSensor;
-                    } else {
-                        traverse = sensorsList;
-                        while(traverse->next != NULL) {
-                            traverse = traverse->next;
-                        }
-
-                        traverse->next = newSensor;
-                    }
-                }
+                cacheSensorList(cid, name, type);
             }
 
             cJSON_Delete(json);
         }
-
-        #if DEBUG
-            traverse = sensorsList;
-            while(traverse != NULL) {
-                printf("Component id : %s\n", traverse->cid);
-                printf("Name : %s\n", traverse->name);
-                printf("Type : %s\n", traverse->type);
-
-                traverse = traverse->next;
-            }
-        #endif
 
         // free buffers
         fclose(fp);
