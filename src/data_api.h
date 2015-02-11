@@ -32,15 +32,15 @@ extern "C" {
 #include <sys/time.h>
 
 typedef struct _RetrieveData {
-    long fromMillis;
-    long toMillis;
+    long long fromMillis;
+    long long toMillis;
     StringList *deviceList;
     StringList *componentId;
 } RetrieveData;
 
 char *submitData(char *cname, char *value, char *latitude, char *longitude, char *height);
 
-RetrieveData *createRetrieveDataObject(long fromMillis, long toMillis);
+RetrieveData *createRetrieveDataObject(long long fromMillis, long long toMillis);
 RetrieveData *addDeviceId(RetrieveData *retrieveObj, char *id);
 RetrieveData *addSensorId(RetrieveData *retrieveObj, char *sensorName);
 char *retrieveData(RetrieveData *retrieveObj);

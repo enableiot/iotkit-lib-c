@@ -148,7 +148,7 @@ char *submitData(char *cname, char *value, char *latitude, char *longitude, char
  * @param toMillis specifies the timestamp in milliseconds till when the data should be considered
  * @return returns the created object if memory is available, otherwise NULL
  */
-RetrieveData *createRetrieveDataObject(long fromMillis, long toMillis) {
+RetrieveData *createRetrieveDataObject(long long fromMillis, long long toMillis) {
     RetrieveData *retrieveObj = (RetrieveData *)malloc(sizeof(RetrieveData));
     if(!retrieveObj) {
         fprintf(stderr, "createRetrieveDataObject::Could not allocate memory\n");
@@ -291,8 +291,8 @@ char *retrieveData(RetrieveData *retrieveObj) {
         appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
         appendHttpHeader(&headers, HEADER_AUTHORIZATION, authorizationHeader);
 
-        sprintf(fromTimeInMillis, "%ld", retrieveObj->fromMillis);
-        sprintf(toTimeInMillis, "%ld", retrieveObj->toMillis);
+        sprintf(fromTimeInMillis, "%lld", retrieveObj->fromMillis);
+        sprintf(toTimeInMillis, "%lld", retrieveObj->toMillis);
 
         strcpy(body, "{");
         strcat(body, "\"from\":");
