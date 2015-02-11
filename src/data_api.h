@@ -44,6 +44,7 @@ RetrieveData *createRetrieveDataObject(long long fromMillis, long long toMillis)
 RetrieveData *addDeviceId(RetrieveData *retrieveObj, char *id);
 RetrieveData *addSensorId(RetrieveData *retrieveObj, char *sensorName);
 char *retrieveData(RetrieveData *retrieveObj);
+char *retrieveData2(RetrieveData *retrieveObj);
 
 #ifdef __cplusplus
 }

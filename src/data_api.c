@@ -345,4 +345,98 @@ char *retrieveData(RetrieveData *retrieveObj) {
     return NULL;
 }
 
+/**
+ * REST API to retrieve data using device token instead of authorization token.
+ * This is helpful when a device is activated directly using activation code from portal.
+ *
+ * @param retrieveObj the object created using createRetrieveDataObject()
+ * @return returns the result received from server, otherwise NULL
+ */
+char *retrieveData2(RetrieveData *retrieveObj) {
+    struct curl_slist *headers = NULL;
+    char *url;
+    char body[BODY_SIZE_MED];
+    char fromTimeInMillis[BODY_SIZE_MIN];
+    char toTimeInMillis[BODY_SIZE_MIN];
+    StringList *traverse = NULL;
+    char *deviceAuthorizationHeader = (char *)getDeviceAuthorizationToken();
+    HttpResponse *response = NULL;
+
+    if(deviceAuthorizationHeader == NULL) {
+        fprintf(stderr, "retrieveData::Device Token not available\n");
+        return NULL;
+    }
+
+    response = (HttpResponse *)malloc(sizeof(HttpResponse));
+    response->code = 0;
+    response->data = NULL;
+
+    if(!retrieveObj->deviceList) {
+        fprintf(stderr, "retrieveData::Device ID cannot be NULL");
+        return NULL;
+    }
+
+    if(!retrieveObj->componentId) {
+        fprintf(stderr, "retrieveData::Component ID cannot be NULL");
+        return NULL;
+    }
+
+    if(prepareUrl(&url, configurations.base_url, configurations.retrieve_data, NULL)) {
+        appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
+        appendHttpHeader(&headers, HEADER_AUTHORIZATION, deviceAuthorizationHeader);
+
+        sprintf(fromTimeInMillis, "%lld", retrieveObj->fromMillis);
+        sprintf(toTimeInMillis, "%lld", retrieveObj->toMillis);
+
+        strcpy(body, "{");
+        strcat(body, "\"from\":");
+        strcat(body, fromTimeInMillis);
+        strcat(body, ",\"to\":");
+        strcat(body, toTimeInMillis);
+        strcat(body, ",\"targetFilter\":{\"deviceList\":[");
+
+        traverse = retrieveObj->deviceList;
+        while(traverse != NULL) {
+            strcat(body, "\"");
+            strcat(body, traverse->data);
+            strcat(body, "\"");
+
+            traverse = traverse->next;
+
+            if(traverse) {
+                strcat(body, ",");
+            }
+        }
+
+        strcat(body, "]}");
+
+        strcat(body, ",\"metrics\":[");
+
+        traverse = retrieveObj->componentId;
+        while(traverse != NULL) {
+            strcat(body, "{\"id\":\"");
+            strcat(body, traverse->data);
+            strcat(body, "\",\"op\":\"none\"}");
+
+            traverse = traverse->next;
+
+            if(traverse) {
+                strcat(body, ",");
+            }
+        }
+
+        strcat(body, "]}");
+
+        #if DEBUG
+            printf("Prepared BODY is %s\n", body);
+        #endif
+
+        doHttpPost(url, headers, body, response);
+
+        return createHttpResponseJson(response);
+    }
+
+    return NULL;
+}
+
 /** @} */ // end of dataapi
