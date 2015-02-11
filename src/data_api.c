@@ -47,7 +47,7 @@ long long getCurrentTimeInMillis() {
 }
 
 /**
- * REST API to submit data
+ * REST API to submit data along with sensor location
  *
  * @param cname specifies the component name
  * @param value specifies the value
@@ -56,7 +56,7 @@ long long getCurrentTimeInMillis() {
  * @param height specifies the physical height of the component during the measurement
  * @return returns the result received from server, otherwise NULL
  */
-char *submitData(char *cname, char *value, char *latitude, char *longitude, char *height) {
+char *submitDataWithLoc(char *cname, char *value, char *latitude, char *longitude, char *height) {
     struct curl_slist *headers = NULL;
     char *url;
     char body[BODY_SIZE_MED];
@@ -139,6 +139,27 @@ char *submitData(char *cname, char *value, char *latitude, char *longitude, char
     }
 
     return NULL;
+}
+
+/**
+ * REST API to submit data
+ *
+ * @param cname specifies the component name
+ * @param value specifies the value
+ * @return returns the result received from server, otherwise NULL
+ */
+char *submitData(char *cname, char *value) {
+    if(!cname) {
+        fprintf(stderr, "submitData::Component Name cannot be NULL\n");
+        return NULL;
+    }
+
+    if(!value) {
+        fprintf(stderr, "submitData::Value cannot be NULL\n");
+        return NULL;
+    }
+
+    return submitDataWithLoc(cname, value, NULL, NULL, NULL);
 }
 
 /**

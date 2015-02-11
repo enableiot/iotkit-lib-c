@@ -38,7 +38,8 @@ typedef struct _RetrieveData {
     StringList *componentId;
 } RetrieveData;
 
-char *submitData(char *cname, char *value, char *latitude, char *longitude, char *height);
+char *submitData(char *cname, char *value);
+char *submitDataWithLoc(char *cname, char *value, char *latitude, char *longitude, char *height);
 
 RetrieveData *createRetrieveDataObject(long long fromMillis, long long toMillis);
 RetrieveData *addDeviceId(RetrieveData *retrieveObj, char *id);
