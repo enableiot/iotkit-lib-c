@@ -28,7 +28,7 @@ int main(void) {
 
     iotkit_init();
 
-    response = submitData("madras9", "26.15", "45.540164", "-122.926048", "124.3");
+    response = submitData("madras9", "26.15");
     printf("Response Received :%s\n", response);
 
     iotkit_cleanup();
