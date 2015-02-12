@@ -43,7 +43,8 @@ char *submitDataWithLoc(char *cname, char *value, char *latitude, char *longitud
 
 RetrieveData *createRetrieveDataObject(long fromMillis, long toMillis);
 RetrieveData *addDeviceId(RetrieveData *retrieveObj, char *id);
-RetrieveData *addSensorId(RetrieveData *retrieveObj, char *sensorName);
+RetrieveData *addSensorName(RetrieveData *retrieveObj, char *sensorName);
+RetrieveData *addSensorId(RetrieveData *retrieveObj, char *id);
 char *retrieveData(RetrieveData *retrieveObj);
 char *retrieveData2(RetrieveData *retrieveObj);
 

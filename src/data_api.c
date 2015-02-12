@@ -211,7 +211,8 @@ RetrieveData *addDeviceId(RetrieveData *retrieveObj, char *id) {
 
 /**
  * add sensor name. This API will replace the sensor name with its corresponding ID.
- * If sensor ID is already known, then please use addSensorId() Can be called multiple times to add different sensor IDs
+ * If sensor ID is already known, then please use addSensorId().
+ * Can be called multiple times to add different sensor IDs
  *
  * @param retrieveObj the object created using createRetrieveDataObject()
  * @param sensorName specifies the sensor name
@@ -222,22 +223,7 @@ RetrieveData *addSensorName(RetrieveData *retrieveObj, char *sensorName) {
 
     cid = getSensorComponentId(sensorName);
 
-    addId = (StringList *)malloc(sizeof(StringList));
-    addId->data = cid;
-    addId->next = NULL;
-
-    if(!retrieveObj->componentId) {
-        retrieveObj->componentId = addId;
-    } else {
-        StringList *traverseId = retrieveObj->componentId;
-
-        while(traverseId->next) {
-            traverseId = traverseId->next;
-        }
-        traverseId->next = addId;
-    }
-
-    return retrieveObj;
+    return addSensorId(retrieveObj, cid);
 }
 
 /**
