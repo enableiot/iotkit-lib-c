@@ -70,7 +70,7 @@ AggregatedReportInterface *createAggregatedReportInterface() {
  * @param aggregatedReportInterfaceObject object created using createAggregatedReportInterface()
  * @param startTimestamp time stamp in milliseconds
  */
-AggregatedReportInterface *setReportStartTimestamp(AggregatedReportInterface *aggregatedReportInterfaceObject, long long startTimestamp) {
+AggregatedReportInterface *setReportStartTimestamp(AggregatedReportInterface *aggregatedReportInterfaceObject, long startTimestamp) {
     aggregatedReportInterfaceObject->startTimestamp = startTimestamp;
 
     return aggregatedReportInterfaceObject;
@@ -82,7 +82,7 @@ AggregatedReportInterface *setReportStartTimestamp(AggregatedReportInterface *ag
  * @param aggregatedReportInterfaceObject object created using createAggregatedReportInterface()
  * @param endTimestamp time stamp in milliseconds
  */
-AggregatedReportInterface *setReportEndTimestamp(AggregatedReportInterface *aggregatedReportInterfaceObject, long long endTimestamp) {
+AggregatedReportInterface *setReportEndTimestamp(AggregatedReportInterface *aggregatedReportInterfaceObject, long endTimestamp) {
     aggregatedReportInterfaceObject->endTimestamp = endTimestamp;
 
     return aggregatedReportInterfaceObject;

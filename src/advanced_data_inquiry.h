@@ -37,8 +37,8 @@ typedef struct _AdvancedDataInquiry {
     StringList *deviceIds;
     StringList *componentIds;
 
-    long long startTimestamp;
-    long long endTimestamp;
+    long startTimestamp;
+    long endTimestamp;
 
     StringList *returnedMeasureAttributes;
 
@@ -59,8 +59,8 @@ AdvancedDataInquiry *createAdvancedDataInquiryObject();
 AdvancedDataInquiry *addGatewayIds(AdvancedDataInquiry *advancedDataInquiryObject, char *gatewayId);
 AdvancedDataInquiry *addDeviceIds(AdvancedDataInquiry *advancedDataInquiryObject, char *deviceId);
 AdvancedDataInquiry *addComponentIds(AdvancedDataInquiry *advancedDataInquiryObject, char *componentId);
-AdvancedDataInquiry *setStartTimestamp(AdvancedDataInquiry *advancedDataInquiryObject, long long startTimestamp);
-AdvancedDataInquiry *setEndTimestamp(AdvancedDataInquiry *advancedDataInquiryObject, long long endTimestamp);
+AdvancedDataInquiry *setStartTimestamp(AdvancedDataInquiry *advancedDataInquiryObject, long startTimestamp);
+AdvancedDataInquiry *setEndTimestamp(AdvancedDataInquiry *advancedDataInquiryObject, long endTimestamp);
 AdvancedDataInquiry *addReturnedMeasureAttributes(AdvancedDataInquiry *advancedDataInquiryObject, char *attribute);
 AdvancedDataInquiry *setShowMeasureLocation(AdvancedDataInquiry *advancedDataInquiryObject, bool measureLocation);
 AttributeFilter *createAttributeFilterObject(char *filterName);

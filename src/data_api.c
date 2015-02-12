@@ -35,15 +35,12 @@
  *  @{
  */
 
-long long getCurrentTimeInMillis() {
+long getCurrentTimeInSeconds() {
     long elapsedtime = -1L;
-    long long currentTimeInMills;
 
     time(&elapsedtime);
 
-    currentTimeInMills = (long long)elapsedtime * 1000L;
-
-    return currentTimeInMills;
+    return elapsedtime;
 }
 
 /**
@@ -99,7 +96,7 @@ char *submitDataWithLoc(char *cname, char *value, char *latitude, char *longitud
         appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
         appendHttpHeader(&headers, HEADER_AUTHORIZATION, deviceAuthorizationHeader);
 
-        sprintf(currentTimeInMills, "%lld", getCurrentTimeInMillis());
+        sprintf(currentTimeInMills, "%lld", (long long) getCurrentTimeInSeconds() * 1000L);
 
         strcpy(body, "{");
         strcat(body, "\"on\":");
@@ -169,7 +166,7 @@ char *submitData(char *cname, char *value) {
  * @param toMillis specifies the timestamp in milliseconds till when the data should be considered
  * @return returns the created object if memory is available, otherwise NULL
  */
-RetrieveData *createRetrieveDataObject(long long fromMillis, long long toMillis) {
+RetrieveData *createRetrieveDataObject(long fromMillis, long toMillis) {
     RetrieveData *retrieveObj = (RetrieveData *)malloc(sizeof(RetrieveData));
     if(!retrieveObj) {
         fprintf(stderr, "createRetrieveDataObject::Could not allocate memory\n");
@@ -195,7 +192,7 @@ RetrieveData *addDeviceId(RetrieveData *retrieveObj, char *id) {
     StringList *addId;
 
     addId = (StringList *)malloc(sizeof(StringList));
-    addId->data = id;
+    addId->data = strdup(id);
     addId->next = NULL;
 
     if(!retrieveObj->deviceList) {
@@ -312,8 +309,8 @@ char *retrieveData(RetrieveData *retrieveObj) {
         appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
         appendHttpHeader(&headers, HEADER_AUTHORIZATION, authorizationHeader);
 
-        sprintf(fromTimeInMillis, "%lld", retrieveObj->fromMillis);
-        sprintf(toTimeInMillis, "%lld", retrieveObj->toMillis);
+        sprintf(fromTimeInMillis, "%lld", (long long) retrieveObj->fromMillis * 1000L);
+        sprintf(toTimeInMillis, "%lld", (long long) retrieveObj->toMillis * 1000L);
 
         strcpy(body, "{");
         strcat(body, "\"from\":");
@@ -406,8 +403,8 @@ char *retrieveData2(RetrieveData *retrieveObj) {
         appendHttpHeader(&headers, HEADER_CONTENT_TYPE_NAME, HEADER_CONTENT_TYPE_JSON);
         appendHttpHeader(&headers, HEADER_AUTHORIZATION, deviceAuthorizationHeader);
 
-        sprintf(fromTimeInMillis, "%lld", retrieveObj->fromMillis);
-        sprintf(toTimeInMillis, "%lld", retrieveObj->toMillis);
+        sprintf(fromTimeInMillis, "%lld", (long long) retrieveObj->fromMillis * 1000L);
+        sprintf(toTimeInMillis, "%lld", (long long) retrieveObj->toMillis * 1000L);
 
         strcpy(body, "{");
         strcat(body, "\"from\":");

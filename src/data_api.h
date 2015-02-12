@@ -32,8 +32,8 @@ extern "C" {
 #include <sys/time.h>
 
 typedef struct _RetrieveData {
-    long long fromMillis;
-    long long toMillis;
+    long fromMillis;
+    long toMillis;
     StringList *deviceList;
     StringList *componentId;
 } RetrieveData;
@@ -41,7 +41,7 @@ typedef struct _RetrieveData {
 char *submitData(char *cname, char *value);
 char *submitDataWithLoc(char *cname, char *value, char *latitude, char *longitude, char *height);
 
-RetrieveData *createRetrieveDataObject(long long fromMillis, long long toMillis);
+RetrieveData *createRetrieveDataObject(long fromMillis, long toMillis);
 RetrieveData *addDeviceId(RetrieveData *retrieveObj, char *id);
 RetrieveData *addSensorId(RetrieveData *retrieveObj, char *sensorName);
 char *retrieveData(RetrieveData *retrieveObj);

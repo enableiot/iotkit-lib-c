@@ -33,8 +33,8 @@ extern "C" {
 
 typedef struct _AggregatedReportInterface {
 
-    long long startTimestamp;
-    long long endTimestamp;
+    long startTimestamp;
+    long endTimestamp;
     StringList *aggregationMethods;
     StringList *dimensions;
     int offset;
@@ -49,8 +49,8 @@ typedef struct _AggregatedReportInterface {
 } AggregatedReportInterface;
 
 AggregatedReportInterface *createAggregatedReportInterface();
-AggregatedReportInterface *setReportStartTimestamp(AggregatedReportInterface *aggregatedReportInterfaceObject, long long startTimestamp);
-AggregatedReportInterface *setReportEndTimestamp(AggregatedReportInterface *aggregatedReportInterfaceObject, long long endTimestamp);
+AggregatedReportInterface *setReportStartTimestamp(AggregatedReportInterface *aggregatedReportInterfaceObject, long startTimestamp);
+AggregatedReportInterface *setReportEndTimestamp(AggregatedReportInterface *aggregatedReportInterfaceObject, long endTimestamp);
 AggregatedReportInterface *addAggregationMethods(AggregatedReportInterface *aggregatedReportInterfaceObject, char *aggregation);
 AggregatedReportInterface *addDimensions(AggregatedReportInterface *aggregatedReportInterfaceObject, char *dimension);
 AggregatedReportInterface *setOffset(AggregatedReportInterface *aggregatedReportInterfaceObject, int offset);

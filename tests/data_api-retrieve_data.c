@@ -29,7 +29,7 @@ int main(void) {
 
     iotkit_init();
 
-    retrieveObj = createRetrieveDataObject(1410387088000, 1415301870434);
+    retrieveObj = createRetrieveDataObject(1410387088, 1415301870);
     addDeviceId(retrieveObj, "02-00-a7-81-77-ff");
     addDeviceId(retrieveObj, "c0-3f-d5-60-d0-74");
     addSensorId(retrieveObj, "madras7");

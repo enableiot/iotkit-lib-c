@@ -23,15 +23,12 @@
 
 #include "../src/advanced_data_inquiry.h"
 
-long long getCurrentTimeInMillis() {
+long getCurrentTimeInSeconds() {
     long elapsedtime = -1L;
-    long long currentTimeInMills;
 
     time(&elapsedtime);
 
-    currentTimeInMills = (long long)elapsedtime * 1000L;
-
-    return currentTimeInMills;
+    return elapsedtime;
 }
 
 int main(void) {
@@ -56,8 +53,8 @@ int main(void) {
     addComponentIds(advancedDataInquiryObj, "madras9");
     addComponentIds(advancedDataInquiryObj, "garage3");
 
-    setStartTimestamp(advancedDataInquiryObj, 1415301870434L);
-    setEndTimestamp(advancedDataInquiryObj, getCurrentTimeInMillis());
+    setStartTimestamp(advancedDataInquiryObj, 1415301870L);
+    setEndTimestamp(advancedDataInquiryObj, getCurrentTimeInSeconds());
 
     addReturnedMeasureAttributes(advancedDataInquiryObj, "attr_1");
     addReturnedMeasureAttributes(advancedDataInquiryObj, "attr_2");

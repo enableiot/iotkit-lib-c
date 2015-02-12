@@ -156,7 +156,7 @@ AdvancedDataInquiry *addComponentIds(AdvancedDataInquiry *advancedDataInquiryObj
  * @param advancedDataInquiryObject object created using createAdvancedDataInquiryObject"()"
  * @param startTimestamp time stamp in milliseconds
  */
-AdvancedDataInquiry *setStartTimestamp(AdvancedDataInquiry *advancedDataInquiryObject, long long startTimestamp) {
+AdvancedDataInquiry *setStartTimestamp(AdvancedDataInquiry *advancedDataInquiryObject, long startTimestamp) {
     advancedDataInquiryObject->startTimestamp = startTimestamp;
 
     return advancedDataInquiryObject;
@@ -168,7 +168,7 @@ AdvancedDataInquiry *setStartTimestamp(AdvancedDataInquiry *advancedDataInquiryO
  * @param advancedDataInquiryObject object created using createAdvancedDataInquiryObject"()"
  * @param endTimestamp time stamp in milliseconds
  */
-AdvancedDataInquiry *setEndTimestamp(AdvancedDataInquiry *advancedDataInquiryObject, long long endTimestamp) {
+AdvancedDataInquiry *setEndTimestamp(AdvancedDataInquiry *advancedDataInquiryObject, long endTimestamp) {
     advancedDataInquiryObject->endTimestamp = endTimestamp;
 
     return advancedDataInquiryObject;

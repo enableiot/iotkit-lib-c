@@ -23,15 +23,12 @@
 
 #include "../src/aggregated_report_interface.h"
 
-long long getCurrentTimeInMillis() {
+long getCurrentTimeInSeconds() {
     long elapsedtime = -1L;
-    long long currentTimeInMills;
 
     time(&elapsedtime);
 
-    currentTimeInMills = (long long)elapsedtime * 1000L;
-
-    return currentTimeInMills;
+    return elapsedtime;
 }
 
 int main(void) {
@@ -43,8 +40,8 @@ int main(void) {
 
     aggregatedReportInterfaceObj = createAggregatedReportInterface();
 
-    setReportStartTimestamp(aggregatedReportInterfaceObj, 1413504889801L);
-    setReportEndTimestamp(aggregatedReportInterfaceObj, getCurrentTimeInMillis());
+    setReportStartTimestamp(aggregatedReportInterfaceObj, 1413504889L);
+    setReportEndTimestamp(aggregatedReportInterfaceObj, getCurrentTimeInSeconds());
 
     addAggregationMethods(aggregatedReportInterfaceObj, "average");
     addAggregationMethods(aggregatedReportInterfaceObj, "min");
