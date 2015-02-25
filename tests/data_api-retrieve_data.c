@@ -32,7 +32,6 @@ int main(void) {
     retrieveObj = createRetrieveDataObject(1410387088, 1415301870);
     addDeviceId(retrieveObj, "02-00-a7-81-77-ff");
     addDeviceId(retrieveObj, "c0-3f-d5-60-d0-74");
-    addSensorName(retrieveObj, "madras7");
     addSensorName(retrieveObj, "madras9");
 
     response = retrieveData(retrieveObj);

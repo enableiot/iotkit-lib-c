@@ -236,21 +236,23 @@ RetrieveData *addSensorId(RetrieveData *retrieveObj, char *id) {
     char *cid = NULL;
     StringList *addId;
 
-    cid = strdup(id);
+    if(id != NULL) {
+        cid = strdup(id);
 
-    addId = (StringList *)malloc(sizeof(StringList));
-    addId->data = cid;
-    addId->next = NULL;
+        addId = (StringList *)malloc(sizeof(StringList));
+        addId->data = cid;
+        addId->next = NULL;
 
-    if(!retrieveObj->componentId) {
-        retrieveObj->componentId = addId;
-    } else {
-        StringList *traverseId = retrieveObj->componentId;
+        if(!retrieveObj->componentId) {
+            retrieveObj->componentId = addId;
+        } else {
+            StringList *traverseId = retrieveObj->componentId;
 
-        while(traverseId->next) {
-            traverseId = traverseId->next;
+            while(traverseId->next) {
+                traverseId = traverseId->next;
+            }
+            traverseId->next = addId;
         }
-        traverseId->next = addId;
     }
 
     return retrieveObj;
