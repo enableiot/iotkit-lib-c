@@ -18,7 +18,7 @@ include (GetGitRevisionDescription)
 git_describe (VERSION "--tags")
 if ("x_${VERSION}" STREQUAL "x_GIT-NOTFOUND")
   message (WARNING " - Install git to compile a production libiotkit!")
-  set (VERSION "v0.1.0-dirty")
+  set (VERSION "v1.4.8-dirty")
 endif ()
 
 message (INFO " - IOTKIT Version ${VERSION}")
